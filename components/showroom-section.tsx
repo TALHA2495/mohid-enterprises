@@ -1,0 +1,50 @@
+'use client'
+
+import { ArrowLeft, ArrowRight, Check, SlidersHorizontal } from 'lucide-react'
+import { useState } from 'react'
+
+type Product = {
+  name: string
+  type: string
+  description: string
+  material: string
+  width: string
+  colors: string
+  finish: string
+  specs: [string, string][]
+}
+
+const products: Product[] = [
+  { name: 'Fringe Lace', type: 'LACE', description: 'Soft, expressive fringe for trims and statement edges.', material: 'Cotton blend', width: '10mm–50mm', colors: 'Custom', finish: 'Natural', specs: [['Product type', 'Fringe lace'], ['Material composition', 'Cotton blend'], ['Available widths', '10mm–50mm'], ['Minimum order quantity', '500 meters'], ['Color options', 'Custom color matching'], ['Finish', 'Natural / brushed'], ['Lead time', '2–3 weeks']] },
+  { name: 'Twill Tape', type: 'TAPE', description: 'Reliable cotton twill tape for garment labeling, binding, and decorative trims.', material: 'Cotton', width: '10mm–50mm', colors: 'Custom', finish: 'Soft', specs: [['Product type', 'Twill tape (SKU-T-02)'], ['Material composition', 'Cotton'], ['Available widths', '10mm–50mm'], ['Minimum order quantity', '500 meters'], ['Material weight', '180 g/m²'], ['Finish', 'Natural / bleached / dyed'], ['Color options', 'Custom color matching'], ['Roll length', '100m per roll (standard)']] },
+  { name: 'Web Tape', type: 'TAPE', description: 'Clean woven construction for dependable finishing and repeat production.', material: 'Polyester', width: '20mm–60mm', colors: 'Custom', finish: 'Woven', specs: [['Product type', 'Woven web tape'], ['Material composition', 'Polyester'], ['Available widths', '20mm–60mm'], ['Minimum order quantity', '500 meters'], ['Finish', 'Woven / dyed'], ['Lead time', '2–3 weeks']] },
+  { name: 'Golden Tassel', type: 'TASSEL', description: 'A polished accent with a warm metallic finish for elevated details.', material: 'Polyester', width: '30mm–80mm', colors: 'Gold tones', finish: 'Metallic', specs: [['Product type', 'Decorative tassel'], ['Material composition', 'Polyester'], ['Available widths', '30mm–80mm'], ['Minimum order quantity', '250 pieces'], ['Finish', 'Metallic'], ['Lead time', '3–4 weeks']] },
+  { name: 'Metal Cord', type: 'CORD', description: 'Structured cord with a refined surface texture.', material: 'Metallic yarn', width: '2mm–8mm', colors: 'Custom', finish: 'Polished', specs: [['Product type', 'Metal cord'], ['Material composition', 'Metallic yarn'], ['Available widths', '2mm–8mm'], ['Minimum order quantity', '500 meters'], ['Finish', 'Polished'], ['Lead time', '3 weeks']] },
+  { name: 'Pom Pom Trim', type: 'POM POM', description: 'Playful volume for apparel and home details.', material: 'Polyester', width: '10mm–25mm', colors: 'Custom', finish: 'Soft', specs: [['Product type', 'Pom pom trim'], ['Material composition', 'Polyester'], ['Available widths', '10mm–25mm'], ['Minimum order quantity', '500 meters'], ['Finish', 'Soft'], ['Lead time', '2–3 weeks']] },
+  { name: 'Cotton Fringe', type: 'FRINGE', description: 'Natural cotton texture with an easy, soft hand.', material: '100% cotton', width: '25mm–100mm', colors: 'Custom', finish: 'Natural', specs: [['Product type', 'Cotton fringe'], ['Material composition', '100% cotton'], ['Available widths', '25mm–100mm'], ['Minimum order quantity', '500 meters'], ['Finish', 'Natural'], ['Lead time', '3 weeks']] },
+  { name: 'Woven Belt', type: 'UTILITY', description: 'Hard-wearing woven utility trim made for scale.', material: 'Polyester', width: '25mm–40mm', colors: 'Custom', finish: 'Durable', specs: [['Product type', 'Woven utility belt'], ['Material composition', 'Polyester'], ['Available widths', '25mm–40mm'], ['Minimum order quantity', '500 meters'], ['Finish', 'Durable woven'], ['Lead time', '3 weeks']] },
+]
+
+const filters = ['All trims', 'Laces', 'Tapes', 'Pom poms', 'Utility']
+
+export function ShowroomSection() {
+  const [selected, setSelected] = useState<Product | null>(null)
+  const [filter, setFilter] = useState('All trims')
+  const visible = products.filter((product) => filter === 'All trims' || product.type.toLowerCase().includes(filter.slice(0, -1).toLowerCase()))
+
+  if (selected) return <ProductDetail product={selected} onBack={() => setSelected(null)} />
+
+  return (
+    <section id="showroom" className="relative z-10 min-h-screen px-4 pb-16 pt-8 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex flex-col gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-[11px] uppercase tracking-[0.22em] text-emerald-400">The collection</p><h1 className="mt-2 font-serif text-4xl font-semibold tracking-tight text-white sm:text-5xl">Showroom</h1><p className="mt-3 max-w-xl text-sm leading-6 text-white/55">A focused range of production-ready trims, developed for thoughtful products and reliable scale.</p></div><button type="button" className="inline-flex items-center gap-2 self-start rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-xs font-medium text-white sm:self-auto"><SlidersHorizontal className="size-3.5" /> Filters</button></div>
+        <div className="mb-8 flex gap-2 overflow-x-auto pb-1" aria-label="Product filters">{filters.map((item) => <button key={item} type="button" onClick={() => setFilter(item)} className={`shrink-0 rounded-full border px-4 py-2 text-xs transition ${filter === item ? 'border-emerald-400 bg-emerald-400 text-black' : 'border-white/15 bg-white/5 text-white/65 hover:text-white'}`}>{item}</button>)}</div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">{visible.map((product) => <button key={product.name} type="button" onClick={() => setSelected(product)} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.055] text-left backdrop-blur-sm transition hover:-translate-y-1 hover:border-emerald-400/45 hover:bg-white/[0.08]"><div className="aspect-[4/3] overflow-hidden bg-zinc-900"><img src="/images/trims-bg.png" alt={`${product.name} textile trim`} className="size-full object-cover transition duration-500 group-hover:scale-105" /></div><div className="p-4"><p className="font-mono text-[10px] tracking-[0.18em] text-emerald-400">{product.type}</p><div className="mt-2 flex items-start justify-between gap-3"><h2 className="font-serif text-xl text-white">{product.name}</h2><ArrowRight className="mt-1 size-4 text-white/30 group-hover:text-emerald-400" /></div><p className="mt-2 text-xs leading-5 text-white/50">{product.description}</p><span className="mt-4 inline-flex text-xs font-medium text-white/80 underline decoration-white/20 underline-offset-4">View details</span></div></button>)}</div>
+      </div>
+    </section>
+  )
+}
+
+function ProductDetail({ product, onBack }: { product: Product; onBack: () => void }) {
+  return <section className="relative z-10 min-h-screen px-4 pb-16 pt-8 sm:px-6 lg:px-10"><div className="mx-auto max-w-7xl"><button type="button" onClick={onBack} className="mb-8 inline-flex items-center gap-2 text-xs text-white/60 hover:text-emerald-400"><ArrowLeft className="size-4" /> Back to showroom</button><div className="grid gap-8 border-b border-white/10 pb-10 lg:grid-cols-[1.05fr_1fr] lg:items-center"><div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5"><img src="/images/trims-bg.png" alt={`${product.name} textile trim detail`} className="aspect-[4/3] size-full object-cover" /></div><div><p className="font-mono text-[10px] tracking-[0.2em] text-emerald-400">{product.type} · SKU-TRIM</p><h1 className="mt-3 font-serif text-4xl text-white sm:text-5xl">{product.name}</h1><p className="mt-4 max-w-lg text-sm leading-6 text-white/60">{product.description} Produced to consistent width and finish density.</p><div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-4">{[['Material', product.material], ['Size range', product.width], ['MOQ', '500 meters'], ['Unit', 'meters']].map(([label, value]) => <div key={label} className="bg-black/40 p-3"><p className="font-mono text-[9px] uppercase tracking-wider text-white/35">{label}</p><p className="mt-1 text-xs text-white">{value}</p></div>)}</div><div className="mt-5 flex flex-col gap-3 sm:flex-row"><a href="/quote" className="inline-flex flex-1 items-center justify-center rounded-lg bg-emerald-500 px-4 py-3 text-xs font-semibold text-black hover:bg-emerald-400">Request specs & quote <ArrowRight className="ml-2 size-4" /></a><a href="#sample" className="inline-flex flex-1 items-center justify-center rounded-lg border border-white/15 px-4 py-3 text-xs text-white hover:bg-white/10">Request physical sample</a></div></div></div><div className="mt-8 grid gap-8 lg:grid-cols-[1.3fr_0.7fr]"><div><h2 className="mb-3 text-sm font-semibold text-white">Technical specifications</h2><div className="overflow-hidden rounded-xl border border-white/10">{product.specs.map(([label, value]) => <div key={label} className="grid grid-cols-[1fr_1.5fr] border-b border-white/10 px-4 py-2.5 last:border-0"><span className="font-mono text-[9px] uppercase tracking-wider text-white/40">{label}</span><span className="text-xs text-white/75">{value}</span></div>)}</div></div><div><h2 className="mb-3 text-sm font-semibold text-white">Customization options</h2><div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">{['Custom width', 'Printed logo or text', 'Custom colour', 'Custom roll length'].map((item) => <div key={item} className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5 text-xs text-white/70"><Check className="size-3.5 text-emerald-400" /> {item}</div>)}</div><div className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] p-4"><p className="font-mono text-[9px] uppercase tracking-wider text-emerald-400">Export readiness & quality control</p><p className="mt-2 text-xs leading-5 text-white/50">Every order is checked for consistency, packaging and export documentation before dispatch.</p></div></div></div></div></section>
+}
