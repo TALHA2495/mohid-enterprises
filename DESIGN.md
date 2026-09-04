@@ -70,7 +70,7 @@ Dark-first design language for the marketing site. Single source of truth for an
 - `components/hero-section.tsx` / `hero-stats.tsx` — hero; visual reference for every other page.
 - `components/showroom-section.tsx` — showroom grid + dark product detail (carousel, spec chips, cards).
 - `components/company-pages.tsx` — `/factory` and `/standards` via `DarkShell`.
-- `app/quote/page.tsx` + `components/quote-form.tsx` — dark quote form.
+- `app/quote/page.tsx` + `components/quote-form.tsx` — compact single-screen quote form (dark, logo + wordmark + close button, no site header).
 - `components/site-header.tsx` — dark on every route (no light/dark branching).
 - `components/site-footer.tsx` — dark footer.
 - `app/globals.css` — Tailwind v4 setup; keep the mobile scrollbar-hiding query and `.product-cards-grid > div:empty`.
