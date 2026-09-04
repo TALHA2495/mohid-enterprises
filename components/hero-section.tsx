@@ -40,14 +40,14 @@ export function HeroSection() {
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <a
             href="/showroom"
-            className="inline-flex items-center gap-2 rounded-full border border-white/30 px-7 py-3.5 text-sm text-white transition-colors hover:border-white/55 hover:bg-white/[0.06]"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-3.5 text-sm text-white transition-colors hover:border-white/55 hover:bg-white/[0.06] sm:flex-initial"
           >
-            Explore showroom
+            Showroom
             <ArrowUpRight className="size-4" />
           </a>
           <a
             href="/quote"
-            className="inline-flex items-center gap-2 rounded-full bg-[#01aa3f] px-7 py-3.5 text-sm font-medium text-white transition-all hover:-translate-y-px hover:bg-[#00ff59]"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#01aa3f] px-7 py-3.5 text-sm font-medium text-white transition-all hover:-translate-y-px hover:bg-[#00ff59] sm:flex-initial"
           >
             Start an RFQ
             <ArrowUpRight className="size-4" />
