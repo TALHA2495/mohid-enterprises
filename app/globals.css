@@ -188,3 +188,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* product-detail: hide the bare structural wrappers around the spec/customization cards */
+.product-cards-grid > div:empty { display: none; }
+
+/* showroom-light: cover remaining utilities used by the showroom grid and product detail */
+.showroom-light .bg-white\/10 { background-color: rgba(23,32,30,.08); }
+.showroom-light .bg-white\/\[0\.04\] { background-color: rgba(255,255,255,.72); }
+.showroom-light .text-white\/40 { color: #879491; }
+.showroom-light .text-white\/70 { color: #61706d; }
+.showroom-light .text-white\/75 { color: #17201e; }
+.showroom-light .text-white\/80 { color: #17201e; }
+.showroom-light .hover\:text-white:hover { color: #17201e; }
+.showroom-light .hover\:bg-white\/10:hover { background-color: rgba(23,32,30,.06); }
+.showroom-light .hover\:bg-white\/\[0\.08\]:hover { background-color: rgba(255,255,255,.96); }
+.showroom-light .hover\:text-emerald-400:hover { color: #008942; }
+.showroom-light .hover\:border-emerald-400\/45:hover { border-color: rgba(0,137,66,.45); }
+.showroom-light .group:hover .group-hover\:text-emerald-400 { color: #008942; }
