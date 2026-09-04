@@ -76,7 +76,7 @@ export function ShowroomSection() {
   if (selected) return <ProductDetail key={selected.name} product={selected} onBack={() => setSelected(null)} />
 
   return (
-    <section id="showroom" className="relative z-10 min-h-screen bg-[#0a0c0b] px-4 pb-16 pt-8 text-white sm:px-6 lg:px-10">
+    <section id="showroom" className="relative z-10 px-4 pb-16 pt-8 text-white sm:px-6 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex gap-2 overflow-x-auto pb-1" aria-label="Product filters">
           {filters.map((item) => (

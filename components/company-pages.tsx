@@ -5,7 +5,7 @@ const factoryCards = ['500k+ Meters / Month Capacity', 'Material Range', 'Size &
 const standardsCards = ['Yarn & Material Inspection', 'Dimensional Width Tolerance', 'Pantone Color Fastness', 'Export Packing Audit', 'Third-Party Testing & Documentation']
 
 function DarkShell({ children }: { children: React.ReactNode }) {
-  return <main className="min-h-screen bg-[#0a0c0b] text-white"><SiteHeader />{children}<SiteFooter /></main>
+  return <main className="relative min-h-screen bg-[#0a0c0b] text-white"><div aria-hidden="true" className="absolute inset-x-0 top-0 z-0 h-[min(760px,100vh)] overflow-hidden"><img src="/images/trims2.webp" alt="" className="size-full object-cover" /><div className="absolute inset-0 bg-black/40" /><div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/30 to-[#0a0c0b]" /></div><div className="relative z-10"><SiteHeader />{children}<SiteFooter /></div></main>
 }
 
 export function FactoryPage() {
