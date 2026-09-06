@@ -65,11 +65,10 @@ Dark-first design language for the marketing site. Single source of truth for an
 
 ## File map
 
-- `app/page.tsx` — home: fixed hero backdrop + `HeroSection` + `HomeSections` + footer, all on `#0a0c0b`.
-- `components/home-sections.tsx` — capability grid, strength band, process strip, CTA band.
+- `app/page.tsx` — home: fixed hero backdrop (next/image, priority) + `HeroSection` + footer, all on `#0a0c0b`.
 - `components/hero-section.tsx` / `hero-stats.tsx` — hero; visual reference for every other page.
 - `components/showroom-section.tsx` — showroom grid + dark product detail (carousel, spec chips, cards).
-- `components/company-pages.tsx` — `/factory` and `/standards` via `DarkShell`.
+- `components/factory-page.tsx` / `components/standards-page.tsx` — `/factory` and `/standards`, each with its own `DarkShell` copy.
 - `app/quote/page.tsx` + `components/quote-form.tsx` — compact single-screen quote form (dark, logo + wordmark + close button, no site header).
 - `components/site-header.tsx` — dark on every route (no light/dark branching).
 - `components/site-footer.tsx` — dark footer.
