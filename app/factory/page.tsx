@@ -1,2 +1,2 @@
-import { FactoryPage } from '@/components/company-pages'
+import { FactoryPage } from '@/components/factory-page'
 export default function Page() { return <FactoryPage /> }

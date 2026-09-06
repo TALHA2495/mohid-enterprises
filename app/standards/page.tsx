@@ -1,2 +1,2 @@
-import { StandardsPage } from '@/components/company-pages'
+import { StandardsPage } from '@/components/standards-page'
 export default function Page() { return <StandardsPage /> }
