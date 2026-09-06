@@ -18,3 +18,4 @@ smoke-*.log
 
 # Build artifacts
 *.tsbuildinfo
+.vercel
