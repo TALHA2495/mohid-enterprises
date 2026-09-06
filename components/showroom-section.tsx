@@ -67,7 +67,7 @@ const products: Product[] = [
     specs: [['Product type', 'Crochet elastic'], ['Material composition', 'Latex / Polyester'], ['Available widths', 'Various'], ['Color options', 'Multiple colors'], ['Finish', 'Soft / flexible'], ['Applications', 'Waistbands, undergarments, crafts']],
   },
   {
-    name: 'Jacquard Elastic & Tape', type: 'ELASTIC', image: '/product%20images%20compressed/Jacquard%20Elastic%20&%20Tape_compressed.webp',
+    name: 'Jacquard Elastic & Tape', type: 'ELASTIC', image: '/product%20images%20compressed/Jacquard%20Elastic%20%26%20Tape_compressed.webp',
     description: 'Strong jacquard elastic and tape with custom branding and woven designs.',
     material: 'Nylon / Polyester', width: 'Custom', colors: 'Custom', finish: 'Woven / Jacquard',
     specs: [['Product type', 'Jacquard elastic & tape'], ['Material composition', 'Nylon / Polyester'], ['Available widths', 'Custom'], ['Color options', 'Custom color matching'], ['Design options', 'Logo, text, branded, custom'], ['Finish', 'Woven / jacquard'], ['Applications', 'Garments, waistbands, sportswear']],
@@ -346,7 +346,7 @@ export function ShowroomSection() {
               onClick={() => setSelected(product)}
               className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101413] text-left backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#00c853]/50 hover:bg-[#151a19]"
             >
-              <div className="h-56 overflow-hidden bg-black/40">
+              <div className="relative h-56 overflow-hidden bg-black/40">
                 <Image
                     src={product.image}
                     alt={`${product.name} textile trim`}
