@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    qualities: [55, 70, 75],
+  },
   experimental: {
     inlineCss: true,
     optimizePackageImports: ['lucide-react'],
@@ -69,7 +72,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=0, s-maxage=600, stale-while-revalidate=60',
+            value: 'public, max-age=0, s-maxage=86400, stale-while-revalidate=3600',
           },
           {
             key: 'X-Content-Type-Options',

@@ -1,4 +1,4 @@
-﻿import { X } from 'lucide-react'
+import { X } from 'lucide-react'
 import Image from 'next/image'
 import { QuoteForm } from '@/components/quote-form'
 
@@ -6,7 +6,7 @@ export default function QuotePage() {
   return (
     <main className="relative flex min-h-screen flex-col bg-[#0a0c0b] text-white">
       <div aria-hidden="true" className="absolute inset-x-0 top-0 z-0 h-[min(760px,100vh)] overflow-hidden lg:h-[100vh]">
-        <Image src="/images/trims2.webp" alt="" fill priority fetchPriority="high" sizes="100vw" className="size-full object-cover" />
+        <Image src="/images/trims2.webp" alt="" fill priority fetchPriority="high" quality={70} sizes="100vw" className="size-full object-cover" />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/30 to-[#0a0c0b]" />
       </div>
