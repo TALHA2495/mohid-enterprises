@@ -37,20 +37,20 @@ export function HeroSection() {
           teams.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center gap-2 sm:gap-3">
           <a
             href="/showroom"
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-3.5 text-sm text-white transition-colors hover:border-white/55 hover:bg-white/[0.06] sm:flex-initial"
+            className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/30 px-4 py-3 text-[13px] text-white transition-colors hover:border-white/55 hover:bg-white/[0.06] sm:flex-initial sm:gap-2 sm:px-7 sm:py-3.5 sm:text-sm"
           >
             Showroom
-            <ArrowUpRight className="size-4" />
+            <ArrowUpRight className="size-3.5 sm:size-4" />
           </a>
           <a
             href="/quote"
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#01aa3f] px-7 py-3.5 text-sm font-medium text-white transition-all hover:-translate-y-px hover:bg-[#00ff59] sm:flex-initial"
+            className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#01aa3f] px-4 py-3 text-[13px] font-medium text-white transition-all hover:-translate-y-px hover:bg-[#00ff59] sm:flex-initial sm:gap-2 sm:px-7 sm:py-3.5 sm:text-sm"
           >
             Start an RFQ
-            <ArrowUpRight className="size-4" />
+            <ArrowUpRight className="size-3.5 sm:size-4" />
           </a>
         </div>
       </div>
