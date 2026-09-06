@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { ArrowUpRight, BadgeCheck, CircleCheck, Droplets, Factory, Layers, Package, Scissors } from 'lucide-react'
 
 const CAPABILITIES = [
@@ -33,8 +34,8 @@ export function HomeSections() {
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {CAPABILITIES.map((item) => (
             <article key={item.title} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101413]">
-              <div className="aspect-[16/10] overflow-hidden bg-black/40">
-                <img src={item.image} alt={item.title} className="size-full object-cover transition duration-500 group-hover:scale-105" />
+              <div className="relative aspect-[16/10] overflow-hidden bg-black/40">
+                <Image src={item.image} alt={item.title} fill loading="lazy" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="size-full object-cover transition duration-500 group-hover:scale-105" />
               </div>
               <div className="p-5">
                 <h3 className="text-base font-semibold tracking-tight text-white">{item.title}</h3>
@@ -72,8 +73,8 @@ export function HomeSections() {
               ))}
             </ul>
           </div>
-          <div className="overflow-hidden rounded-2xl border border-white/10">
-            <img src="/images/trims-bg.webp" alt="Mohid Enterprises manufacturing floor" className="aspect-[16/7] w-full object-cover" />
+          <div className="relative aspect-[16/7] overflow-hidden rounded-2xl border border-white/10">
+            <Image src="/images/trims-bg.webp" alt="Mohid Enterprises manufacturing floor" fill loading="lazy" sizes="(min-width: 1024px) 58vw, 100vw" className="w-full object-cover" />
           </div>
         </div>
       </section>

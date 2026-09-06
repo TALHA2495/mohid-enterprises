@@ -3,15 +3,25 @@ import { Fraunces, Inter, Playfair_Display } from 'next/font/google'
 import { AnalyticsLoader } from '@/components/analytics-loader'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+  fallback: ['system-ui', 'arial'],
+})
 const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-serif',
+  display: 'swap',
+  fallback: ['Georgia', 'serif'],
+  preload: false, // only used in showroom product detail (below fold elsewhere)
 })
 const fraunces = Fraunces({
   subsets: ['latin'],
   style: ['normal', 'italic'],
   variable: '--font-fraunces',
+  display: 'swap',
+  fallback: ['Georgia', 'serif'],
 })
 
 export const metadata: Metadata = {

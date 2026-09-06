@@ -333,7 +333,7 @@ export function ShowroomSection() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {displayed.map((product) => (
+          {displayed.map((product, index) => (
             <button
               key={product.name}
               type="button"
@@ -344,6 +344,7 @@ export function ShowroomSection() {
                 <Image
                     src={product.image}
                     alt={`${product.name} textile trim`}
+                    loading={index < 4 ? 'eager' : 'lazy'}
                     fill
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
@@ -449,7 +450,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
             <div className="flex items-center gap-2.5 p-3.5">
               {GALLERY_VIEWS.map((galleryView, index) => (
                 <button key={galleryView.label} type="button" onClick={() => setView(index)} aria-label={`Show ${galleryView.label.toLowerCase()}`} aria-pressed={view === index} className={`relative h-14 min-w-16 flex-1 overflow-hidden rounded-lg border transition ${view === index ? 'border-[#00c853] ring-1 ring-[#00c853]' : 'border-white/10 opacity-70 hover:opacity-100'}`}>
-                  <Image src={product.image} alt="" fill sizes="100px" className={`size-full object-cover ${galleryView.className}`} />
+                  <Image src={product.image} alt="" fill loading="lazy" sizes="100px" className={`size-full object-cover ${galleryView.className}`} />
                 </button>
               ))}
             </div>

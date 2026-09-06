@@ -15,3 +15,6 @@ node_modules
 .DS_Storebuild.log
 build.log
 smoke-*.log
+
+# Build artifacts
+*.tsbuildinfo
