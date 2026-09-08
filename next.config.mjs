@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'ik.imagekit.io', pathname: '/wavawecyl/**' },
+    ],
     qualities: [55, 70, 75],
   },
   experimental: {

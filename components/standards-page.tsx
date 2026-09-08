@@ -5,9 +5,9 @@ import { CertificateGallery } from './certificate-gallery'
 
 const standardsCards = ['Yarn & Material Inspection', 'Dimensional Width Tolerance', 'Pantone Color Fastness', 'Export Packing Audit', 'Third-Party Testing & Documentation']
 const certificates = [
-  { title: 'Company Profile — 20 Years', image: '/certificates/company profile 20 year.jpeg' },
-  { title: 'WSO Certificate of Compliance', image: '/certificates/wso certificate of compliance.jpeg' },
-  { title: 'WSO Letter of Authorization', image: '/certificates/wso letter of authorization.jpeg' },
+  { title: 'Company Profile — 20 Years', image: 'https://ik.imagekit.io/wavawecyl/certificates/company%20profile%2020%20year.jpeg?updatedAt=1788845951259&tr=w-1200,q-75' },
+  { title: 'WSO Certificate of Compliance', image: 'https://ik.imagekit.io/wavawecyl/certificates/wso%20certificate%20of%20compliance.jpeg?updatedAt=1788845951371&tr=w-1200,q-75' },
+  { title: 'WSO Letter of Authorization', image: 'https://ik.imagekit.io/wavawecyl/certificates/wso%20letter%20of%20authorization.jpeg?updatedAt=1788845951255&tr=w-1200,q-75' },
 ]
 
 function DarkShell({ children }: { children: React.ReactNode }) {
