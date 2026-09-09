@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { X } from 'lucide-react'
 import Image from 'next/image'
 import { QuoteForm } from '@/components/quote-form'
@@ -29,7 +30,9 @@ export default function QuotePage() {
         <h1 className="mt-2 font-[family-name:var(--font-fraunces)] text-2xl font-semibold tracking-tight sm:text-4xl">Request specifications & quote</h1>
         <p className="mt-3 max-w-lg text-sm leading-6 text-white/60">Share a few details and our team will follow up with the right production information.</p>
         <div className="mt-6 rounded-2xl border border-white/10 bg-[#101413] p-5 sm:p-6">
-          <QuoteForm />
+          <Suspense fallback={<div className="min-h-[420px] animate-pulse rounded-xl bg-white/[0.03]" />}>
+            <QuoteForm />
+          </Suspense>
         </div>
       </section>
     </main>

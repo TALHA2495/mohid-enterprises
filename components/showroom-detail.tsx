@@ -48,6 +48,16 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
     { icon: Globe, label: 'Origin', value: 'Pakistan' },
   ]
 
+  // Carry the active product's context into the quote form so the RFQ
+  // pre-fills and the Zod schema can enforce the product's own MOQ.
+  const quoteHref = `/quote?${new URLSearchParams({
+    product: product.name,
+    material: product.material,
+    width: product.width,
+    moq: findSpec(product, ['minimum order quantity'], ''),
+  }).toString()}`
+  const sampleHref = quoteHref
+
 
   return (
     <section className="product-detail relative z-10 min-h-screen overflow-hidden bg-[#0a0c0b] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
@@ -106,13 +116,13 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
 
             <div className="mt-7 flex flex-col gap-3.5 sm:flex-row">
               <a
-                href="/quote"
+                href={quoteHref}
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#01aa3f] px-6 py-3.5 text-sm font-semibold text-[#ffffff] transition-colors hover:bg-[#00ff59]"
               >
                 Request quote &amp; sample <ArrowUpRight className="size-4" />
               </a>
               <a
-                href="/quote"
+                href={sampleHref}
                 className="inline-flex flex-1 items-center justify-center rounded-full border border-white/20 px-6 py-3.5 text-sm text-white transition-colors hover:bg-white/10"
               >
                 Request physical sample
