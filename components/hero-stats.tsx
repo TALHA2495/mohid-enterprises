@@ -11,12 +11,12 @@ export function HeroStats() {
       {stats.map((stat) => (
         <div
           key={stat.value}
-          className="flex flex-col gap-1 rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-md transition-colors hover:border-emerald-400/40 hover:bg-white/[0.07]"
+          className="flex flex-col gap-1 rounded-xl border border-black/10 bg-white/70 p-5 backdrop-blur-md transition-colors hover:border-emerald-400/40 hover:bg-white/80"
         >
-          <dt className="text-lg font-semibold tracking-tight text-white">
+          <dt className="text-lg font-semibold tracking-tight text-black">
             {stat.value}
           </dt>
-          <dd className="text-sm leading-relaxed text-white/55 text-pretty">
+          <dd className="text-sm leading-relaxed text-black/55 text-pretty">
             {stat.label}
           </dd>
         </div>

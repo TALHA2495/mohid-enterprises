@@ -60,7 +60,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
 
 
   return (
-    <section className="product-detail relative z-10 min-h-screen overflow-hidden bg-[#0a0c0b] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
+    <section className="product-detail relative z-10 min-h-screen overflow-hidden bg-[#f4f7f8] px-4 pb-20 pt-8 sm:px-6 lg:px-10">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_50%_at_50%_0%,rgba(255,255,255,0.05),transparent_65%)]" />
       <div className="relative mx-auto max-w-7xl">
         <button type="button" onClick={onBack} className="inline-flex items-center gap-2 text-sm font-medium text-[#00c853] transition-colors hover:text-[#00ff59]">
@@ -68,8 +68,8 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
         </button>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-[1.02fr_1fr] lg:gap-12">
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#101413]">
-            <div className="relative aspect-[16/11] overflow-hidden bg-black/40">
+          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white">
+            <div className="relative aspect-[16/11] overflow-hidden bg-black/5">
               <Image
                   src={product.image}
                   alt={`${product.name} textile trim � ${GALLERY_VIEWS[view].label}`}
@@ -87,7 +87,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
             </div>
             <div className="flex items-center gap-2.5 p-3.5">
               {GALLERY_VIEWS.map((galleryView, index) => (
-                <button key={galleryView.label} type="button" onClick={() => setView(index)} aria-label={`Show ${galleryView.label.toLowerCase()}`} aria-pressed={view === index} className={`relative h-14 min-w-16 flex-1 overflow-hidden rounded-lg border transition ${view === index ? 'border-[#00c853] ring-1 ring-[#00c853]' : 'border-white/10 opacity-70 hover:opacity-100'}`}>
+                <button key={galleryView.label} type="button" onClick={() => setView(index)} aria-label={`Show ${galleryView.label.toLowerCase()}`} aria-pressed={view === index} className={`relative h-14 min-w-16 flex-1 overflow-hidden rounded-lg border transition ${view === index ? 'border-[#00c853] ring-1 ring-[#00c853]' : 'border-black/10 opacity-70 hover:opacity-100'}`}>
                   <Image src={product.image} alt="" fill loading="lazy" quality={70} sizes="100px" className={`size-full object-cover ${galleryView.className}`} />
                 </button>
               ))}
@@ -95,20 +95,20 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
           </div>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#00c853]">{product.type} � {product.material}</p>
-            <h1 className="mt-4 font-serif text-4xl font-medium leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-[64px]">
+            <h1 className="mt-4 font-serif text-4xl font-medium leading-[1.05] tracking-tight text-black sm:text-5xl lg:text-[64px]">
               {titleFirst} {titleRest.length > 0 && <span className="text-[#00c853]">{titleRest.join(' ')}</span>}
             </h1>
-            <p className="mt-5 max-w-xl text-[15px] leading-7 text-white/60">
+            <p className="mt-5 max-w-xl text-[15px] leading-7 text-black/60">
               {product.description} Produced to consistent width and finish density.
             </p>
 
-            <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-4">
+            <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10 sm:grid-cols-4">
               {specChips.map(({ icon: Icon, label, value }) => (
-                <div key={label} className="flex items-start gap-3 bg-[#101413] p-4">
+                <div key={label} className="flex items-start gap-3 bg-white p-4">
                   <Icon className="mt-0.5 size-5 shrink-0 text-[#00c853]" strokeWidth={1.6} />
                   <div>
-                    <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-white/45">{label}</p>
-                    <p className="mt-1.5 text-sm leading-5 text-white/90">{value}</p>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-black/45">{label}</p>
+                    <p className="mt-1.5 text-sm leading-5 text-black/90">{value}</p>
                   </div>
                 </div>
               ))}
@@ -123,14 +123,14 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
               </a>
               <a
                 href={sampleHref}
-                className="inline-flex flex-1 items-center justify-center rounded-full border border-white/20 px-6 py-3.5 text-sm text-white transition-colors hover:bg-white/10"
+                className="inline-flex flex-1 items-center justify-center rounded-full border border-black/20 px-6 py-3.5 text-sm text-black transition-colors hover:bg-black/[0.06]"
               >
                 Request physical sample
               </a>
             </div>
             <ul className="mt-7 flex flex-wrap gap-x-7 gap-y-3">
               {PRODUCT_FEATURES.map((feature) => (
-                <li key={feature} className="flex items-center gap-2 text-sm text-white/80">
+                <li key={feature} className="flex items-center gap-2 text-sm text-black/80">
                   <CircleCheck className="size-[18px] text-[#00c853]" strokeWidth={1.6} /> {feature}
                 </li>
               ))}
@@ -142,39 +142,39 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
         <div className="product-cards-grid mt-12 grid gap-6 lg:grid-cols-[1.15fr_1fr]">
           <div>
           </div>
-          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#101413] p-6 sm:p-8">
+          <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-white p-6 sm:p-8">
             <span aria-hidden="true" className="absolute left-0 top-8 h-14 w-[3px] rounded-r-full bg-[#00c853]" />
-            <h2 className="text-lg font-semibold text-white">Technical specifications</h2>
+            <h2 className="text-lg font-semibold text-black">Technical specifications</h2>
             <div className="mt-6">
               {product.specs.map(([label, value]) => (
-                <div key={label} className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] gap-4 border-b border-white/[0.07] py-3.5 last:border-0">
-                  <dt className="text-[11px] uppercase tracking-[0.14em] text-white/40">{label}</dt>
-                  <dd className="text-sm leading-6 text-white/85">{value}</dd>
+                <div key={label} className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] gap-4 border-b border-black/[0.07] py-3.5 last:border-0">
+                  <dt className="text-[11px] uppercase tracking-[0.14em] text-black/40">{label}</dt>
+                  <dd className="text-sm leading-6 text-black/85">{value}</dd>
                 </div>
               ))}
             </div>
           </div>
           <div>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-[#101413] p-6 sm:p-8">
+          <div className="rounded-2xl border border-black/10 bg-white p-6 sm:p-8">
             <div className="flex items-center gap-2.5">
-              <SlidersHorizontal className="size-5 text-white/70" strokeWidth={1.6} />
-              <h2 className="text-lg font-semibold text-white">Customization options</h2>
+              <SlidersHorizontal className="size-5 text-black/70" strokeWidth={1.6} />
+              <h2 className="text-lg font-semibold text-black">Customization options</h2>
             </div>
             <div className="mt-4">
               {CUSTOMIZATION_OPTIONS.map((option) => (
-                <div key={option} className="flex items-center gap-3 border-b border-white/[0.07] py-3.5 text-sm text-white/85 last:border-0">
+                <div key={option} className="flex items-center gap-3 border-b border-black/[0.07] py-3.5 text-sm text-black/85 last:border-0">
                     <CircleCheck className="size-[18px] shrink-0 text-[#00c853]" strokeWidth={1.6} /> {option}
                 </div>
               ))}
             </div>
-            <div className="mt-7 rounded-xl border border-white/10 bg-white/[0.04] p-5">
+            <div className="mt-7 rounded-xl border border-black/10 bg-black/[0.03] p-5">
               <div className="flex items-start gap-3.5">
                 <Package className="mt-0.5 size-5 shrink-0 text-[#00c853]" strokeWidth={1.6} />
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#00c853]">Sample &amp; production</p>
-                  <p className="mt-2 text-[13px] leading-6 text-white/55">Samples available on request.</p>
-                  <p className="text-[13px] leading-6 text-white/55">Production lead time depends on order quantity and specifications.</p>
+                  <p className="mt-2 text-[13px] leading-6 text-black/55">Samples available on request.</p>
+                  <p className="text-[13px] leading-6 text-black/55">Production lead time depends on order quantity and specifications.</p>
                   </div>
                 </div>
             </div>

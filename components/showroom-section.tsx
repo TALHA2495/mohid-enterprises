@@ -295,7 +295,7 @@ const filterTypes: Record<string, string[]> = {
 
 const ProductDetail = dynamic(() => import('./showroom-detail'), {
   ssr: false,
-  loading: () => <section className="min-h-screen bg-[#0a0c0b]" />,
+  loading: () => <section className="min-h-screen bg-[#f4f7f8]" />,
 })
 
 export function ShowroomSection() {
@@ -319,7 +319,7 @@ export function ShowroomSection() {
   if (selected) return <ProductDetail key={selected.name} product={selected} onBack={() => setSelected(null)} />
 
   return (
-    <section id="showroom" className="relative z-10 px-4 pb-16 pt-8 text-white sm:px-6 lg:px-10">
+    <section id="showroom" className="relative z-10 px-4 pb-16 pt-8 text-black sm:px-6 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex gap-2 overflow-x-auto pb-1" aria-label="Product filters">
           {filters.map((item) => (
@@ -330,7 +330,7 @@ export function ShowroomSection() {
               className={`shrink-0 rounded-full border px-4 py-2 text-xs transition ${
                 filter === item
                   ? 'border-[#01aa3f] bg-[#01aa3f] text-[#ffffff]'
-                  : 'border-white/15 bg-white/5 text-white/65 hover:text-white'
+                  : 'border-white/40 bg-black/[0.04] text-white drop-shadow-sm hover:text-white'
               }`}
             >
               {item}
@@ -344,9 +344,9 @@ export function ShowroomSection() {
               key={product.name}
               type="button"
               onClick={() => setSelected(product)}
-              className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101413] text-left backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#00c853]/50 hover:bg-[#151a19]"
+              className="group overflow-hidden rounded-2xl border border-black/10 bg-white text-left backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#00c853]/50 hover:bg-[#f0f5f4]"
             >
-              <div className="relative h-56 overflow-hidden bg-black/40">
+              <div className="relative h-56 overflow-hidden bg-black/5">
                 <Image
                     src={product.image}
                     alt={`${product.name} textile trim`}
@@ -360,11 +360,11 @@ export function ShowroomSection() {
               <div className="p-4">
                 <p className="font-mono text-[10px] tracking-[0.18em] text-[#00c853]">{product.type}</p>
                 <div className="mt-2 flex items-start justify-between gap-3">
-                  <h2 className="text-xl font-semibold tracking-tight text-white">{product.name}</h2>
-                  <ArrowRight className="mt-1 size-4 text-white/30 group-hover:text-[#00c853]" />
+                  <h2 className="text-xl font-semibold tracking-tight text-black">{product.name}</h2>
+                  <ArrowRight className="mt-1 size-4 text-black/30 group-hover:text-[#00c853]" />
                 </div>
-                <p className="mt-2 text-xs leading-5 text-white/50">{product.description}</p>
-                <span className="mt-4 inline-flex text-xs font-medium text-white/80 underline decoration-white/20 underline-offset-4 transition-colors group-hover:text-[#00c853] group-hover:decoration-[#00c853]">View details</span>
+                <p className="mt-2 text-xs leading-5 text-black/50">{product.description}</p>
+                <span className="mt-4 inline-flex text-xs font-medium text-black/80 underline decoration-black/20 underline-offset-4 transition-colors group-hover:text-[#00c853] group-hover:decoration-[#00c853]">View details</span>
               </div>
             </button>
           ))}
@@ -375,7 +375,7 @@ export function ShowroomSection() {
             <button
               type="button"
               onClick={handleLoadMore}
-              className="rounded-full border border-white/15 bg-white/5 px-8 py-3 text-sm font-medium text-white/80 transition hover:border-[#00c853]/50 hover:text-white"
+              className="rounded-full border border-white/40 bg-black/[0.04] px-8 py-3 text-sm font-medium text-white drop-shadow-sm transition hover:border-[#00c853]/50 hover:text-black"
             >
               Load more
             </button>

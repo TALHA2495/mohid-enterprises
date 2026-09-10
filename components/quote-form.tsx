@@ -68,7 +68,7 @@ export function QuoteForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-3" noValidate>
       {productContext.product && (
-        <div className="flex flex-wrap gap-2 rounded-lg border border-white/10 bg-white/[0.04] p-3">
+        <div className="flex flex-wrap gap-2 rounded-lg border border-black/10 bg-black/[0.03] p-3">
           {[productContext.product, productContext.material, productContext.width, productContext.moq]
             .filter(Boolean)
             .map((chip) => (
@@ -79,65 +79,65 @@ export function QuoteForm() {
         </div>
       )}
 
-      <label className="grid gap-1 text-xs font-medium text-white/85">
+      <label className="grid gap-1 text-xs font-medium text-black/85">
         Inquiry details
         <textarea
           rows={3}
           placeholder="Tell us about your material, width, color, or trimming specifications..."
-          className="mt-1 resize-none rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm font-normal text-white outline-none placeholder:text-white/35 focus:border-[#00c853]"
+          className="mt-1 resize-none rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none placeholder:text-black/45 focus:border-[#00c853]"
           {...register('inquiry')}
         />
         {errors.inquiry && <span className="text-[11px] font-normal text-red-400">{errors.inquiry.message}</span>}
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="grid gap-1 text-xs font-medium text-white/85">
+        <label className="grid gap-1 text-xs font-medium text-black/85">
           Company name
           <input
-            className="rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm font-normal text-white outline-none focus:border-[#00c853]"
+            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
             {...register('companyName')}
           />
           {errors.companyName && <span className="text-[11px] font-normal text-red-400">{errors.companyName.message}</span>}
         </label>
 
-        <label className="grid gap-1 text-xs font-medium text-white/85">
+        <label className="grid gap-1 text-xs font-medium text-black/85">
           Work email
           <input
             type="email"
-            className="rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm font-normal text-white outline-none focus:border-[#00c853]"
+            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
             {...register('workEmail')}
           />
           {errors.workEmail && <span className="text-[11px] font-normal text-red-400">{errors.workEmail.message}</span>}
         </label>
 
-        <label className="grid gap-1 text-xs font-medium text-white/85">
+        <label className="grid gap-1 text-xs font-medium text-black/85">
           Quantity{moqFloor !== null ? ` (MOQ: ${productContext.moq})` : ''}
           <input
             type="number"
             min="0"
             inputMode="numeric"
-            className="rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm font-normal text-white outline-none focus:border-[#00c853]"
+            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
             {...register('quantity')}
           />
           {errors.quantity && <span className="text-[11px] font-normal text-red-400">{errors.quantity.message}</span>}
         </label>
 
-        <label className="grid gap-1 text-xs font-medium text-white/85">
+        <label className="grid gap-1 text-xs font-medium text-black/85">
           Destination port
           <input
             placeholder="e.g. Istanbul, Yokohama"
-            className="rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm font-normal text-white outline-none placeholder:text-white/35 focus:border-[#00c853]"
+            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none placeholder:text-black/45 focus:border-[#00c853]"
             {...register('destinationPort')}
           />
           {errors.destinationPort && <span className="text-[11px] font-normal text-red-400">{errors.destinationPort.message}</span>}
         </label>
       </div>
 
-      <label className="grid gap-1 text-xs font-medium text-white/85">
+      <label className="grid gap-1 text-xs font-medium text-black/85">
         Additional notes
         <textarea
           rows={2}
-          className="resize-none rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm font-normal text-white outline-none focus:border-[#00c853]"
+          className="resize-none rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
           {...register('notes')}
         />
         {errors.notes && <span className="text-[11px] font-normal text-red-400">{errors.notes.message}</span>}
