@@ -1,18 +1,10 @@
 'use client'
 
-import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown, CircleCheck, Package, SlidersHorizontal } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, ChevronDown, CircleCheck, Package, SlidersHorizontal } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { Product } from './showroom-section'
-
-const GALLERY_VIEWS = [
-  { label: 'Full view', className: 'object-center' },
-  { label: 'Weave detail', className: 'object-left scale-[1.7]' },
-  { label: 'Edge detail', className: 'object-right scale-[1.6]' },
-  { label: 'Texture macro', className: 'object-center scale-[2.1]' },
-  { label: 'Top detail', className: 'object-top scale-[1.35]' },
-]
 
 const PRODUCT_FEATURES = ['Consistent quality', 'Custom widths', 'Bulk production', 'Global shipping']
 
@@ -33,8 +25,8 @@ function findSpec(product: Product, keywords: string[], fallback: string) {
 }
 
 function ProductDetail({ product, onBack }: { product: Product; onBack: () => void }) {
-  const [view, setView] = useState(0)
   const [customOpen, setCustomOpen] = useState(false)
+  const imageRef = useRef<HTMLImageElement>(null)
   const [titleFirst, ...titleRest] = product.name.split(' ')
 
   useEffect(() => {
@@ -59,33 +51,30 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
         </button>
 
         <div className="mt-5 grid gap-6 lg:grid-cols-[1.02fr_1fr] lg:gap-8">
-          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white">
-            <div className="relative aspect-[16/11] overflow-hidden bg-black/5">
+          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white lg:self-start">
+            <div
+                className="group relative aspect-[16/11] overflow-hidden bg-black/5"
+                onMouseMove={(event) => {
+                  const rect = event.currentTarget.getBoundingClientRect()
+                  const x = ((event.clientX - rect.left) / rect.width) * 100
+                  const y = ((event.clientY - rect.top) / rect.height) * 100
+                  imageRef.current?.style.setProperty('transform-origin', `${x}% ${y}%`)
+                }}
+                onMouseLeave={() => imageRef.current?.style.setProperty('transform-origin', 'center')}
+              >
               <Image
+                  ref={imageRef}
                   src={product.image}
-                  alt={`${product.name} textile trim � ${GALLERY_VIEWS[view].label}`}
+                  alt={`${product.name} - ${product.type} trim`}
                   fill
                   quality={70}
                   sizes="(min-width: 1024px) 50vw, 100vw"
-                  className={`size-full object-cover transition-transform duration-500 ${GALLERY_VIEWS[view].className}`}
+                  className="size-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.6]"
                 />
-              <button type="button" aria-label="Previous image" onClick={() => setView((view - 1 + GALLERY_VIEWS.length) % GALLERY_VIEWS.length)} className="absolute left-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/70">
-                <ArrowLeft className="size-4" />
-              </button>
-              <button type="button" aria-label="Next image" onClick={() => setView((view + 1) % GALLERY_VIEWS.length)} className="absolute right-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/70">
-                <ArrowRight className="size-4" />
-              </button>
-            </div>
-            <div className="flex items-center gap-2.5 p-3.5">
-              {GALLERY_VIEWS.map((galleryView, index) => (
-                <button key={galleryView.label} type="button" onClick={() => setView(index)} aria-label={`Show ${galleryView.label.toLowerCase()}`} aria-pressed={view === index} className={`relative h-14 min-w-16 flex-1 overflow-hidden rounded-lg border transition ${view === index ? 'border-[#00c853] ring-1 ring-[#00c853]' : 'border-black/10 opacity-70 hover:opacity-100'}`}>
-                  <Image src={product.image} alt="" fill loading="lazy" quality={70} sizes="100px" className={`size-full object-cover ${galleryView.className}`} />
-                </button>
-              ))}
             </div>
           </div>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#00c853]">{product.type} � {product.material}</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#00c853]">{product.type} · {product.material}</p>
             <h1 className="mt-3 font-serif text-2xl font-semibold leading-[1.1] tracking-tight text-black sm:text-3xl lg:text-4xl">
               {titleFirst} {titleRest.length > 0 && <span className="text-[#00c853]">{titleRest.join(' ')}</span>}
             </h1>

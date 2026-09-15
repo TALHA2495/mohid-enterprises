@@ -1,9 +1,9 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
+import ProductDetail from './showroom-detail'
 import { FILTER_TYPES, SHOWROOM_FILTERS } from '@/lib/showroom'
 import type { ProductType } from '@/lib/showroom'
 
@@ -285,11 +285,6 @@ const products: Product[] = [
     specs: [['Product type', 'PP woven egg conveyor belt'], ['Material composition', 'Nylon, polyester & polypropylene'], ['Available widths', '90–120mm'], ['Length', 'Custom'], ['Egg broken rate', 'Below 0.3%'], ['Applications', 'Poultry farm egg collecting, assembly-line conveyor belts'], ['Finish', 'UV & anti-static treated, washable in cold water']],
   },
 ]
-
-const ProductDetail = dynamic(() => import('./showroom-detail'), {
-  ssr: false,
-  loading: () => <section className="min-h-screen bg-[#f4f7f8]" />,
-})
 
 export function ShowroomSection() {
   const [selected, setSelected] = useState<Product | null>(null)
