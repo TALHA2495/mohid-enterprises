@@ -32,7 +32,6 @@ const aggressive = new Set([
   'hero-bg.webp',
   'trims2.webp',
   'bg-img-for-mobile-screen.webp',
-  'trims-bg.webp',
 ])
 
 let beforeTotal = 0

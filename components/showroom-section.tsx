@@ -1,13 +1,15 @@
 'use client'
 
-import { ArrowRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
+import { FILTER_TYPES, SHOWROOM_FILTERS } from '@/lib/showroom'
+import type { ProductType } from '@/lib/showroom'
+
 export type Product = {
   name: string
-  type: string
+  type: ProductType
   description: string
   material: string
   width: string
@@ -181,10 +183,10 @@ const products: Product[] = [
     specs: [['Product type', 'Label tape'], ['Material composition', 'Polyester'], ['Available widths', 'Various'], ['Color options', 'Multiple colors'], ['Finish', 'Printable'], ['Applications', 'Garments, branding, identification']],
   },
   {
-    name: 'Waste Belt', type: 'UTILITY', image: '/product%20images%20compressed/Waste%20Belt_compressed.webp',
+    name: 'Waist Belt', type: 'UTILITY', image: '/product%20images%20compressed/Waste%20Belt_compressed.webp',
     description: 'Recycled material belt for sustainable garment production.',
     material: 'Recycled material', width: 'Various', colors: 'Various', finish: 'Utility',
-    specs: [['Product type', 'Waste belt'], ['Material composition', 'Recycled material'], ['Available widths', 'Various'], ['Color options', 'Various'], ['Finish', 'Utility'], ['Applications', 'Garments, sustainable production']],
+    specs: [['Product type', 'Waist belt'], ['Material composition', 'Recycled material'], ['Available widths', 'Various'], ['Color options', 'Various'], ['Finish', 'Utility'], ['Applications', 'Garments, sustainable production']],
   },
   {
     name: 'Cotton Belts', type: 'UTILITY', image: '/product%20images%20compressed/Cotton%20Belts_compressed.webp',
@@ -259,10 +261,10 @@ const products: Product[] = [
     specs: [['Product type', 'Jute cord'], ['Material composition', 'Jute'], ['Available widths', 'Various'], ['Color options', 'Natural and multiple colors'], ['Finish', 'Natural'], ['Applications', 'Crafts, packaging, home decor']],
   },
   {
-    name: 'Braid Rope', type: 'CORD', image: '/product%20images%20compressed/Braid%20Rope_compressed.webp',
-    description: 'High-strength braided rope available in different thicknesses and colors.',
-    material: 'Polyester / Nylon / Polypropylene', width: 'Various', colors: 'Multiple colors', finish: 'Braided',
-    specs: [['Product type', 'Braid rope'], ['Material composition', 'Polyester / Nylon / Polypropylene'], ['Available widths', 'Various'], ['Color options', 'Multiple colors'], ['Thickness', 'Various'], ['Finish', 'Braided'], ['Applications', 'Garments, bags, industrial']],
+    name: 'Braid Rope', type: 'EGG BELT', image: '/product%20images%20compressed/Braid%20Rope_compressed.webp',
+    description: 'Durable braided rope manufactured from Nylon, Polyester, and Polypropylene, available in 5mm–20mm thicknesses and customized lengths according to customer requirements.',
+    material: 'Nylon, Polyester & Polypropylene', width: '5mm–20mm', colors: 'White', finish: 'Braided rope',
+    specs: [['Product type', 'Braid rope'], ['Material', 'Nylon, Polyester & Polypropylene'], ['Thickness', '5mm to 20mm'], ['Length', 'Depends on customer requirements'], ['Color', 'White'], ['Construction', 'Braided rope'], ['Packing', 'Standard package']],
   },
   {
     name: 'Fancy Yarn', type: 'YARN', image: '/product%20images%20compressed/Fancy%20Yarn_compressed.webp',
@@ -276,22 +278,13 @@ const products: Product[] = [
     material: 'Textile / Synthetic fiber', width: 'Various', colors: 'Multiple colors', finish: 'Soft / Durable',
     specs: [['Product type', 'Pouch'], ['Material composition', 'Textile / synthetic fiber'], ['Available sizes', 'Various'], ['Color options', 'Multiple colors'], ['Finish', 'Soft / durable'], ['Applications', 'Storage, packaging, gifts']],
   },
+  {
+    name: 'PP Woven Egg Conveyor Belt', type: 'EGG BELT', image: '/product%20images%20compressed/PP%20Woven%20Egg%20Conveyor%20Belt.webp',
+    description: 'UV and anti-static treated PP woven belt for egg collection in poultry farms, with an egg broken rate below 0.3%.',
+    material: 'Nylon / Polyester / Polypropylene', width: '90mm–120mm', colors: 'Custom', finish: 'UV & anti-static treated',
+    specs: [['Product type', 'PP woven egg conveyor belt'], ['Material composition', 'Nylon, polyester & polypropylene'], ['Available widths', '90–120mm'], ['Length', 'Custom'], ['Egg broken rate', 'Below 0.3%'], ['Applications', 'Poultry farm egg collecting, assembly-line conveyor belts'], ['Finish', 'UV & anti-static treated, washable in cold water']],
+  },
 ]
-
-const filters = ['All trims', 'Elastics', 'Tapes', 'Ribbons', 'Cords', 'Shoelaces', 'Belts', 'Pom Poms', 'Lace', 'Yarn', 'Pouch']
-
-const filterTypes: Record<string, string[]> = {
-  'Elastics': ['ELASTIC'],
-  'Tapes': ['TAPE'],
-  'Ribbons': ['RIBBON'],
-  'Cords': ['CORD', 'TASSEL'],
-  'Shoelaces': ['SHOELACE'],
-  'Belts': ['UTILITY'],
-  'Pom Poms': ['POM POM'],
-  'Lace': ['LACE'],
-  'Yarn': ['YARN'],
-  'Pouch': ['POUCH'],
-}
 
 const ProductDetail = dynamic(() => import('./showroom-detail'), {
   ssr: false,
@@ -303,48 +296,90 @@ export function ShowroomSection() {
   const [filter, setFilter] = useState('All trims')
   const [loadedCount, setLoadedCount] = useState(8)
 
-  const visible = products.filter((product) => filter === 'All trims' || (filterTypes[filter]?.includes(product.type) ?? false))
+  // Deep-linkable detail + filter: /showroom?product=<name>&filter=<filter>.
+  // Browser back/forward syncs grid <-> detail and filter state.
+  useEffect(() => {
+    const syncFromUrl = () => {
+      const search = new URLSearchParams(window.location.search)
+      const name = search.get('product')
+      setSelected(name ? products.find((p) => p.name === name) ?? null : null)
+      const filterName = search.get('filter')
+      if (filterName && SHOWROOM_FILTERS.includes(filterName)) {
+        setFilter(filterName)
+        setLoadedCount(8)
+      } else if (filterName) {
+        setFilter('All trims')
+      }
+    }
+    syncFromUrl()
+    window.addEventListener('popstate', syncFromUrl)
+    return () => window.removeEventListener('popstate', syncFromUrl)
+  }, [])
+
+  const handleSelect = (product: Product) => {
+    setSelected(product)
+    const params = new URLSearchParams(window.location.search)
+    params.set('product', product.name)
+    window.history.pushState(null, '', `${window.location.pathname}?${params.toString()}`)
+  }
+
+  const handleBack = () => {
+    setSelected(null)
+    const params = new URLSearchParams(window.location.search)
+    params.delete('product')
+    const query = params.toString()
+    window.history.pushState(null, '', query ? `${window.location.pathname}?${query}` : window.location.pathname)
+  }
+
+  const visible = products.filter((product) => filter === 'All trims' || (FILTER_TYPES[filter]?.includes(product.type) ?? false))
   const displayed = visible.slice(0, loadedCount)
   const hasMore = loadedCount < visible.length
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter)
     setLoadedCount(8)
+    const params = new URLSearchParams(window.location.search)
+    if (newFilter === 'All trims') params.delete('filter')
+    else params.set('filter', newFilter)
+    const query = params.toString()
+    window.history.pushState(null, '', query ? `${window.location.pathname}?${query}` : window.location.pathname)
   }
 
   const handleLoadMore = () => {
     setLoadedCount((prev) => prev + 8)
   }
 
-  if (selected) return <ProductDetail key={selected.name} product={selected} onBack={() => setSelected(null)} />
+  if (selected) return <ProductDetail key={selected.name} product={selected} onBack={handleBack} />
 
   return (
-    <section id="showroom" className="relative z-10 px-4 pb-16 pt-8 text-black sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex gap-2 overflow-x-auto pb-1" aria-label="Product filters">
-          {filters.map((item) => (
+    <section id="showroom" className="relative z-10 flex h-[calc(100vh-5.3125rem)] flex-col px-4 pt-8 text-black sm:px-6 md:h-[calc(100vh-5.0625rem)] lg:px-10">
+      <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col">
+        <div className="mb-8 flex shrink-0 gap-2 overflow-x-auto pb-1" aria-label="Product filters">
+          {SHOWROOM_FILTERS.map((item) => (
             <button
               key={item}
               type="button"
               onClick={() => handleFilterChange(item)}
-              className={`shrink-0 rounded-full border px-4 py-2 text-xs transition ${
+              className={`shrink-0 rounded-full border px-4 py-2.5 text-xs transition ${
                 filter === item
-                  ? 'border-[#01aa3f] bg-[#01aa3f] text-[#ffffff]'
-                  : 'border-white/40 bg-black/[0.04] text-white drop-shadow-sm hover:text-white'
+                  ? 'border-[#01aa3f] bg-[#01aa3f] text-black'
+                  : 'border-white/40 bg-black/[0.04] text-white drop-shadow-sm active:scale-[0.95]'
               }`}
+              aria-pressed={filter === item}
             >
               {item}
             </button>
           ))}
         </div>
 
+        <div aria-label="Product grid" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto pb-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {displayed.map((product, index) => (
             <button
               key={product.name}
               type="button"
-              onClick={() => setSelected(product)}
-              className="group overflow-hidden rounded-2xl border border-black/10 bg-white text-left backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#00c853]/50 hover:bg-[#f0f5f4]"
+              onClick={() => handleSelect(product)}
+              className="group overflow-hidden rounded-2xl border border-black/10 bg-white text-left transition hover:-translate-y-1 hover:border-[#00c853]/50 hover:bg-[#f0f5f4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]"
             >
               <div className="relative h-56 overflow-hidden bg-black/5">
                 <Image
@@ -357,14 +392,8 @@ export function ShowroomSection() {
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
               </div>
-              <div className="p-4">
-                <p className="font-mono text-[10px] tracking-[0.18em] text-[#00c853]">{product.type}</p>
-                <div className="mt-2 flex items-start justify-between gap-3">
-                  <h2 className="text-xl font-semibold tracking-tight text-black">{product.name}</h2>
-                  <ArrowRight className="mt-1 size-4 text-black/30 group-hover:text-[#00c853]" />
-                </div>
-                <p className="mt-2 text-xs leading-5 text-black/50">{product.description}</p>
-                <span className="mt-4 inline-flex text-xs font-medium text-black/80 underline decoration-black/20 underline-offset-4 transition-colors group-hover:text-[#00c853] group-hover:decoration-[#00c853]">View details</span>
+              <div className="flex items-center justify-center p-3.5 text-center">
+                <h2 className="text-[13px] font-semibold leading-snug tracking-tight text-black">{product.name}</h2>
               </div>
             </button>
           ))}
@@ -375,12 +404,13 @@ export function ShowroomSection() {
             <button
               type="button"
               onClick={handleLoadMore}
-              className="rounded-full border border-white/40 bg-black/[0.04] px-8 py-3 text-sm font-medium text-white drop-shadow-sm transition hover:border-[#00c853]/50 hover:text-black"
+              className="rounded-full border border-[#00c853] bg-black/[0.04] px-8 py-3 text-sm font-medium text-black drop-shadow-sm transition hover:border-[#00c853]/50 hover:text-black"
             >
               Load more
             </button>
           </div>
         )}
+        </div>
       </div>
     </section>
   )
