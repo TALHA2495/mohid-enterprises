@@ -31,13 +31,18 @@ policies** (anon + authenticated keys can read/write nothing directly).
 
 ## 3. Configure the app
 
-Copy the values from Supabase → **Settings → API** into `.env.local`:
+Copy the values from Supabase → **Settings → API keys** into `.env.local`:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...      # client-safe (RLS-locked)
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGc...          # SECRET — server-side only
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...   # public, client-safe (RLS-locked)
+SUPABASE_SERVICE_ROLE_KEY=sb_secret_...            # SECRET — server-side only
 ```
+
+Both key styles work: new projects issue **publishable / secret** keys, older
+ones issue **anon / service_role** JWTs. The server key is the one that can
+bypass RLS — treat it like a password. Leave a value empty until you have the
+real one; a leftover placeholder counts as "configured" and fails with a 401.
 
 Until these are set the app degrades gracefully: the quote form still hands
 off to WhatsApp (no persistence) and `/admin` shows a "not configured" panel.
@@ -115,6 +120,22 @@ FROM audit_log
 WHERE entity_type = 'quote' AND entity_id = 'Q-20260916-XXXXXX'
 ORDER BY timestamp DESC;
 ```
+
+## 6. Troubleshooting (errors already hit once)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `ERROR: 42883: function public.create_quote(text, …) does not exist` while running `schema.sql` | a `GRANT`/`REVOKE` line listed a function signature that didn't match the definition | fixed in the committed `schema.sql` — always paste the **whole** file from the repo, not a saved copy |
+| After that error, **no tables exist** | the SQL Editor runs the script in a single transaction, so the failure rolled everything back | re-run the full fixed `schema.sql`; expect `Success. No rows returned.` |
+| `404 PGRST205 Could not find the table 'public.customers'` (from the app or a REST probe) | the schema was never applied | run `supabase/schema.sql` (see step 2) |
+| `404 PGRST202 … create_quote … no matches were found` | the RPC doesn't exist yet | same as above — the RPC is created by the schema file |
+| `401 Invalid API key` | a placeholder (`eyJhbGc...`) is still in `.env.local`, or the URL/key are from different projects | paste the real values, then restart `pnpm dev` |
+| `401 Secret API key required` when calling `/rest/v1/` with the publishable/anon key | that root endpoint only accepts a secret key; it is **not** a sign of misconfiguration | probe a table (`/rest/v1/customers?select=*&limit=1`) or just use the app |
+| `/admin` shows "not configured" | `SUPABASE_SERVICE_ROLE_KEY` is empty or commented out | paste the secret key; the public form is unaffected |
+
+A quick health check without any tooling — with the app running, submit the
+quote form once: `[Supabase]` errors appear in the browser console and the row
+lands in Table Editor → `quotes` (plus `customers`, `quote_line_items`, `audit_log`).
 
 ## Design deviations from the original draft (and why)
 
