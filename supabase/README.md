@@ -69,6 +69,81 @@ select * from audit_log order by timestamp desc limit 5;
 select quote_number, quote_status, customer_notes, rfq_details from quotes order by created_at desc limit 3;
 ```
 
+## 4b. Verify the ledger + triggers (nothing is committed)
+
+`orders`, `invoices` and `payments` must be exercised inside a transaction that
+ends in `rollback;`: `payments` is a write-once ledger and its `DELETE` is blocked
+by `trg_payments_immutable`, so a test row could otherwise never be removed.
+
+Paste the block below into the SQL Editor and read the **Messages** tab — expect
+three `NOTICE` lines, two `OK:` lines, no `FAIL`, then `ROLLBACK`:
+
+```sql
+begin;
+do $$
+declare
+  v_cust uuid; v_quote text; v_order uuid; v_inv uuid;
+  v_status text; v_paid numeric; v_bal numeric;
+  v_o_status text; v_o_paid numeric; v_o_due numeric;
+begin
+  select customer_id into v_cust from create_quote(
+    'Ledger Test','Test Co','ledger-test@example.com','+923001234567',
+    'Elastic Trim','Polyester',20,100,'{}'::jsonb,7);
+  select id into v_quote from quotes where customer_id = v_cust order by created_at desc limit 1;
+
+  insert into orders (order_number, customer_id, quote_id, order_status, total_amount,
+                      currency, payment_status, amount_due, amount_paid)
+  values ('ORD-TEST-0001', v_cust, v_quote, 'confirmed', 100000, 'PKR', 'unpaid', 100000, 0)
+  returning id into v_order;
+
+  insert into invoices (invoice_number, order_id, customer_id, invoice_status, subtotal,
+                        total_amount, amount_due, balance_remaining)
+  values ('INV-TEST-0001', v_order, v_cust, 'issued', 100000, 100000, 100000, 100000)
+  returning id into v_inv;
+
+  -- 40% payment -> partially_paid on the invoice AND the order
+  insert into payments (payment_number, invoice_id, customer_id, payment_amount, payment_method)
+  values ('PAY-TEST-0001', v_inv, v_cust, 40000, 'bank_transfer');
+
+  select invoice_status, amount_paid, balance_remaining into v_status, v_paid, v_bal from invoices where id = v_inv;
+  select payment_status, amount_paid, amount_due into v_o_status, v_o_paid, v_o_due from orders where id = v_order;
+  raise notice 'partial: invoice=% paid=% balance=% | order=% paid=% due=%', v_status, v_paid, v_bal, v_o_status, v_o_paid, v_o_due;
+  if v_status <> 'partially_paid' or v_paid <> 40000 or v_bal <> 60000 then
+    raise exception 'FAIL invoice partial sync'; end if;
+  if v_o_status <> 'partially_paid' or v_o_paid <> 40000 or v_o_due <> 60000 then
+    raise exception 'FAIL order partial cascade'; end if;
+
+  -- remaining 60% -> fully_paid, zero balance
+  insert into payments (payment_number, invoice_id, customer_id, payment_amount, payment_method)
+  values ('PAY-TEST-0002', v_inv, v_cust, 60000, 'bank_transfer');
+
+  select invoice_status, amount_paid, balance_remaining into v_status, v_paid, v_bal from invoices where id = v_inv;
+  select payment_status, amount_paid, amount_due into v_o_status, v_o_paid, v_o_due from orders where id = v_order;
+  raise notice 'full: invoice=% paid=% balance=% | order=% paid=% due=%', v_status, v_paid, v_bal, v_o_status, v_o_paid, v_o_due;
+  if v_status <> 'fully_paid' or v_bal <> 0 then raise exception 'FAIL invoice full sync'; end if;
+  if v_o_status <> 'fully_paid' or v_o_due <> 0 then raise exception 'FAIL order full cascade'; end if;
+
+  -- reversal (bounced cheque) must re-open the balance
+  update payments set payment_status = 'reversed' where payment_number = 'PAY-TEST-0002';
+  select invoice_status, amount_paid into v_status, v_paid from invoices where id = v_inv;
+  raise notice 'after reversal: invoice=% paid=%', v_status, v_paid;
+  if v_status <> 'partially_paid' or v_paid <> 40000 then raise exception 'FAIL reversal did not re-open balance'; end if;
+
+  -- immutability: both statements MUST raise
+  begin
+    update payments set payment_amount = 1 where payment_number = 'PAY-TEST-0001';
+    raise exception 'FAIL payment_amount was mutable';
+  exception when check_violation then raise notice 'OK: payment_amount update blocked';
+  end;
+  begin
+    delete from payments where payment_number = 'PAY-TEST-0001';
+    raise exception 'FAIL payment row was deletable';
+  exception when check_violation then raise notice 'OK: payment delete blocked';
+  end;
+end $$;
+rollback;
+```
+
 ## 5. Admin reference queries
 
 Revenue by month:
@@ -136,6 +211,30 @@ ORDER BY timestamp DESC;
 A quick health check without any tooling — with the app running, submit the
 quote form once: `[Supabase]` errors appear in the browser console and the row
 lands in Table Editor → `quotes` (plus `customers`, `quote_line_items`, `audit_log`).
+
+## 7. Repeatable checks
+
+**Schema, intake RPC, RLS, persistence and cleanup** — writes four test rows,
+asserts them, then deletes them (safe to run against production; prints no keys):
+
+```bash
+node --env-file=.env.local scripts/verify-supabase.mjs
+# expect: RESULT: 52 passed, 0 failed   (every table reported "back to baseline")
+```
+
+**HTTP smoke test** against a running dev server (`pnpm dev`, adjust the port):
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/quote        # 200
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/admin        # 307 -> /admin/login
+curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Content-Type: application/json" \
+  -d '{"password":"wrong"}' http://localhost:3000/api/admin/login           # 401
+```
+
+Behavioral invariants covered by the two checks above: anon can read nothing and
+write nothing; `create_quote` dedups by email, rejects invalid emails server-side
+and returns `Q-YYYYMMDD-XXXXXX`; the admin session cookie is httpOnly and a forged
+cookie is rejected.
 
 ## Design deviations from the original draft (and why)
 
