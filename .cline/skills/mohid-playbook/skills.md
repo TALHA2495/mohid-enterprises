@@ -37,6 +37,7 @@ This project keeps its skills **in one file** (`skills.md`) plus two long-form r
 | **Code Review / Quality** | Before committing or merging | [Code Review / Quality](#skill-code-review--quality) |
 | **Performance** | Optimizing load, images, Lighthouse | [Performance](#skill-performance) |
 | **RFQ Forms & Validation** | Editing the quote form, schema, or WhatsApp handoff | [RFQ Forms & Validation](#skill-rfq-forms--validation) |
+| **Supabase & Admin** | Editing DB schema, the intake RPC, or `/admin` pages/actions | [Supabase & Admin](#skill-supabase--admin) |
 | **Built-in agent skills** | Environment-provided capabilities | [Built-in agent skills](#built-in-agent-skills) |
 | **Roadmap** | Planned future skills | [Roadmap](#roadmap) |
 ---
@@ -150,11 +151,26 @@ This project keeps its skills **in one file** (`skills.md`) plus two long-form r
 
 1. **Schema lives in `lib/rfq-schema.ts`.** Use `createRfqSchema(productContext)` to build the strict Zod schema. Do not inline validation rules in the component.
 2. **Data-driven MOQ floor.** When a buyer arrives from a showroom product, the product's "Minimum order quantity" spec is parsed via `parseMoq()` and enforced with `superRefine` on the `quantity` field. Preserve this behavior.
-3. **Fields:** inquiry (min 10), companyName (min 2), workEmail (email), quantity (numeric > 0), destinationPort (min 2), notes (optional, max 500). Do not change messages/requirements unless asked.
+3. **Fields:** inquiry (min 10), companyName (min 2), workEmail (email), phone (international format, normalized by stripping spaces/dashes), quantity (numeric > 0), destinationPort (min 2), notes (optional, max 500). Do not change messages/requirements unless asked.
 4. **react-hook-form + @hookform/resolvers (zod).** Use `zodResolver` with the schema. `RfqFormInput` (pre-parse, `z.coerce` makes quantity unknown) vs `RfqInput` (post-parse) — keep the two types straight.
-5. **WhatsApp handoff is the only submission.** There are no API routes; submitting builds a WhatsApp deep link to `NEXT_PUBLIC_WHATSAPP_NUMBER` (international format, no `+`/spaces). Keep the payload encoding intact.
-6. **Suspense-wrapped.** The quote page is wrapped in `Suspense` (client hooks need it). Don't remove it.
-7. **Standalone layout.** `/quote` has no `SiteHeader` — logo + wordmark + close button over the backdrop photo. Don't add the global header to this page.
+5. **Submission = Supabase RPC + WhatsApp handoff.** Valid input first persists through the `create_quote` RPC (`supabase.rpc('create_quote', …)` — server-side dedup + customer upsert + audit log, atomic), then opens the WhatsApp deep link to `NEXT_PUBLIC_WHATSAPP_NUMBER` (international format, no `+`/spaces) with the Quote ID in the message. Keep the payload encoding intact. A persistence failure must never block the lead — fall back to WhatsApp-only and surface a notice.
+6. **Graceful degradation.** When Supabase env vars are unset (`isSupabaseConfigured === false`), skip persistence and behave like the pre-Supabase form. Never crash `/quote` for a missing environment.
+7. **Suspense-wrapped.** The quote page is wrapped in `Suspense` (client hooks need it). Don't remove it.
+8. **Standalone layout.** `/quote` has no `SiteHeader` — logo + wordmark + close button over the backdrop photo. Don't add the global header to this page.
+
+---
+
+## Skill: Supabase & Admin
+
+**Goal:** The database stays the single source of truth, the public key stays useless to attackers, and every mutation is audited.
+
+1. **Schema source of truth is `supabase/schema.sql`.** Table/enum changes go there first, then mirror into the TypeScript types in `lib/supabase.ts`. `supabase/README.md` documents run order, verification queries, and deviations from the original draft.
+2. **Two clients, never one.** `lib/supabase.ts` (anon key, client-safe, RLS-locked) vs `lib/supabase-admin.server.ts` (service role, server-only guard). Never import the admin client from a `'use client'` module — that leaks the service-role key.
+3. **Public writes only via the `create_quote` SECURITY DEFINER RPC.** RLS is enabled with zero policies — do not add public SELECT policies without a PII review; the admin dashboard reads with the service-role key instead.
+4. **Admin auth is the HMAC cookie session** (`proxy.ts` + `lib/admin-auth.ts` + `POST /api/admin/login`). Never authenticate via `?pwd=` query params. Next.js 16 convention is `proxy.ts`, not the deprecated `middleware.ts`.
+5. **Admin mutations are server actions** in `app/admin/actions.ts`: session check → service-role update → `audit_log` insert (best-effort) → `revalidatePath`. No direct supabase calls from client components.
+6. **Money is NUMERIC end to end.** Render with `Intl.NumberFormat` (PKR); never floats, never string math. Payment corrections go through `payment_status = 'reversed'` — the payments table is write-once by trigger, don't try to UPDATE ledger columns or DELETE rows.
+7. **Duplicate RFQs are handled server-side** (per-email sliding window inside `create_quote`); the form only displays the result. Don't reimplement the check client-side.
 ---
 
 ## Built-in agent skills
