@@ -77,7 +77,7 @@ export function CertificateGallery({ certificates }: { certificates: Certificate
           onKeyDown={handleDialogKeyDown}
         >
           <div className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl border border-white/10" onClick={(event) => event.stopPropagation()}>
-            <img src={selected.image.split('/').map(encodeURIComponent).join('/')} alt="" className="max-h-[90vh] w-auto object-contain" />
+            <img src={selected.image} alt="" className="max-h-[90vh] w-auto object-contain" />
           </div>
         </div>
       )}
