@@ -222,7 +222,17 @@ node --env-file=.env.local scripts/verify-supabase.mjs
 # expect: RESULT: 52 passed, 0 failed   (every table reported "back to baseline")
 ```
 
-**HTTP smoke test** against a running dev server (`pnpm dev`, adjust the port):
+**HTTP smoke test** — admin guard, login, cookie flags, dashboard render and
+cookie tampering, against a running dev server. The password comes from the
+environment and is never printed:
+
+```bash
+pnpm dev --port 3100                              # terminal 1
+node --env-file=.env.local scripts/smoke-admin.mjs   # terminal 2
+# expect: SMOKE RESULT: 18 passed, 0 failed
+```
+
+Quick manual equivalent with `curl` (no password needed):
 
 ```bash
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/quote        # 200
@@ -230,6 +240,25 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/admin        # 30
 curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Content-Type: application/json" \
   -d '{"password":"wrong"}' http://localhost:3000/api/admin/login           # 401
 ```
+
+> Never hardcode the admin password in a script, test or commit. Read it from
+> `ADMIN_PASSWORD` — an earlier `scripts/smoke-admin.ps1` did hardcode it and had
+> to be purged from history.
+
+### Session token semantics (know before you scale)
+
+The session cookie is `HMAC-SHA256(password, 'mohid-admin-session-v1')`: a
+deterministic value derived only from the password, verified statelessly by
+`proxy.ts`. Consequences:
+
+- **Rotating `ADMIN_PASSWORD` revokes every outstanding session** — that is the
+  only revocation mechanism. Treat the password as the session's root of trust.
+- The cookie carries a 12-hour browser `maxAge`, but an attacker who copies the
+  token value can replay it indefinitely, so never log it (the smoke test
+  deliberately prints only the cookie flags, not the value).
+- If you later need per-session expiry or multi-user access, replace this with
+  Supabase Auth or a signed token that embeds `issued_at` + a server-checked
+  revocation list.
 
 Behavioral invariants covered by the two checks above: anon can read nothing and
 write nothing; `create_quote` dedups by email, rejects invalid emails server-side

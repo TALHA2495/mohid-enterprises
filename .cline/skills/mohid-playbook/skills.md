@@ -171,7 +171,8 @@ This project keeps its skills **in one file** (`skills.md`) plus two long-form r
 5. **Admin mutations are server actions** in `app/admin/actions.ts`: session check → service-role update → `audit_log` insert (best-effort) → `revalidatePath`. No direct supabase calls from client components.
 6. **Money is NUMERIC end to end.** Render with `Intl.NumberFormat` (PKR); never floats, never string math. Payment corrections go through `payment_status = 'reversed'` — the payments table is write-once by trigger, don't try to UPDATE ledger columns or DELETE rows.
 7. **Duplicate RFQs are handled server-side** (per-email sliding window inside `create_quote`); the form only displays the result. Don't reimplement the check client-side.
-8. **Verification is scripted, not manual.** After any schema change run `node --env-file=.env.local scripts/verify-supabase.mjs` — it asserts intake, dedup, server-side validation, RLS, persistence and cleanup, then returns the database to baseline (no residue, no key output). Ledger/trigger behavior is verified inside a rolled-back SQL transaction (`supabase/README.md` § 4b) because payment rows are undeletable by design.
+8. **Verification is scripted, not manual.** After any schema change run `node --env-file=.env.local scripts/verify-supabase.mjs` (52 assertions: intake, dedup, server-side validation, RLS, persistence, cleanup — no residue, no key output). For the admin area run `scripts/smoke-admin.mjs` against a dev server (guard, login, cookie flags, dashboard). Ledger/trigger behavior is verified inside a rolled-back SQL transaction (`supabase/README.md` § 4b) because payment rows are undeletable by design.
+9. **Never commit a secret — not even in a test script.** Read `ADMIN_PASSWORD`/keys from the environment; never hardcode a key, password or token in a script, fixture or commit. This rule exists because a smoke script once shipped with the admin password inlined and had to be purged from history.
 
 ---
 
