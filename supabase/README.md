@@ -265,6 +265,55 @@ write nothing; `create_quote` dedups by email, rejects invalid emails server-sid
 and returns `Q-YYYYMMDD-XXXXXX`; the admin session cookie is httpOnly and a forged
 cookie is rejected.
 
+## 8. Vercel environment variables (Production and Preview)
+
+Five variables are required in the host environment, and they do not all behave
+the same way:
+
+| Variable | Save as | Resolved | Notes |
+|---|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Config | **build time** (inlined into the bundle) | must exist when the build runs; a rebuild is needed after any change |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Config | **build time** (inlined) | public by design - it ships in the browser JavaScript |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Config | **build time** (inlined) | the lead handoff breaks without it |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Secret** | runtime | bypasses RLS; server-only, never in a client bundle |
+| `ADMIN_PASSWORD` | **Secret** | runtime | rotating it revokes every admin session |
+
+Rules that have already caused a real outage here:
+
+1. **Scope.** A Preview deployment only sees variables ticked for **Preview**;
+   Production only sees **Production**. Tick both (plus Development if you use
+   `vercel dev`), then redeploy.
+2. **Changing a variable never affects an existing deployment.** Vercel snapshots
+   the environment when the deployment is created, and `NEXT_PUBLIC_*` is inlined
+   into the build output. Use **Redeploy** or push a commit.
+   **Instant Rollback and Promote reuse the old build artifacts**, so they
+   silently keep the old value.
+3. **Secret variables are write-only.** Pick Config or Secret when you save a
+   variable; a Secret can never be read or edited afterwards (not even by
+   `vercel env pull`), so changing its value or scope means deleting and
+   recreating it. Keep the real values in `.env.local` (gitignored) or a
+   password manager.
+4. **Add the `NEXT_PUBLIC_*` values first.** They are the ones that need a
+   rebuild; the two Secrets only need a new deployment.
+5. **Rotate the service-role key without downtime:** create a new secret key in
+   Supabase, set it in `.env.local` and in Vercel (Secret, Production + Preview),
+   redeploy, confirm `/admin` renders counters, then revoke the old key.
+6. **Never commit a secret.** `.env*.local` is gitignored; an earlier
+   `scripts/smoke-admin.ps1` hardcoded the admin password and had to be purged
+   from git history.
+
+Symptom to cause:
+
+| Symptom | Cause |
+|---|---|
+| `/admin` lists variable names under "Supabase is not configured" | those names are absent from the environment that deployment was built and deployed with (missing, wrong scope, or a name typo) |
+| `/admin` says "Supabase answered, but the query failed" | keys are fine but the tables are missing - run `supabase/schema.sql` |
+| `POST /api/admin/login` returns 500 "ADMIN_PASSWORD is not set" | `ADMIN_PASSWORD` is missing from that deployment's scope |
+| `POST /api/admin/login` returns 401 | the variable is fine; the typed password is wrong |
+| the quote form never writes to `quotes` | `NEXT_PUBLIC_SUPABASE_*` was not present when the build ran |
+
+The admin pages print variable **names only**, never values.
+
 ## Design deviations from the original draft (and why)
 
 | Original draft | This schema | Why |

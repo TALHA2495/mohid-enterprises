@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { supabaseAdmin } from '@/lib/supabase-admin.server'
+import { missingAdminEnvVars, supabaseAdmin } from '@/lib/supabase-admin.server'
 
 const NAV_LINKS = [
   { href: '/admin/quotes', label: 'Quotes', emoji: '📋' },
@@ -10,9 +10,18 @@ const NAV_LINKS = [
   { href: '/admin/customers', label: 'Customers', emoji: '👥' },
 ] as const
 
-async function fetchCounts() {
-  if (!supabaseAdmin) return null
+type Counts = {
+  quotes: number
+  orders: number
+  invoices: number
+  payments: number
+  customers: number
+}
 
+async function fetchCounts(): Promise<{ counts: Counts | null; error: string | null }> {
+  if (!supabaseAdmin) return { counts: null, error: null }
+
+  if (!supabaseAdmin) return { counts: null, error: null }
   const [quotes, orders, invoices, payments, customers] = await Promise.all([
     supabaseAdmin.from('quotes').select('id', { count: 'exact', head: true }),
     supabaseAdmin.from('orders').select('id', { count: 'exact', head: true }),
@@ -21,29 +30,61 @@ async function fetchCounts() {
     supabaseAdmin.from('customers').select('id', { count: 'exact', head: true }),
   ])
 
+  const failure = [quotes, orders, invoices, payments, customers].find((result) => result.error)?.error
+
+  if (failure) {
+    return { counts: null, error: `${failure.code ?? ''} ${failure.message}`.trim() }
+  }
+
   return {
-    quotes: quotes.count ?? 0,
-    orders: orders.count ?? 0,
-    invoices: invoices.count ?? 0,
-    payments: payments.count ?? 0,
-    customers: customers.count ?? 0,
+    counts: {
+      quotes: quotes.count ?? 0,
+      orders: orders.count ?? 0,
+      invoices: invoices.count ?? 0,
+      payments: payments.count ?? 0,
+      customers: customers.count ?? 0,
+    },
+    error: null,
   }
 }
 
 export default async function AdminOverview() {
-  const counts = await fetchCounts()
+  const { counts, error } = await fetchCounts()
+  const configMissing = missingAdminEnvVars.length > 0
 
   return (
     <div className="grid gap-6">
       {!counts ? (
         <div className="rounded-2xl border border-black/10 bg-white p-6 text-sm font-normal text-black/70">
-          <p className="font-semibold text-black">Supabase is not configured.</p>
-          <p className="mt-2">
-            Add <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">NEXT_PUBLIC_SUPABASE_URL</code>,{' '}
-            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> and{' '}
-            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">SUPABASE_SERVICE_ROLE_KEY</code> to the
-            environment, then run <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/schema.sql</code>{' '}
-            in the Supabase SQL editor. See <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/README.md</code>.
+          <p className="font-semibold text-black">
+            {configMissing ? 'Supabase is not configured.' : 'Supabase answered, but the query failed.'}
+          </p>
+          {configMissing ? (
+            <>
+              <p className="mt-2">Missing from the environment of this deployment:</p>
+              <ul className="mt-2 list-disc pl-5 font-mono text-xs text-black">
+                {missingAdminEnvVars.map((name) => (
+                  <li key={name}>{name}</li>
+                ))}
+              </ul>
+              <p className="mt-4">
+                Add each one in Vercel under Settings, Environment Variables, tick Production and Preview, then
+                redeploy: environment changes never apply to an existing deployment. NEXT_PUBLIC_* values are inlined at
+                build time, so they must be present when the build runs, and promoting or rolling back a deployment
+                reuses the old build instead.
+              </p>
+            </>
+          ) : null}
+          {error ? (
+            <p className="mt-4">
+              Supabase replied with{' '}
+              <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">{error}</code>
+            </p>
+          ) : null}
+          <p className="mt-4">
+            Run <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/schema.sql</code> in
+            the Supabase SQL editor, then reload. See{' '}
+            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/README.md</code>.
           </p>
         </div>
       ) : (
