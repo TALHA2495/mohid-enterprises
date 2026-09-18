@@ -51,20 +51,46 @@ export type Customer = {
   updated_at: string
 }
 
+export type ProductImage = {
+  /** Public CDN URL (ImageKit URL endpoint). */
+  url: string
+  /**
+   * ImageKit file id. `null` for images seeded from the existing showroom —
+   * those were uploaded outside this app, so nothing may delete them remotely.
+   */
+  fileId: string | null
+  name: string
+  width: number | null
+  height: number | null
+}
+
+export type ProductCategory = {
+  id: string
+  name: string
+  sort_order: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
 export type Product = {
   id: string
   name: string
   category: string
+  /** Managed taxonomy (migration 0002). `category` stays in sync with this name. */
+  category_id: string | null
   description: string | null
   material: string
   width_mm: number | null
   available_colors: string[]
   available_finishes: string[]
-  moq_units: number
+  moq_units: number | null
   price_per_unit: number | null
   currency: string
   stock_available: number
   is_active: boolean
+  /** Ordered gallery, max 6 (enforced by chk_products_images_is_array). */
+  images: ProductImage[]
   supplier_id: string | null
   last_price_update: string | null
   created_at: string

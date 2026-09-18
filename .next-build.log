@@ -1,0 +1,50 @@
+
+> my-project@0.1.0 build D:\mohid\mohid cloned\mohid-enterprises
+> next build
+
+▲ Next.js 16.3.3 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.mjs took 27ms
+Warning: Custom Cache-Control headers detected for the following routes:
+  - /_next/static/:path*
+  - /_next/image
+
+Setting a custom Cache-Control header can break Next.js development behavior.
+- Experiments (use with caution):
+  ✓ inlineCss
+  · optimizePackageImports
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 11.3s
+  Skipping validation of types
+  Finished TypeScript config validation in 10ms ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 475ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /admin
+├ ƒ /admin/login
+├ ƒ /admin/products
+├ ƒ /admin/products/[id]
+├ ƒ /admin/products/new
+├ ƒ /admin/quotes
+├ ƒ /api/admin/imagekit-auth
+├ ƒ /api/admin/login
+├ ○ /factory
+├ ○ /quote
+├ ○ /showroom
+└ ○ /standards
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
