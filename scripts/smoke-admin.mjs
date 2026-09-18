@@ -62,6 +62,8 @@ rec(
 )
 r = await req('/admin/quotes')
 rec('GET /admin/quotes -> redirect', isRedirect(r.status), `status=${r.status}`)
+r = await req('/admin/hero')
+rec('GET /admin/hero -> redirect', isRedirect(r.status), `status=${r.status}`)
 r = await req('/admin/login')
 rec('GET /admin/login -> 200', r.status === 200, `status=${r.status}`)
 
@@ -108,6 +110,20 @@ if (!PW) {
 
   r = await req('/admin/quotes', { headers: { cookie: cookieHeader } })
   rec('GET /admin/quotes -> 200', r.status === 200, `status=${r.status}`)
+
+  r = await req('/admin/hero', { headers: { cookie: cookieHeader } })
+  const heroHtml = await r.text()
+  rec('GET /admin/hero -> 200', r.status === 200, `status=${r.status}`)
+  rec(
+    'admin hero reads Supabase (no "not configured" fallback)',
+    !/Supabase is not configured/.test(heroHtml),
+    /Supabase is not configured/.test(heroHtml) ? 'service-role key missing' : 'configured',
+  )
+  rec('admin hero lists a seeded card', heroHtml.includes('Industrial Egg Belts'))
+
+  r = await req('/', { headers: { cookie: cookieHeader } })
+  const homeHtml = await r.text()
+  rec('home page renders hero card from the DB', homeHtml.includes('Industrial Egg Belts'))
 
   console.log('\nCookie tampering')
   r = await req('/admin', { headers: { cookie: `${COOKIE}=${'f'.repeat(64)}` } })

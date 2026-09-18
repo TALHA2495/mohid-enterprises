@@ -70,3 +70,55 @@ export const HERO_CATEGORIES: readonly HeroCategory[] = [
   { id: '05', label: 'Elastics & Belts', desc: 'Custom waistbands and durable utility webbing.', filter: 'Elastics', image: '/product%20images%20compressed/Jacquard%20Elastic%20%26%20Tape_compressed.webp' },
   { id: '06', label: 'Cords & Tassels', desc: 'Functional drawstrings and decorative end-finishes.', filter: 'Cords & Tassels', image: '/product%20images%20compressed/Flat%20Draw%20Cord_compressed.webp' },
 ]
+
+// ============================================================================
+// HERO SECTIONS — live, editor-managed catalog of the home-page cards
+// ----------------------------------------------------------------------------
+// The home page reads published rows via loadHeroSections() (server-side, using
+// the service-role client so the public site never needs the anon key to hold
+// catalog read access). When Supabase is unavailable, the table is missing, or
+// no rows are published, it transparently falls back to the static
+// HERO_CATEGORIES above — so a misconfigured deployment still renders.
+// ============================================================================
+import { supabaseAdmin } from '@/lib/supabase-admin.server'
+
+export type HeroSectionRow = {
+  id: string
+  label: string
+  desc: string | null
+  filter: string
+  image: string
+  sort_order: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+/** Map a DB row back to the legacy HeroCategory shape the home page expects. */
+function toHeroCategory(row: HeroSectionRow): HeroCategory {
+  return {
+    id: row.id,
+    label: row.label,
+    desc: row.desc ?? '',
+    filter: row.filter,
+    image: row.image,
+  }
+}
+
+/** Sorted set of currently-published hero cards (static fallback on any failure). */
+export async function loadHeroCategories(): Promise<HeroCategory[]> {
+  if (!supabaseAdmin) return [...HERO_CATEGORIES]
+
+    const { data, error } = await supabaseAdmin
+    .from('hero_sections')
+    .select('id, label, desc, filter, image, sort_order, is_active, created_at, updated_at')
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true })
+
+  if (error || !(data?.length)) {
+    console.error('[hero-sections] load failed — falling back to static list:', error?.message ?? 'no rows')
+    return [...HERO_CATEGORIES]
+  }
+
+  return data.map(toHeroCategory)
+}

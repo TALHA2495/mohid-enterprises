@@ -1,15 +1,6 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
 import { missingAdminEnvVars, supabaseAdmin } from '@/lib/supabase-admin.server'
-
-const NAV_LINKS = [
-  { href: '/admin/quotes', label: 'Quotes', emoji: '📋', ready: true },
-  { href: '/admin/products', label: 'Products', emoji: '🧵', ready: true },
-  { href: '/admin/orders', label: 'Orders', emoji: '📦', ready: false },
-  { href: '/admin/invoices', label: 'Invoices', emoji: '💰', ready: false },
-  { href: '/admin/payments', label: 'Payments', emoji: '✓', ready: false },
-  { href: '/admin/customers', label: 'Customers', emoji: '👥', ready: false },
-] as const
 
 type Counts = {
   quotes: number
@@ -85,79 +76,50 @@ export default async function AdminOverview() {
             </p>
           ) : null}
           <p className="mt-4">
-            Run <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/schema.sql</code> in
+            If this is a fresh database, run{' '}
+            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/schema.sql</code> in
             the Supabase SQL editor, then reload. See{' '}
             <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/README.md</code>.
           </p>
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {(
-              [
-                { key: 'quotes', label: 'Quotes', href: '/admin/quotes' },
-                { key: 'products', label: 'Products', href: '/admin/products' },
-                { key: 'customers', label: 'Customers' },
-                { key: 'orders', label: 'Orders' },
-                { key: 'invoices', label: 'Invoices' },
-                { key: 'payments', label: 'Payments' },
-              ] as { key: keyof Counts; label: string; href?: string }[]
-            ).map((stat) => {
-              const body = (
-                <>
-                  <div className="text-xs font-medium text-black/60">{stat.label}</div>
-                  <div className="mt-2 text-3xl font-semibold tabular-nums text-black">{counts[stat.key]}</div>
-                  {stat.href ? null : (
-                    <div className="mt-1 text-[10px] font-normal uppercase tracking-wide text-black/35">Soon</div>
-                  )}
-                </>
-              )
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {(
+            [
+              { key: 'quotes', label: 'Quotes', href: '/admin/quotes' },
+              { key: 'products', label: 'Products', href: '/admin/products' },
+              { key: 'customers', label: 'Customers' },
+              { key: 'orders', label: 'Orders' },
+              { key: 'invoices', label: 'Invoices' },
+              { key: 'payments', label: 'Payments' },
+            ] as { key: keyof Counts; label: string; href?: string }[]
+          ).map((stat) => {
+            const body = (
+              <>
+                <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/60">{stat.label}</div>
+                <div className="font-display mt-2 text-4xl tabular-nums text-black">{counts[stat.key]}</div>
+                {stat.href ? null : (
+                  <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-black/40">Soon</div>
+                )}
+              </>
+            )
 
-              // Only link to a section that exists — a card leading to a 404 is worse than an inert one.
-              return stat.href ? (
-                <Link
-                  key={stat.key}
-                  href={stat.href}
-                  className="rounded-2xl border border-black/10 bg-white p-5 transition-colors hover:bg-black/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"
-                >
-                  {body}
-                </Link>
-              ) : (
-                <div key={stat.key} className="rounded-2xl border border-dashed border-black/10 bg-white/60 p-5">
-                  {body}
-                </div>
-              )
-            })}
-          </div>
-
-          <nav aria-label="Admin sections" className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {NAV_LINKS.map((link) =>
-              link.ready ? (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-2xl border border-black/10 bg-white p-4 text-center text-sm font-medium text-black transition-colors hover:bg-black/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"
-                >
-                  <span aria-hidden="true" className="mr-1.5">
-                    {link.emoji}
-                  </span>
-                  {link.label}
-                </Link>
-              ) : (
-                <span
-                  key={link.href}
-                  className="rounded-2xl border border-dashed border-black/10 bg-white/60 p-4 text-center text-sm font-normal text-black/45"
-                >
-                  <span aria-hidden="true" className="mr-1.5">
-                    {link.emoji}
-                  </span>
-                  {link.label}
-                  <span className="sr-only"> (not built yet)</span>
-                </span>
-              ),
-            )}
-          </nav>
-        </>
+            // Only link to a section that exists — a card leading to a 404 is worse than an inert one.
+            return stat.href ? (
+              <Link
+                key={stat.key}
+                href={stat.href}
+                className="rounded-2xl border border-black/10 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#01aa3f]/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/60"
+              >
+                {body}
+              </Link>
+            ) : (
+              <div key={stat.key} className="rounded-2xl border border-dashed border-black/15 bg-black/[0.02] p-5">
+                {body}
+              </div>
+            )
+          })}
+        </div>
       )}
     </div>
   )

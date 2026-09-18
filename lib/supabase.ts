@@ -244,7 +244,7 @@ export type Payment = {
   created_at: string
 }
 
-export type AuditEntityType = 'customer' | 'product' | 'quote' | 'order' | 'invoice' | 'payment'
+export type AuditEntityType = 'customer' | 'product' | 'quote' | 'order' | 'invoice' | 'payment' | 'hero'
 
 export type AuditLog = {
   id: string

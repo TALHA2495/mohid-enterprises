@@ -1,18 +1,18 @@
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react' // used by the CTA pills below - NOT unused
+import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 
-import { HERO_CATEGORIES } from '@/lib/showroom'
+import { HERO_CATEGORIES, loadHeroCategories } from '@/lib/showroom'
 
 const CARD_SIZES = '50vw'
 
-function HeroCategoryGrid() {
+function HeroCategoryGrid({ categories }: { categories: readonly { id: string; label: string; desc: string; filter: string; image: string }[] }) {
   return (
     <div
       aria-label="Product categories"
       className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-4 px-4 sm:px-6"
     >
-      {HERO_CATEGORIES.map((category, index) => (
+                  {categories.map((category, index) => (
         <Link
           key={category.id}
           href={`/showroom?filter=${encodeURIComponent(category.filter)}`}
@@ -49,13 +49,14 @@ function HeroCategoryGrid() {
   )
 }
 
-export function HeroSection() {
+export async function HeroSection() {
+  const categories = await loadHeroCategories()
   return (
     <section className="relative z-10 flex min-h-[calc(90vh-5.25rem)] flex-col justify-center py-10 sm:py-12 md:min-h-[calc(90vh-4.375rem)]">
       {/* Invisible page heading - the visible hero is cards + CTAs only. */}
       <h1 className="sr-only">Mohid Enterprises — garment trims manufacturer, Faisalabad, Pakistan</h1>
 
-      <HeroCategoryGrid />
+            <HeroCategoryGrid categories={categories} />
 
       <div className="mx-auto hidden w-full max-w-7xl flex-wrap items-center justify-center gap-2 px-4 pt-10 sm:gap-4 sm:px-6 sm:pt-12">
         <Link

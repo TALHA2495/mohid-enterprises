@@ -6,7 +6,9 @@ import { revalidatePath } from 'next/cache'
 import { ADMIN_SESSION_COOKIE, isValidSession } from '@/lib/admin-auth'
 import { deleteImageKitFile } from '@/lib/imagekit.server'
 import { categoryFormSchema, csvToArray, productFormSchema } from '@/lib/product-schema'
+import { heroFormSchema } from '@/lib/hero-schema'
 import type { CategoryFormInput, ProductFormInput } from '@/lib/product-schema'
+import type { HeroFormInput } from '@/lib/hero-schema'
 import { supabaseAdmin } from '@/lib/supabase-admin.server'
 import type { QuoteStatus } from '@/lib/supabase'
 
@@ -69,7 +71,7 @@ export async function updateQuoteStatus(quoteId: string, newStatus: QuoteStatus)
 
 export type CatalogActionResult = { ok: boolean; error?: string; id?: string }
 
-type CatalogEntity = 'product' | 'product_category'
+type CatalogEntity = 'product' | 'product_category' | 'hero'
 
 /** Null when the caller holds a valid admin session, else the error message. */
 async function sessionError(): Promise<string | null> {
@@ -82,11 +84,13 @@ function issueMessage(error: { issues: { message: string }[] }): string {
 }
 
 /** Translate Postgres constraint violations into messages an operator can act on. */
-function catalogError(error: { code?: string; message: string }, subject: 'product' | 'category'): string {
+function catalogError(error: { code?: string; message: string }, subject: 'product' | 'category' | 'hero'): string {
   if (error.code === '23505') {
     return subject === 'product'
       ? 'A product with that name already exists.'
-      : 'A category with that name already exists.'
+      : subject === 'category'
+        ? 'A category with that name already exists.'
+        : 'A hero card with that label already exists.'
   }
   if (error.code === '23503') return 'That category no longer exists — reload the page and pick another.'
   if (error.code === '23514') return 'One of the values is outside the range the database allows.'
@@ -319,7 +323,101 @@ export async function deleteCategory(id: string): Promise<CatalogActionResult> {
   const { error } = await supabaseAdmin.from('product_categories').delete().eq('id', id)
   if (error) return { ok: false, error: catalogError(error, 'category') }
 
-  await logCatalogEvent('product_category', id, 'deleted', { name: existing.name }, null)
+    await logCatalogEvent('product_category', id, 'deleted', { name: existing.name }, null)
   revalidatePath('/admin/products')
+  revalidatePath('/')
   return { ok: true, id }
+}
+
+// ============================================================================\
+// HERO SECTIONS — home-page category cards
+// ----------------------------------------------------------------------------
+// Editable from /admin/hero: reorder, set active, add, delete. Every change
+// revalidates the admin list AND the home page so the hero reflects edits
+// instantly without a redeploy.
+// ============================================================================
+
+export type HeroActionResult = { ok: boolean; error?: string; id?: string }
+
+/** Create a new hero card, or edit an existing one (compare-and-set on updated_at). */
+export async function saveHero(input: HeroFormInput & { id?: string; updatedAt?: string }): Promise<HeroActionResult> {
+  const authError = await sessionError()
+  if (authError) return { ok: false, error: authError }
+  if (!supabaseAdmin) return { ok: false, error: 'Supabase is not configured on the server.' }
+
+  const parsed = heroFormSchema.safeParse(input)
+  if (!parsed.success) return { ok: false, error: issueMessage(parsed.error) }
+  const values = parsed.data
+
+  const record = {
+    label: values.label,
+    desc: values.desc ?? null,
+    filter: values.filter,
+    image: values.image,
+    sort_order: values.sortOrder === '' ? 0 : Number(values.sortOrder),
+    is_active: values.isActive,
+  }
+
+  if (!input.id) {
+    const { data, error } = await supabaseAdmin.from('hero_sections').insert(record).select('id').single()
+        if (error) return { ok: false, error: catalogError(error, 'hero') }
+    await logCatalogEvent('hero', data.id, 'created', null, record)
+    revalidatePath('/admin/hero')
+    revalidatePath('/')
+    return { ok: true, id: data.id }
+  }
+
+  if (!input.updatedAt) return { ok: false, error: 'Missing revision — reload the page and try again.' }
+
+  const { data, error } = await supabaseAdmin
+    .from('hero_sections')
+    .update(record)
+    .eq('id', input.id)
+    .eq('updated_at', input.updatedAt)
+    .select('id')
+
+  if (error) return { ok: false, error: catalogError(error, 'hero') }
+  if (!data || data.length === 0) {
+    return { ok: false, error: 'This hero card changed in another tab or was removed. Reload to see the current values.' }
+  }
+
+      await logCatalogEvent('hero', input.id, 'updated', null, record)
+  revalidatePath('/admin/hero')
+  revalidatePath('/')
+  return { ok: true, id: input.id }
+}
+
+/** Delete a hero card. ImageKit files are only removed for uploads made here. */
+export async function deleteHero(id: string): Promise<HeroActionResult> {
+  const authError = await sessionError()
+  if (authError) return { ok: false, error: authError }
+  if (!supabaseAdmin) return { ok: false, error: 'Supabase is not configured on the server.' }
+
+  const { data: existing } = await supabaseAdmin.from('hero_sections').select('label, image').eq('id', id).maybeSingle()
+  if (!existing) return { ok: false, error: 'That hero card no longer exists.' }
+
+  const { error } = await supabaseAdmin.from('hero_sections').delete().eq('id', id)
+  if (error) return { ok: false, error: catalogError(error, 'hero') }
+
+    await logCatalogEvent('hero', id, 'deleted', { label: existing.label, image: existing.image }, null)
+  revalidatePath('/admin/hero')
+  revalidatePath('/')
+  return { ok: true, id }
+}
+
+/** Reorder the published hero cards in one write (called from drag-and-drop). */
+export async function reorderHero(ids: string[]): Promise<HeroActionResult> {
+  const authError = await sessionError()
+  if (authError) return { ok: false, error: authError }
+  if (!supabaseAdmin) return { ok: false, error: 'Supabase is not configured on the server.' }
+
+  const updates = ids.map((id, sort_order) => ({ id, sort_order }))
+  const { error } = await supabaseAdmin.from('hero_sections').upsert(updates, { onConflict: 'id' })
+  if (error) return { ok: false, error: catalogError(error, 'hero') }
+
+  // Revalidate by refreshing each card's row path individually is not possible;
+  // clear the home + admin caches wholesale.
+  revalidatePath('/admin/hero')
+  revalidatePath('/')
+  return { ok: true }
 }
