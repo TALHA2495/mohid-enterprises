@@ -83,7 +83,7 @@ export default async function AdminOverview() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {(
             [
               { key: 'quotes', label: 'Quotes', href: '/admin/quotes' },
@@ -96,25 +96,28 @@ export default async function AdminOverview() {
           ).map((stat) => {
             const body = (
               <>
-                <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/60">{stat.label}</div>
-                <div className="font-display mt-2 text-4xl tabular-nums text-black">{counts[stat.key]}</div>
-                {stat.href ? null : (
-                  <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-black/40">Soon</div>
-                )}
+                <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/60">
+                  {stat.label}
+                </div>
+                <div className="font-display mt-2 text-3xl sm:text-4xl tabular-nums text-black">
+                  {counts[stat.key]}
+                </div>
               </>
             )
 
-            // Only link to a section that exists — a card leading to a 404 is worse than an inert one.
             return stat.href ? (
               <Link
                 key={stat.key}
                 href={stat.href}
-                className="rounded-2xl border border-black/10 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#01aa3f]/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/60"
+                className="min-w-0 rounded-2xl border border-black/10 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#01aa3f]/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/60"
               >
                 {body}
               </Link>
             ) : (
-              <div key={stat.key} className="rounded-2xl border border-dashed border-black/15 bg-black/[0.02] p-5">
+              <div
+                key={stat.key}
+                className="min-w-0 rounded-2xl border border-dashed border-black/15 bg-black/[0.02] p-5"
+              >
                 {body}
               </div>
             )

@@ -351,7 +351,7 @@ export async function saveHero(input: HeroFormInput & { id?: string; updatedAt?:
 
   const record = {
     label: values.label,
-    desc: values.desc ?? null,
+    description: values.desc ?? null,
     filter: values.filter,
     image: values.image,
     sort_order: values.sortOrder === '' ? 0 : Number(values.sortOrder),

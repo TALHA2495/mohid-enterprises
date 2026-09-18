@@ -59,7 +59,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       <div className="sm:pl-64">
         <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur">
           <div className="mx-auto flex h-14 items-center justify-between gap-4 px-4 sm:px-6">
-            {/* Mobile: hamburger + compact brand. Desktop: Live badge (as before). */}
+            {/* Mobile: hamburger + compact brand. Desktop: Live badge + company name. */}
             <div className="flex items-center gap-2.5">
               <MobileSidebar />
               <Link
@@ -72,21 +72,27 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                   alt="Mohid Enterprises logo"
                   width={96}
                   height={26}
-                  className="h-7 w-auto"
+                  className="h-6 w-auto"
                 />
-                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/50">Admin</span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-black/50">
+                  Admin
+                </span>
               </Link>
               <span className="section-label hidden sm:inline-flex" data-pulse="">
                 Live
               </span>
             </div>
-            <span className="font-mono text-xs text-black/40 hidden sm:inline">Mohid Enterprises</span>
+            <span className="font-mono text-xs text-black/40 hidden sm:inline">
+              Mohid Enterprises
+            </span>
             <span className="section-label sm:hidden" data-pulse="">
               Live
             </span>
           </div>
         </header>
-        <div className="min-h-[calc(100vh-3.5rem)]">{children}</div>
+        <main className="min-h-[calc(100vh-3.5rem)] px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">{children}</div>
+        </main>
       </div>
     </div>
   )

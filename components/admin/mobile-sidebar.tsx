@@ -54,11 +54,12 @@ export function MobileSidebar() {
         }`}
       />
 
-      {/* Drawer. */}
+      {/* Drawer. Width: 85vw on phones (generous), capped at 320px so it never
+          dominates the screen. Top padding respects notched-phone safe areas. */}
       <aside
         id="admin-mobile-nav"
         aria-label="Admin navigation"
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col gap-6 overflow-y-auto border-r border-black/10 bg-white p-6 transition-transform duration-200 sm:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[85vw] max-w-[320px] flex-col gap-6 overflow-y-auto border-r border-black/10 bg-white p-6 pt-[max(1.5rem,env(safe-area-inset-top))] transition-transform duration-200 sm:hidden ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
