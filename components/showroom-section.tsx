@@ -183,7 +183,7 @@ const products: Product[] = [
     specs: [['Product type', 'Label tape'], ['Material composition', 'Polyester'], ['Available widths', 'Various'], ['Color options', 'Multiple colors'], ['Finish', 'Printable'], ['Applications', 'Garments, branding, identification']],
   },
   {
-    name: 'Waist Belt', type: 'UTILITY', image: '/product%20images%20compressed/Waste%20Belt_compressed.webp',
+    name: 'Waist Belt', type: 'UTILITY', image: 'https://ik.imagekit.io/wavawecyl/product%20images%20webp/Waist%20Belt.webp?tr=w-1200,f-auto,q-70',
     description: 'Recycled material belt for sustainable garment production.',
     material: 'Recycled material', width: 'Various', colors: 'Various', finish: 'Utility',
     specs: [['Product type', 'Waist belt'], ['Material composition', 'Recycled material'], ['Available widths', 'Various'], ['Color options', 'Various'], ['Finish', 'Utility'], ['Applications', 'Garments, sustainable production']],
@@ -261,7 +261,7 @@ const products: Product[] = [
     specs: [['Product type', 'Jute cord'], ['Material composition', 'Jute'], ['Available widths', 'Various'], ['Color options', 'Natural and multiple colors'], ['Finish', 'Natural'], ['Applications', 'Crafts, packaging, home decor']],
   },
   {
-    name: 'Braid Rope', type: 'EGG BELT', image: '/product%20images%20compressed/Braid%20Rope_compressed.webp',
+    name: 'Braid Rope', type: 'EGG BELT', image: 'https://ik.imagekit.io/wavawecyl/product%20images%20webp/Braid%20Rope.webp?tr=w-1200,f-auto,q-70',
     description: 'Durable braided rope manufactured from Nylon, Polyester, and Polypropylene, available in 5mm–20mm thicknesses and customized lengths according to customer requirements.',
     material: 'Nylon, Polyester & Polypropylene', width: '5mm–20mm', colors: 'White', finish: 'Braided rope',
     specs: [['Product type', 'Braid rope'], ['Material', 'Nylon, Polyester & Polypropylene'], ['Thickness', '5mm to 20mm'], ['Length', 'Depends on customer requirements'], ['Color', 'White'], ['Construction', 'Braided rope'], ['Packing', 'Standard package']],
