@@ -70,3 +70,38 @@ INSERT INTO products (
   ('Pouch', 'Accessories', (SELECT id FROM product_categories WHERE lower(name) = lower('Accessories')), 'POUCH', 'Durable and soft pouches available in multiple sizes and colors.', 'Textile / Synthetic fiber', NULL, ARRAY['Multiple colors']::text[], ARRAY['Soft / Durable']::text[], NULL, 'PKR', true, '[["Product type","Pouch"],["Material composition","Textile / synthetic fiber"],["Available sizes","Various"],["Color options","Multiple colors"],["Finish","Soft / durable"],["Applications","Storage, packaging, gifts"]]'::jsonb, '[{"url":"https://ik.imagekit.io/a2q8u8qtw/products/pouch.jpg","fileId":"6aacce4bead997d09a89ef66","name":"pouch.jpg","width":null,"height":null}]'::jsonb),
   ('PP Woven Egg Conveyor Belt', 'Egg Belts', (SELECT id FROM product_categories WHERE lower(name) = lower('Egg Belts')), 'EGG BELT', 'UV and anti-static treated PP woven belt for egg collection in poultry farms, with an egg broken rate below 0.3%.', 'Nylon / Polyester / Polypropylene', 90, '{}'::text[], ARRAY['UV & anti-static treated']::text[], NULL, 'PKR', true, '[["Product type","PP woven egg conveyor belt"],["Material composition","Nylon, polyester & polypropylene"],["Available widths","90–120mm"],["Length","Custom"],["Egg broken rate","Below 0.3%"],["Applications","Poultry farm egg collecting, assembly-line conveyor belts"],["Finish","UV & anti-static treated, washable in cold water"]]'::jsonb, '[{"url":"https://ik.imagekit.io/a2q8u8qtw/products/pp_woven_egg_conveyor_belt.avif","fileId":"6aae1627ead997d09ae97070","name":"pp_woven_egg_conveyor_belt.avif","width":null,"height":null}]'::jsonb)
 ON CONFLICT (name) DO NOTHING;
+
+-- ============================================================================
+-- SEED 0005 - FACTORY_SECTIONS (6 rows: 3 hero + 3 card)
+-- ----------------------------------------------------------------------------
+-- Idempotent: ON CONFLICT against the (lower(title), kind) expression index.
+-- Postgres requires an expression conflict target to be parenthesized.
+-- ============================================================================
+INSERT INTO factory_sections (kind, title, subtitle, image_url, sort_order, is_active) VALUES
+  -- Hero grid (top of /factory) - full-bleed production imagery.
+  ('hero', 'Material preparation',     NULL, 'https://ik.imagekit.io/a2q8u8qtw/factory/textile%20production.webp',      10, true),
+  ('hero', 'Production floor',         NULL, 'https://ik.imagekit.io/a2q8u8qtw/factory/Braiding%20Winding.webp',        20, true),
+  ('hero', 'Packed inventory',         NULL, 'https://ik.imagekit.io/a2q8u8qtw/factory/packed%20inventory.png',         30, true),
+  -- Info cards (bottom of /factory) - capability callouts.
+  ('card', 'Quality Inspection Protocol', 'Consistent processes, clear specifications, and dependable communication for every order.', 'https://ik.imagekit.io/a2q8u8qtw/factory/quality%20inspection.webp', 10, true),
+  ('card', 'Export Packaging',            'Consistent processes, clear specifications, and dependable communication for every order.', 'https://ik.imagekit.io/a2q8u8qtw/factory/global_export.webp',        20, true),
+  -- NOTE: the '&' must stay RAW here - '%26' returns HTTP 404 from ImageKit.
+  ('card', 'Incoterms & Logistics',       'Consistent processes, clear specifications, and dependable communication for every order.', 'https://ik.imagekit.io/a2q8u8qtw/factory/Logistics%20&%20Export.png', 30, true)
+ON CONFLICT ((lower(title)), kind) DO NOTHING;
+
+-- ============================================================================
+-- SEED 0006 - CERTIFICATES (3 rows)
+-- ----------------------------------------------------------------------------
+-- Idempotent: ON CONFLICT against the lower(title) expression index.
+-- ============================================================================
+INSERT INTO certificates (title, subtitle, image_url, sort_order, is_active) VALUES
+  ('Company Profile - 20 Years',
+   'Two decades of trims manufacturing, capacity, and export experience.',
+   'https://ik.imagekit.io/a2q8u8qtw/certificates/company%20profile%2020%20year.jpeg',        10, true),
+  ('WSO Certificate of Compliance',
+   'Bureau verified export compliance for the current production year.',
+   'https://ik.imagekit.io/a2q8u8qtw/certificates/wso%20certificate%20of%20compliance.jpeg',  20, true),
+  ('WSO Letter of Authorization',
+   'Official authorization for worldwide certificate-backed trade.',
+   'https://ik.imagekit.io/a2q8u8qtw/certificates/wso%20letter%20of%20authorization.jpeg',    30, true)
+ON CONFLICT ((lower(title))) DO NOTHING;

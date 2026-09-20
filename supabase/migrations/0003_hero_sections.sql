@@ -42,12 +42,15 @@ CREATE TRIGGER trg_hero_sections_updated_at
 -- ----------------------------------------------------------------------------
 INSERT INTO hero_sections (label, description, "filter", image, sort_order, is_active)
 VALUES
-  ('Industrial Egg Belts',  'Specialized belting for agricultural systems.',      'Egg Belts',      '/product%20images%20webp/pp%20woven%20egg%20conveyor%20belt.avif', 10, true),
-  ('Pom Poms & Lace',       'Delicate Guipure and playful accents for apparel.',   'Pom Poms',       '/product%20images%20compressed/Pom%20Pom%20Trim_compressed.webp',  20, true),
-  ('Accessories & Crafts',  'Custom packaging and specialty finished goods.',      'Accessories',    '/product%20images%20compressed/Party%20Hat_compressed.webp',       30, true),
-  ('Tapes & Ribbons',       'Structural strength and high-polish finishes.',       'Tapes',          '/product%20images%20compressed/Twill%20Tape_compressed.webp',       40, true),
-  ('Elastics & Belts',      'Custom waistbands and durable utility webbing.',      'Elastics',       '/product%20images%20compressed/Jacquard%20Elastic%20%26%20Tape_compressed.webp', 50, true),
-  ('Cords & Tassels',       'Functional drawstrings and decorative end-finishes.', 'Cords & Tassels', '/product%20images%20compressed/Flat%20Draw%20Cord_compressed.webp', 60, true)
+  -- Images: product photos on the live ImageKit account (a2q8u8qtw). The
+  -- original local paths (/product images webp/…, /product images compressed/…)
+  -- died when those folders were renamed; these URLs were verified HTTP 200.
+  ('Industrial Egg Belts',  'Specialized belting for agricultural systems.',      'Egg Belts',      'https://ik.imagekit.io/a2q8u8qtw/products/pp_woven_egg_conveyor_belt.avif', 10, true),
+  ('Pom Poms & Lace',       'Delicate Guipure and playful accents for apparel.',   'Pom Poms',       'https://ik.imagekit.io/a2q8u8qtw/products/Pom_Pom_Trim.webp',       20, true),
+  ('Accessories & Crafts',  'Custom packaging and specialty finished goods.',      'Accessories',    'https://ik.imagekit.io/a2q8u8qtw/products/Party_Hat.webp',       30, true),
+  ('Tapes & Ribbons',       'Structural strength and high-polish finishes.',       'Tapes',          'https://ik.imagekit.io/a2q8u8qtw/products/Twill_Tape.webp',       40, true),
+  ('Elastics & Belts',      'Custom waistbands and durable utility webbing.',      'Elastics',       'https://ik.imagekit.io/a2q8u8qtw/products/Jacquard_Elastic___Tape.webp', 50, true),
+  ('Cords & Tassels',       'Functional drawstrings and decorative end-finishes.', 'Cords & Tassels', 'https://ik.imagekit.io/a2q8u8qtw/products/Flat_Draw_Cord.webp', 60, true)
 ON CONFLICT (lower(label)) DO NOTHING;
 
 -- ----------------------------------------------------------------------------

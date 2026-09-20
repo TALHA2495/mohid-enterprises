@@ -18,8 +18,24 @@ const privateKey = process.env.IMAGEKIT_PRIVATE_KEY
 const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY
 const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
 
-/** Folder every product upload lands in (ImageKit creates it if absent). */
+/** Folder product uploads land in by default (ImageKit creates it if absent). */
 export const PRODUCT_IMAGE_FOLDER = 'products'
+
+/** Allowlist of folders browser uploads may target, keyed by content type. */
+export const UPLOAD_FOLDERS = {
+  products: 'products',
+  factory: 'factory',
+  certificates: 'certificates',
+  logo: 'logo',
+} as const
+
+export type UploadFolder = keyof typeof UPLOAD_FOLDERS
+
+/** Resolve a requested folder to an ImageKit path; unknown names fall back to products. */
+export function resolveUploadFolder(requested: string | null | undefined): UploadFolder {
+  if (requested && requested in UPLOAD_FOLDERS) return requested as UploadFolder
+  return 'products'
+}
 
 /** Names (never values) of the variables this module needs but did not receive. */
 export const missingImagekitEnvVars: string[] = [
@@ -44,11 +60,11 @@ export type UploadAuth = {
  * Returns null when the environment is incomplete, so the caller can surface a
  * setup message instead of throwing a 500.
  */
-export function createUploadAuth(): UploadAuth | null {
+export function createUploadAuth(folder: UploadFolder = 'products'): UploadAuth | null {
   if (!privateKey || !publicKey) return null
 
   const { token, signature, expire } = getUploadAuthParams({ privateKey, publicKey })
-  return { token, signature, expire, publicKey, folder: PRODUCT_IMAGE_FOLDER }
+  return { token, signature, expire, publicKey, folder: UPLOAD_FOLDERS[folder] }
 }
 
 /**

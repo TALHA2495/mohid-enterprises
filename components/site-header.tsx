@@ -8,6 +8,13 @@ import { useEffect, useState } from 'react'
 
 import { siteNavLinks } from '@/lib/navigation'
 
+// Brand logo lives on the ImageKit CDN (account a2q8u8qtw, /Brand folder).
+// NEXT_PUBLIC_LOGO_URL overrides it when set; the literal keeps the header
+// rendering if the variable is blank. Verified reachable (HTTP 200).
+const LOGO_URL =
+  process.env.NEXT_PUBLIC_LOGO_URL?.trim() ||
+  `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT ?? 'https://ik.imagekit.io/a2q8u8qtw'}/Brand/Mohid%20logo.png`
+
 export function SiteHeader() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
@@ -24,7 +31,7 @@ export function SiteHeader() {
 
   return <>
     <header className="relative z-30 mx-auto flex w-full items-center justify-between gap-4 bg-white border-b border-black/10 px-4 py-5 text-black sm:px-6">
-      <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5" aria-label="Home"><Image src="/images/LOGO%20MOHID.webp" alt="Mohid Enterprises logo" width={1600} height={1491} sizes="(min-width: 768px) 32px, 47px" className="h-11 w-auto object-contain md:h-[30px]" priority /><span className="flex flex-col leading-[1.15]"><span className="text-[13px] font-semibold tracking-[0.08em]">MOHID</span><span className="text-[10px] font-medium tracking-[0.14em] text-current opacity-60">ENTERPRISES</span></span></Link>
+      <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5" aria-label="Home"><Image src={LOGO_URL} alt="Mohid Enterprises logo" width={1600} height={1491} sizes="(min-width: 768px) 32px, 47px" className="h-11 w-auto object-contain md:h-[30px]" priority /><span className="flex flex-col leading-[1.15]"><span className="text-[13px] font-semibold tracking-[0.08em]">MOHID</span><span className="text-[10px] font-medium tracking-[0.14em] text-current opacity-60">ENTERPRISES</span></span></Link>
       <nav aria-label="Primary" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
         {siteNavLinks.map(([label, href]) => <Link key={href} href={href} className={`rounded-full px-4 py-1.5 text-sm transition-colors ${pathname === href ? 'bg-[#01aa3f]/12 font-medium text-[#01aa3f]' : 'text-black/70 hover:text-black'}`}>{label}</Link>)}
       </nav>

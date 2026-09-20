@@ -60,7 +60,8 @@ export function useHeroAdmin(initial: HeroSectionRow[]) {
       }
       const stamp = values.sortOrder === '' ? 0 : Number(values.sortOrder)
       const patch: Partial<HeroSectionRow> = {
-        label: values.label, desc: values.desc ?? null, filter: values.filter,
+        // Row field is `description`; the form field is `desc`.
+        label: values.label, description: values.desc ?? null, filter: values.filter,
         image: values.image, sort_order: stamp, is_active: values.isActive,
       }
       setItems((prev) => {
@@ -71,7 +72,7 @@ export function useHeroAdmin(initial: HeroSectionRow[]) {
           next = [
             ...prev,
             {
-              id: result.id, label: values.label, desc: values.desc ?? null,
+              id: result.id, label: values.label, description: values.desc ?? null,
               filter: values.filter, image: values.image, sort_order: stamp,
               is_active: values.isActive,
               created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
@@ -99,7 +100,7 @@ export function useHeroAdmin(initial: HeroSectionRow[]) {
 
   const editorInitial: Partial<HeroFormInput> = editing
     ? {
-        label: editing.label, desc: editing.desc ?? '', filter: editing.filter as HeroFormInput['filter'],
+        label: editing.label, desc: editing.description ?? '', filter: editing.filter as HeroFormInput['filter'],
         image: editing.image, sortOrder: String(editing.sort_order), isActive: editing.is_active,
       }
     : { filter: 'All trims', image: '', sortOrder: '', isActive: true, label: '', desc: '' }

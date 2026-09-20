@@ -2,7 +2,10 @@ import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 
-import { HERO_CATEGORIES, loadHeroCategories } from '@/lib/showroom'
+import { HERO_CATEGORIES } from '@/lib/showroom'
+// loadHeroCategories lives in the server-only module — lib/showroom.ts is
+// client-safe and must never re-import the service-role client.
+import { loadHeroCategories } from '@/lib/public-data.server'
 
 const CARD_SIZES = '50vw'
 

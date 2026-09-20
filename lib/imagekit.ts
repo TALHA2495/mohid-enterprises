@@ -74,8 +74,12 @@ type UploadOptions = {
  * Validate-free upload: callers run `validateImageFile` first. Throws an Error
  * with a readable message on any failure so the caller can show it inline.
  */
-export async function uploadProductImage(file: File, options: UploadOptions = {}): Promise<ProductImage> {
-  const authResponse = await fetch('/api/admin/imagekit-auth', { method: 'POST' })
+export async function uploadProductImage(
+  file: File,
+  options: UploadOptions = {},
+  folder: string = 'products',
+): Promise<ProductImage> {
+  const authResponse = await fetch(`/api/admin/imagekit-auth?folder=${encodeURIComponent(folder)}`, { method: 'POST' })
 
   if (!authResponse.ok) {
     const body = (await authResponse.json().catch(() => null)) as { error?: string } | null

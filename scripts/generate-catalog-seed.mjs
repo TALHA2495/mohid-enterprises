@@ -19,7 +19,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const ROOT = process.cwd()
-const SHOWROOM = join(ROOT, 'components', 'showroom-section.tsx')
+const CATALOG = join(ROOT, 'lib', 'catalog-data.ts')
 const SHOWROOM_LIB = join(ROOT, 'lib', 'showroom.ts')
 const OUT = join(ROOT, 'supabase', 'seed-products.sql')
 
@@ -57,10 +57,22 @@ function firstNumber(value) {
   return match ? Math.round(Number(match[0])) : null
 }
 
-const showroomSource = readFileSync(SHOWROOM, 'utf8')
+const showroomSource = readFileSync(CATALOG, 'utf8')
 const showroomLib = readFileSync(SHOWROOM_LIB, 'utf8')
 
-const products = parseLiteral(extractLiteral(showroomSource, 'const products: Product[] = ', '[', ']'))
+// If the image-migration map exists, the seed carries real ImageKit fileIds so
+// an admin delete also removes the file from the CDN (entries uploaded outside
+// this app keep fileId: null).
+let fileIdByUrl = new Map()
+try {
+  const map = JSON.parse(readFileSync(join(ROOT, 'supabase', 'product-image-map.json'), 'utf8'))
+  fileIdByUrl = new Map(map.migrated.map((entry) => [entry.newUrl, entry.fileId]))
+} catch {
+  // No map yet — every seeded image keeps fileId: null.
+}
+
+
+const products = parseLiteral(extractLiteral(showroomSource, 'export const CATALOG_DATA: CatalogProduct[] = ', '[', ']'))
 const filterTypes = parseLiteral(extractLiteral(showroomLib, 'FILTER_TYPES', '{', '}'))
 
 // Reverse the showroom's type-tag -> filter-group map: LACE -> "Lace".
@@ -87,13 +99,15 @@ for (const product of products) {
   const colors = /^custom$/i.test(product.colors ?? '') ? [] : String(product.colors ?? '').split(/[,/]/).map((c) => c.trim()).filter(Boolean)
   const finishes = product.finish ? [product.finish] : []
   const imageName = decodeURIComponent(product.image.split('/').pop().split('?')[0])
-  const images = [{ url: product.image.split('?')[0], fileId: null, name: imageName, width: null, height: null }]
+  const imageUrl = product.image.split('?')[0]
+  const images = [{ url: imageUrl, fileId: fileIdByUrl.get(imageUrl) ?? null, name: imageName, width: null, height: null }]
 
   rows.push(
     `  (${sqlText(product.name)}, ${sqlText(category)}, ` +
       `(SELECT id FROM product_categories WHERE lower(name) = lower(${sqlText(category)})), ` +
-      `${sqlNullableText(product.description)}, ${sqlText(product.material)}, ${firstNumber(product.width) ?? 'NULL'}, ` +
-      `${sqlArray(colors)}, ${sqlArray(finishes)}, ${moq ?? 'NULL'}, 'PKR', true, ${sqlText(JSON.stringify(images))}::jsonb)`,
+      `${sqlNullableText(product.type)}, ${sqlNullableText(product.description)}, ${sqlText(product.material)}, ${firstNumber(product.width) ?? 'NULL'}, ` +
+      `${sqlArray(colors)}, ${sqlArray(finishes)}, ${moq ?? 'NULL'}, 'PKR', true, ` +
+      `${sqlText(JSON.stringify(product.specs ?? []))}::jsonb, ${sqlText(JSON.stringify(images))}::jsonb)`,
   )
 }
 
@@ -121,8 +135,8 @@ const sql = `-- ================================================================
 -- ============================================================================
 
 INSERT INTO products (
-  name, category, category_id, description, material, width_mm,
-  available_colors, available_finishes, moq_units, currency, is_active, images
+  name, category, category_id, type, description, material, width_mm,
+  available_colors, available_finishes, moq_units, currency, is_active, specs, images
 ) VALUES
 ${rows.join(',\n')}
 ON CONFLICT (name) DO NOTHING;

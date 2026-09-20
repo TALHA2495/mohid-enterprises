@@ -93,8 +93,10 @@ CREATE TABLE products (
   currency            TEXT NOT NULL DEFAULT 'PKR',
   stock_available     INT NOT NULL DEFAULT 0 CHECK (stock_available >= 0),
   is_active           BOOLEAN NOT NULL DEFAULT true,
-  supplier_id         UUID,
+    supplier_id         UUID,
   last_price_update   TIMESTAMPTZ,
+  type                TEXT,
+  specs               JSONB,
   created_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at          TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -370,7 +372,7 @@ CREATE TRIGGER trg_payments_immutable
 CREATE TABLE audit_log (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   entity_type    TEXT NOT NULL
-                 CHECK (entity_type IN ('customer', 'product', 'quote', 'order', 'invoice', 'payment', 'hero')),
+                                   CHECK (entity_type IN ('customer', 'product', 'product_category', 'quote', 'order', 'invoice', 'payment', 'hero', 'factory_section', 'certificate')),
   entity_id      TEXT NOT NULL,
   action         TEXT NOT NULL
                  CHECK (action IN ('created', 'updated', 'status_changed', 'deleted')),
@@ -562,6 +564,9 @@ ALTER TABLE quote_line_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE invoices         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payments         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE hero_sections    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE factory_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE certificates     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_log        ENABLE ROW LEVEL SECURITY;
 
 -- No policies are created: with RLS enabled and zero policies, all operations
@@ -643,6 +648,108 @@ $$;
 DROP TRIGGER IF EXISTS trg_hero_audit ON hero_sections;
 CREATE TRIGGER trg_hero_audit
   AFTER INSERT OR UPDATE OR DELETE ON hero_sections
-  FOR EACH ROW EXECUTE FUNCTION public.log_hero_edit();
+    FOR EACH ROW EXECUTE FUNCTION public.log_hero_edit();
 
 ALTER TABLE hero_sections ENABLE ROW LEVEL SECURITY;
+
+-- ===========================================================================
+-- TABLES 10-11: FACTORY_SECTIONS + CERTIFICATES (DB-driven factory & standards pages)
+-- ----------------------------------------------------------------------------
+-- Mirrors supabase/migrations/0005_factory_sections.sql and 0006_certificates.sql.
+-- ===========================================================================
+-- TABLE 10: FACTORY_SECTIONS
+CREATE TABLE IF NOT EXISTS factory_sections (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  kind       TEXT NOT NULL CHECK (kind IN ('hero', 'card')),
+  title      TEXT NOT NULL,
+  subtitle   TEXT,
+  image_url  TEXT NOT NULL,         -- ImageKit CDN url (optionally ?tr= transform suffix)
+  file_id    TEXT,
+  sort_order INT NOT NULL DEFAULT 0,
+  is_active  BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_factory_sections_title_kind ON factory_sections (lower(title), kind);
+CREATE INDEX IF NOT EXISTS idx_factory_sections_active_sort ON factory_sections (is_active, sort_order);
+DROP TRIGGER IF EXISTS trg_factory_sections_updated_at ON factory_sections;
+CREATE TRIGGER trg_factory_sections_updated_at BEFORE UPDATE ON factory_sections
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+ALTER TABLE factory_sections ENABLE ROW LEVEL SECURITY;
+
+-- TABLE 11: CERTIFICATES
+CREATE TABLE IF NOT EXISTS certificates (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title      TEXT NOT NULL,
+  subtitle   TEXT,
+  image_url  TEXT NOT NULL,         -- ImageKit CDN url (optionally ?tr= transform suffix)
+  file_id    TEXT,
+  sort_order INT NOT NULL DEFAULT 0,
+  is_active  BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_certificates_title_lower ON certificates (lower(title));
+CREATE INDEX IF NOT EXISTS idx_certificates_active_sort ON certificates (is_active, sort_order);
+DROP TRIGGER IF EXISTS trg_certificates_updated_at ON certificates;
+CREATE TRIGGER trg_certificates_updated_at BEFORE UPDATE ON certificates
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+ALTER TABLE certificates ENABLE ROW LEVEL SECURITY;
+
+-- ===========================================================================
+-- AUDIT HOOKS for factory_sections + certificates (best-effort, never block writes)
+-- ===========================================================================
+CREATE OR REPLACE FUNCTION public.log_factory_edit()
+RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public, pg_temp AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    INSERT INTO audit_log (entity_type, entity_id, action, new_state, changed_by, change_reason)
+    VALUES ('factory_section', NEW.id, 'created',
+            jsonb_build_object('title', NEW.title, 'kind', NEW.kind, 'image_url', NEW.image_url),
+            'admin_dashboard', 'Factory section added from the admin dashboard');
+  ELSIF TG_OP = 'UPDATE' THEN
+    INSERT INTO audit_log (entity_type, entity_id, action, new_state, changed_by, change_reason)
+    VALUES ('factory_section', NEW.id, 'updated',
+            jsonb_build_object('title', NEW.title, 'is_active', NEW.is_active),
+            'admin_dashboard', 'Factory section edited from the admin dashboard');
+  ELSIF TG_OP = 'DELETE' THEN
+    INSERT INTO audit_log (entity_type, entity_id, action, old_state, changed_by, change_reason)
+    VALUES ('factory_section', OLD.id, 'deleted',
+            jsonb_build_object('title', OLD.title, 'is_active', OLD.is_active),
+            'admin_dashboard', 'Factory section removed from the admin dashboard');
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.log_certificate_edit()
+RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public, pg_temp AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    INSERT INTO audit_log (entity_type, entity_id, action, new_state, changed_by, change_reason)
+    VALUES ('certificate', NEW.id, 'created',
+            jsonb_build_object('title', NEW.title, 'image_url', NEW.image_url),
+            'admin_dashboard', 'Certificate added from the admin dashboard');
+  ELSIF TG_OP = 'UPDATE' THEN
+    INSERT INTO audit_log (entity_type, entity_id, action, new_state, changed_by, change_reason)
+    VALUES ('certificate', NEW.id, 'updated',
+            jsonb_build_object('title', NEW.title, 'is_active', NEW.is_active),
+            'admin_dashboard', 'Certificate edited from the admin dashboard');
+  ELSIF TG_OP = 'DELETE' THEN
+    INSERT INTO audit_log (entity_type, entity_id, action, old_state, changed_by, change_reason)
+    VALUES ('certificate', OLD.id, 'deleted',
+            jsonb_build_object('title', OLD.title, 'is_active', OLD.is_active),
+            'admin_dashboard', 'Certificate removed from the admin dashboard');
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+-- Audit triggers are created HERE, after both hook functions exist — a trigger
+-- cannot reference a function that has not been defined yet.
+DROP TRIGGER IF EXISTS trg_factory_audit ON factory_sections;
+CREATE TRIGGER trg_factory_audit AFTER INSERT OR UPDATE OR DELETE ON factory_sections
+  FOR EACH ROW EXECUTE FUNCTION public.log_factory_edit();
+DROP TRIGGER IF EXISTS trg_certificate_audit ON certificates;
+CREATE TRIGGER trg_certificate_audit AFTER INSERT OR UPDATE OR DELETE ON certificates
+  FOR EACH ROW EXECUTE FUNCTION public.log_certificate_edit();
