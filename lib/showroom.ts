@@ -67,6 +67,21 @@ export const FILTER_TYPES: Record<string, readonly ProductType[]> = {
   Accessories: ['POUCH', 'PARTY'],
 }
 
+// Category names (product_categories, seeded 1:1 with the filter names above)
+// -> showroom type tag. saveProduct stamps this into the legacy `type` column so
+// a product added under a category shows under the matching showroom filter.
+// Multi-type filters use the first value (type is never rendered, only used for
+// filter membership, so CORD vs TASSEL etc. is invisible in the UI). Returns
+// null for custom categories with no showroom filter - callers then leave the
+// `type` column untouched and the read-side fallback chain applies.
+const CATEGORY_TYPES: ReadonlyMap<string, ProductType> = new Map(
+  Object.entries(FILTER_TYPES).map(([filter, types]) => [filter.trim().toLowerCase(), types[0]]),
+)
+
+export function typeForCategoryName(name: string): ProductType | null {
+  return CATEGORY_TYPES.get(name.trim().toLowerCase()) ?? null
+}
+
 export type HeroCategory = {
   id: string
   label: string

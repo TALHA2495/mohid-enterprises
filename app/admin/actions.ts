@@ -9,6 +9,7 @@ import { categoryFormSchema, csvToArray, productFormSchema } from '@/lib/product
 import { heroFormSchema } from '@/lib/hero-schema'
 import type { CategoryFormInput, ProductFormInput } from '@/lib/product-schema'
 import type { HeroFormInput } from '@/lib/hero-schema'
+import { typeForCategoryName } from '@/lib/showroom'
 import { supabaseAdmin } from '@/lib/supabase-admin.server'
 import type { QuoteStatus } from '@/lib/supabase'
 
@@ -143,10 +144,16 @@ export async function saveProduct(
   if (categoryLookupError) return { ok: false, error: catalogError(categoryLookupError, 'category') }
   if (!category) return { ok: false, error: 'That category no longer exists — reload the page and pick another.' }
 
+  // The showroom filters by the legacy `type` tag, not by category. Derive it
+  // from the chosen category (the seeded categories match the showroom filters
+  // 1:1) so a product created here lands under the matching showroom filter.
+  const type = typeForCategoryName(category.name)
+
   const record = {
     name: values.name,
     category: category.name,
     category_id: category.id,
+    ...(type ? { type } : {}),
     description: values.description === '' ? null : values.description,
     material: values.material,
     width_mm: values.widthMm === '' ? null : Number(values.widthMm),
@@ -168,6 +175,7 @@ export async function saveProduct(
     await logCatalogEvent('product', data.id, 'created', null, { name: values.name, category: category.name })
     revalidatePath('/admin/products')
     revalidatePath('/admin')
+    revalidatePath('/showroom')
     return { ok: true, id: data.id }
   }
 
@@ -189,6 +197,7 @@ export async function saveProduct(
   revalidatePath('/admin/products')
   revalidatePath(`/admin/products/${input.id}`)
   revalidatePath('/admin')
+  revalidatePath('/showroom')
   return { ok: true, id: input.id }
 }
 
@@ -210,6 +219,7 @@ export async function setProductActive(id: string, isActive: boolean): Promise<C
   await logCatalogEvent('product', id, 'status_changed', null, { is_active: isActive })
   revalidatePath('/admin/products')
   revalidatePath('/admin')
+  revalidatePath('/showroom')
   return { ok: true, id }
 }
 
@@ -237,6 +247,7 @@ export async function deleteProduct(id: string): Promise<CatalogActionResult> {
   await logCatalogEvent('product', id, 'deleted', { name: existing.name }, null)
   revalidatePath('/admin/products')
   revalidatePath('/admin')
+  revalidatePath('/showroom')
   return { ok: true, id }
 }
 

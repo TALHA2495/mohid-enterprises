@@ -61,7 +61,7 @@ export default async function NewProductPage() {
 
         <h1 className="mb-2 mt-4 text-3xl font-semibold">New product</h1>
         <p className="mb-8 text-sm font-normal text-black/60">
-          Everything except the gallery is optional apart from name, category, material and MOQ.
+          Name, category, material and stock are required; everything else, including MOQ and the gallery, is optional.
         </p>
 
         <ProductForm categories={categories} />
