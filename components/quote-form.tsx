@@ -7,7 +7,11 @@ import { useForm } from 'react-hook-form'
 import { createRfqSchema, parseMoq, type ProductContext, type RfqFormInput, type RfqInput } from '@/lib/rfq-schema'
 import { isSupabaseConfigured, supabase } from '@/lib/supabase'
 
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '92XXXXXXXXXX'
+const WHATSAPP_NUMBER = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '').replace(/[\s+()-]/g, '')
+// A missing or placeholder number must never ship: wa.me/92XXXXXXXXXX would
+// route real leads nowhere. The submit flow checks this and falls back to an
+// honest "contact us" error instead of opening a broken chat.
+const WHATSAPP_CONFIGURED = /^\d{6,15}$/.test(WHATSAPP_NUMBER)
 
 /** "10mm–50mm" → 10 (first integer); unparseable → null (DB column is nullable). */
 function parseWidthMm(width: string): number | null {
@@ -64,7 +68,9 @@ export function QuoteForm() {
     if (supabase && isSupabaseConfigured) {
       try {
         const { data, error } = await supabase.rpc('create_quote', {
-          p_full_name: values.companyName,
+          // TODO(ship): the form has no buyer name field yet, so the quote
+          // record is keyed by the (verified) work email until one ships.
+          p_full_name: values.workEmail.toLowerCase(),
           p_company_name: values.companyName,
           p_email: values.workEmail.toLowerCase(),
           p_phone: values.phone,
@@ -98,6 +104,16 @@ export function QuoteForm() {
           'Your request will still be sent via WhatsApp, but we could not save a quote ID at the moment.',
         )
       }
+    }
+    if (!WHATSAPP_CONFIGURED) {
+      setSubmitError(
+        persistedQuoteId
+          ? `Your request was received (ID: ${persistedQuoteId}), but WhatsApp is not configured — our team will follow up by email.`
+          : 'WhatsApp is not configured for this deployment — please email us at info@mohident.com with your specifications.',
+      )
+      if (persistedQuoteId) setQuoteId(persistedQuoteId)
+      setSubmitting(false)
+      return
     }
 
     const { product, material, width, moq } = productContext
@@ -256,7 +272,7 @@ export function QuoteForm() {
         )}
       </div>
 
-      <button type="submit" disabled={submitting || sent} aria-live="polite" className="rounded-lg bg-[#01aa3f] px-5 py-3 text-sm font-semibold text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] hover:text-black active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+      <button type="submit" disabled={submitting || sent} className="rounded-lg bg-[#01aa3f] px-5 py-3 text-sm font-semibold text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] hover:text-black active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
         {submitting ? 'Submitting…' : sent ? 'Request received' : 'Submit request'}
       </button>
     </form>

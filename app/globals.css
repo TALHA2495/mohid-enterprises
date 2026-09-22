@@ -96,7 +96,9 @@ body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 60;
+  /* 30: stays below overlays (backdrop 40 / drawer & dialogs 50) and above
+     page content + the sticky header (10) — see the ladder in mobile-sidebar. */
+  z-index: 30;
   pointer-events: none;
   opacity: 0.03;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");

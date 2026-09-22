@@ -17,7 +17,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   if (!supabaseAdmin) {
     return (
-      <main className="min-h-screen bg-[#f4f7f8] p-8 text-black">
+      <div>
         <p className="rounded-2xl border border-black/10 bg-white p-6 text-sm font-normal">
           <span className="font-semibold">Supabase is not configured on the server.</span>
           {missingAdminEnvVars.length > 0 && (
@@ -27,7 +27,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
             </>
           )}
         </p>
-      </main>
+      </div>
     )
   }
 
@@ -42,14 +42,14 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   if (productResult.error) {
     return (
-      <main className="min-h-screen bg-[#f4f7f8] p-8 text-black">
+      <div>
         <p
           role="alert"
           className="rounded-2xl border border-[#c62828]/30 bg-[#c62828]/[0.04] p-6 text-sm font-normal text-[#c62828]"
         >
           Failed to load this product: {productResult.error.message}
         </p>
-      </main>
+      </div>
     )
   }
 
@@ -60,8 +60,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   const categories = (categoriesResult.data ?? []) as ProductCategory[]
 
   return (
-    <main className="min-h-screen bg-[#f4f7f8] text-black">
-      <div className="mx-auto w-full max-w-4xl px-5 py-10 sm:px-6">
+    <div className="mx-auto w-full max-w-4xl">
         <Link
           href="/admin/products"
           className="text-xs font-medium text-[#0b7a34] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"
@@ -77,6 +76,5 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
         <ProductForm categories={categories} product={product} />
       </div>
-    </main>
   )
 }

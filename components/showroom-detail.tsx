@@ -133,7 +133,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
                 Request quote &amp; sample <ArrowUpRight className="size-4" />
               </a>
               <a
-                href={quoteHref}
+                href={`mailto:info@mohident.com?subject=${encodeURIComponent(`Physical sample request — ${product.name}`)}`}
                 className="inline-flex flex-1 items-center justify-center rounded-full border border-black/20 px-6 py-3.5 text-sm text-black transition-colors hover:bg-black/[0.06]"
               >
                 Request physical sample

@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function AdminNotFound() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f4f7f8] p-8 text-black">
+    <div className="flex min-h-[60vh] items-center justify-center py-10">
       <div className="w-full max-w-md rounded-2xl border border-black/10 bg-white p-8 text-center">
         <h1 className="mb-2 text-3xl font-semibold">404</h1>
         <p className="mb-6 text-sm font-normal text-black/60">
@@ -15,6 +15,6 @@ export default function AdminNotFound() {
           ← Back to dashboard
         </Link>
       </div>
-    </main>
+    </div>
   )
 }

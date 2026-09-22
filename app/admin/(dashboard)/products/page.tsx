@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 export default async function AdminProductsPage() {
   if (!supabaseAdmin) {
     return (
-      <main className="min-h-screen bg-[#f4f7f8] p-8 text-black">
+      <div>
         <p className="rounded-2xl border border-black/10 bg-white p-6 text-sm font-normal">
           <span className="font-semibold">Supabase is not configured on the server.</span>
           {missingAdminEnvVars.length > 0 && (
@@ -27,7 +27,7 @@ export default async function AdminProductsPage() {
           )}{' '}
           See <code className="font-mono">supabase/README.md</code>.
         </p>
-      </main>
+      </div>
     )
   }
 
@@ -49,7 +49,7 @@ export default async function AdminProductsPage() {
   if (failure) {
     console.error('[AdminProductsPage] fetch failed:', failure)
     return (
-      <main className="min-h-screen bg-[#f4f7f8] p-8 text-black">
+      <div>
         <p
           role="alert"
           className="rounded-2xl border border-[#c62828]/30 bg-[#c62828]/[0.04] p-6 text-sm font-normal text-[#c62828]"
@@ -63,7 +63,7 @@ export default async function AdminProductsPage() {
             </>
           )}
         </p>
-      </main>
+      </div>
     )
   }
 
@@ -77,8 +77,7 @@ export default async function AdminProductsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f7f8] text-black">
-      <div className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6">
+    <div>
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="section-label mb-4">Catalog</p>
@@ -104,6 +103,5 @@ export default async function AdminProductsPage() {
           <CategoriesPanel categories={categories} productCounts={productCounts} />
         </div>
       </div>
-    </main>
   )
 }

@@ -1,4 +1,4 @@
-﻿import type { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { cookies } from 'next/headers'
@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
   if (!supabaseAdmin) {
     return (
-      <main className="min-h-screen bg-[#f4f7f8] p-8 text-black">
+      <main id="main" className="min-h-screen bg-[#f4f7f8] p-8 text-black">
         <p className="rounded-2xl border border-black/10 bg-white p-6 text-sm font-normal">
           <span className="font-semibold">Supabase is not configured.</span>
           {missingAdminEnvVars.length > 0 && (
@@ -36,8 +36,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
   return (
     <div className="min-h-screen bg-[#f4f7f8] text-black">
-      {/* Desktop sidebar (>= sm). Mobile uses the MobileSidebar drawer instead. */}
-      <aside className="fixed inset-y-0 top-0 hidden w-64 shrink-0 flex-col gap-6 overflow-y-auto border-r border-black/10 bg-white p-6 sm:flex">
+      {/* Desktop sidebar (>= md). Below md the MobileSidebar drawer takes over —
+          at sm (640px) a fixed 256px rail would leave ~360px of usable content. */}
+      <aside className="fixed inset-y-0 top-0 hidden w-64 shrink-0 flex-col gap-6 overflow-y-auto border-r border-black/10 bg-white p-6 md:flex">
         <div>
           <p className="section-label mb-3">Admin</p>
           <Link href="/" className="block w-fit" aria-label="Mohid Enterprises home">
@@ -56,16 +57,16 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         <AdminSidebarNav />
       </aside>
 
-      <div className="sm:pl-64">
+      <div className="md:pl-64">
         <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur">
           <div className="mx-auto flex h-14 items-center justify-between gap-4 px-4 sm:px-6">
-            {/* Mobile: hamburger + compact brand. Desktop: Live badge + company name. */}
+            {/* Mobile/tablet: hamburger + compact brand. Desktop: company name. */}
             <div className="flex items-center gap-2.5">
               <MobileSidebar />
               <Link
                 href="/"
                 aria-label="Mohid Enterprises admin home"
-                className="flex items-center gap-2.5 sm:hidden"
+                className="flex items-center gap-2.5 md:hidden"
               >
                 <Image
                   src="/images/LOGO MOHID.webp"
@@ -78,19 +79,16 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                   Admin
                 </span>
               </Link>
-              <span className="section-label hidden sm:inline-flex" data-pulse="">
-                Live
-              </span>
             </div>
-            <span className="font-mono text-xs text-black/40 hidden sm:inline">
+            <span className="font-mono text-xs text-black/40 hidden md:inline">
               Mohid Enterprises
-            </span>
-            <span className="section-label sm:hidden" data-pulse="">
-              Live
             </span>
           </div>
         </header>
-        <main className="min-h-[calc(100vh-3.5rem)] px-4 sm:px-6 lg:px-8">
+        {/* Single <main id="main"> landmark — child pages must NOT render their own
+            <main> (nested landmarks are an a11y violation). The global skip link
+            in app/layout.tsx targets this id. */}
+        <main id="main" className="min-h-[calc(100vh-3.5rem)] px-4 py-10 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>

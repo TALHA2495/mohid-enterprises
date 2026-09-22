@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import { ShowroomSection } from '@/components/showroom-section'
 import type { Product } from '@/components/showroom-section'
@@ -8,6 +9,13 @@ import { loadShowroomProducts } from '@/lib/public-data.server'
 // Revalidate so catalog edits made in /admin appear without a redeploy; the
 // page would otherwise be frozen at build time.
 export const revalidate = 60
+
+export const metadata: Metadata = {
+  title: 'Showroom — Woven & Woven Label Trims Catalog',
+  description:
+    'Browse the full Mohid Enterprises catalog: laces, cords, elastics, tapes, ribbons, tassels and pom poms — filter by trim family and request a quote with pre-filled specs.',
+  alternates: { canonical: '/showroom' },
+}
 
 // Live catalog. The server reads the published `products` rows through the
 // service-role client (same pattern as loadHeroCategories on the home page) and

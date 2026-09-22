@@ -60,6 +60,9 @@ export default function HeroSectionsAdminClient({ hero }: { hero: HeroSectionRow
               onDrop={onDrop}
               onEdit={startEdit}
               onRemove={startDelete}
+              onMoveUp={moveUp}
+              onMoveDown={moveDown}
+              isLast={index === items.length - 1}
               disabled={isPending}
             />
           ))}

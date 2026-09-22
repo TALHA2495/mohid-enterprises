@@ -189,7 +189,72 @@ export default function ProductsAdminClient({ products, categories }: Props) {
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-2xl border border-black/10 bg-white">
+          {/* Phone layout: a 9-column table is unusable at 360px, so below md
+              the same rows render as compact cards with identical actions. */}
+          <ul aria-label="Products" className="grid gap-3 md:hidden">
+            {visible.map((product) => {
+              const cover = product.images?.[0]
+              return (
+                <li key={product.id} className="rounded-2xl border border-black/10 bg-white p-3">
+                  <div className="flex items-center gap-3">
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-black/5">
+                      {cover ? (
+                        <Image
+                          src={productImageUrl(cover.url, 200)}
+                          alt=""
+                          fill
+                          sizes="56px"
+                          quality={70}
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span aria-hidden="true" className="grid h-full w-full place-items-center text-[10px] text-black/35">
+                          none
+                        </span>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <Link
+                        href={`/admin/products/${product.id}`}
+                        className="block truncate font-medium text-black underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"
+                      >
+                        {product.name}
+                      </Link>
+                      <p className="mt-0.5 truncate text-xs text-black/55">
+                        {product.category} · {money(product.price_per_unit)} · stock {product.stock_available}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => toggleActive(product.id, !product.is_active)}
+                      aria-pressed={product.is_active}
+                      aria-label={`${product.is_active ? 'Deactivate' : 'Activate'} ${product.name}`}
+                      className={`${chipBase} ${
+                        product.is_active ? 'bg-[#00c853]/15 text-[#0b7a34]' : 'bg-black/[0.06] text-black/70'
+                      }`}
+                    >
+                      {product.is_active ? 'Active' : 'Inactive'}
+                    </button>
+                  </div>
+                  <div className="mt-2.5 flex items-center justify-between gap-3 border-t border-black/[0.06] pt-2.5 text-xs text-black/55">
+                    <span className="tabular-nums">
+                      MOQ {product.moq_units ?? '—'} · updated {day(product.updated_at)}
+                    </span>
+                    <Link
+                      href={`/admin/products/${product.id}`}
+                      aria-label={`Edit ${product.name}`}
+                      className="inline-flex shrink-0 items-center gap-1 font-medium text-[#0b7a34] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"
+                    >
+                      <Pencil aria-hidden="true" className="size-3.5" />
+                      Edit
+                    </Link>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+
+          <div className="hidden overflow-x-auto rounded-2xl border border-black/10 bg-white md:block">
             <table className="w-full min-w-[820px] text-sm">
               <thead>
                 <tr className="border-b border-black/10 bg-black/[0.02] text-left">

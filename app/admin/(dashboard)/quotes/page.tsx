@@ -12,11 +12,11 @@ export const dynamic = 'force-dynamic'
 export default async function AdminQuotesPage() {
   if (!supabaseAdmin) {
     return (
-      <main className="min-h-screen bg-[#f4f7f8] p-8 text-black">
+      <div>
         <p className="rounded-2xl border border-black/10 bg-white p-6 text-sm font-normal">
           Supabase is not configured on the server — see <code className="font-mono">supabase/README.md</code>.
         </p>
-      </main>
+      </div>
     )
   }
 
@@ -34,22 +34,20 @@ export default async function AdminQuotesPage() {
   if (error) {
     console.error('[AdminQuotesPage] fetch failed:', error)
     return (
-      <main className="min-h-screen bg-[#f4f7f8] p-8 text-black">
+      <div>
         <p role="alert" className="rounded-2xl border border-[#c62828]/30 bg-[#c62828]/[0.04] p-6 text-sm font-normal text-[#c62828]">
           Failed to load quotes: {error.message}
         </p>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f7f8] text-black">
-      <div className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6">
+    <div>
         <p className="section-label mb-4">Quotes</p>
         <h1 className="font-display mb-2 text-4xl leading-tight">Quote management</h1>
         <p className="mb-8 text-sm font-normal text-black/60">Track and manage every incoming RFQ.</p>
         <QuotesAdminClient initialQuotes={(data as unknown as AdminQuote[]) ?? []} />
       </div>
-    </main>
   )
 }

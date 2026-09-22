@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import { Lock } from 'lucide-react'
 
@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
   const adminConfigured = Boolean(process.env.ADMIN_PASSWORD)
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f4f7f8] p-5 text-black">
+    <main id="main" className="flex min-h-screen items-center justify-center bg-[#f4f7f8] p-5 text-black">
       <div className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-black/10 bg-white shadow-xl">
         <div aria-hidden="true" className="h-1.5 w-full bg-gradient-to-r from-[#01aa3f] to-[#00ff59]" />
         <div className="p-6">

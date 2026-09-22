@@ -33,10 +33,38 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Textile Trims — Made for Scale | Faisalabad, Pakistan',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mohident.com'),
+  title: {
+    default: 'Textile Trims — Made for Scale | Faisalabad, Pakistan',
+    template: '%s | Mohid Enterprises',
+  },
   description:
     'A trusted manufacturing partner for custom laces, cords, tapes and specialty trims engineered in Faisalabad for global procurement teams.',
-  generator: 'v0.app',
+  applicationName: 'Mohid Enterprises',
+  openGraph: {
+    type: 'website',
+    siteName: 'Mohid Enterprises',
+    url: '/',
+    locale: 'en_US',
+    title: 'Textile Trims — Made for Scale | Faisalabad, Pakistan',
+    description:
+      'Custom laces, cords, tapes and specialty trims, engineered in Faisalabad for global procurement teams.',
+    images: [
+      {
+        url: '/images/hero-bg.webp',
+        width: 1600,
+        height: 900,
+        alt: 'Mohid Enterprises — textile trims manufacturing floor',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Textile Trims — Made for Scale | Faisalabad, Pakistan',
+    description: 'Custom laces, cords, tapes and specialty trims, engineered in Faisalabad.',
+    images: ['/images/hero-bg.webp'],
+  },
+  robots: { index: true, follow: true },
   icons: {
     icon: [
       {
@@ -55,7 +83,6 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
 }
-
 export const viewport: Viewport = {
   colorScheme: 'light',
   themeColor: '#f4f7f8',

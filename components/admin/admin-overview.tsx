@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 
 import { missingAdminEnvVars, supabaseAdmin } from '@/lib/supabase-admin.server'
 
@@ -11,44 +11,50 @@ type Counts = {
   customers: number
 }
 
-async function fetchCounts(): Promise<{ counts: Counts | null; error: string | null }> {
+async function fetchCounts(): Promise<{ counts: Partial<Counts> | null; error: string | null }> {
   if (!supabaseAdmin) return { counts: null, error: null }
 
-  const [quotes, products, orders, invoices, payments, customers] = await Promise.all([
+  // Core modules. These tables always exist in the schema.
+  const [quotes, products, customers] = await Promise.all([
     supabaseAdmin.from('quotes').select('id', { count: 'exact', head: true }),
     supabaseAdmin.from('products').select('id', { count: 'exact', head: true }),
-    supabaseAdmin.from('orders').select('id', { count: 'exact', head: true }),
-    supabaseAdmin.from('invoices').select('id', { count: 'exact', head: true }),
-    supabaseAdmin.from('payments').select('id', { count: 'exact', head: true }),
     supabaseAdmin.from('customers').select('id', { count: 'exact', head: true }),
   ])
 
-  const failure = [quotes, products, orders, invoices, payments, customers].find((result) => result.error)?.error
+  const failure = [quotes, products, customers].find((result) => result.error)?.error
 
   if (failure) {
     return { counts: null, error: `${failure.code ?? ''} ${failure.message}`.trim() }
   }
 
-  return {
-    counts: {
-      quotes: quotes.count ?? 0,
-      products: products.count ?? 0,
-      orders: orders.count ?? 0,
-      invoices: invoices.count ?? 0,
-      payments: payments.count ?? 0,
-      customers: customers.count ?? 0,
-    },
-    error: null,
+  const counts: Partial<Counts> = {
+    quotes: quotes.count ?? 0,
+    products: products.count ?? 0,
+    customers: customers.count ?? 0,
   }
-}
 
+  // Optional modules (orders / invoices / payments) are not shipped yet. A
+  // missing table (Postgres 42P01) means "not shipped" — show 0 instead of
+  // failing the whole dashboard; any other error is logged but non-fatal.
+  for (const entry of [
+    { key: 'orders', table: 'orders' },
+    { key: 'invoices', table: 'invoices' },
+    { key: 'payments', table: 'payments' },
+  ] as const) {
+    const { count, error } = await supabaseAdmin.from(entry.table).select('id', { count: 'exact', head: true })
+    if (!error) counts[entry.key] = count ?? 0
+    else if (error.code !== '42P01') console.error(`[AdminOverview] count(${entry.table}) failed:`, error.message)
+  }
+
+  return { counts, error: null }
+}
 export default async function AdminOverview() {
   const { counts, error } = await fetchCounts()
   const configMissing = missingAdminEnvVars.length > 0
 
   return (
     <div className="grid gap-6">
-      {!counts ? (
+      {!counts || Object.keys(counts).length === 0 ? (
         <div className="rounded-2xl border border-black/10 bg-white p-6 text-sm font-normal text-black/70">
           <p className="font-semibold text-black">
             {configMissing ? 'Supabase is not configured.' : 'Supabase answered, but the query failed.'}
@@ -89,18 +95,18 @@ export default async function AdminOverview() {
               { key: 'quotes', label: 'Quotes', href: '/admin/quotes' },
               { key: 'products', label: 'Products', href: '/admin/products' },
               { key: 'customers', label: 'Customers' },
-              { key: 'orders', label: 'Orders' },
-              { key: 'invoices', label: 'Invoices' },
-              { key: 'payments', label: 'Payments' },
-            ] as { key: keyof Counts; label: string; href?: string }[]
+              { key: 'orders', label: 'Orders', soon: true },
+              { key: 'invoices', label: 'Invoices', soon: true },
+              { key: 'payments', label: 'Payments', soon: true },
+            ] as { key: keyof Counts; label: string; href?: string; soon?: boolean }[]
           ).map((stat) => {
             const body = (
               <>
                 <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/60">
-                  {stat.label}
+                  {stat.label}{stat.soon ? ' · soon' : ''}
                 </div>
                 <div className="font-display mt-2 text-3xl sm:text-4xl tabular-nums text-black">
-                  {counts[stat.key]}
+                  {counts[stat.key] ?? '—'}
                 </div>
               </>
             )
@@ -116,7 +122,7 @@ export default async function AdminOverview() {
             ) : (
               <div
                 key={stat.key}
-                className="min-w-0 rounded-2xl border border-dashed border-black/15 bg-black/[0.02] p-5"
+                className={`min-w-0 rounded-2xl border p-5 ${stat.soon ? 'border-dashed border-black/15 bg-black/[0.02]' : 'border-black/10 bg-white'}`}
               >
                 {body}
               </div>
