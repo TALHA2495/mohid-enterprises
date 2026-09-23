@@ -7,10 +7,29 @@ import { FactoryPage } from '@/components/factory-page'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Factory & Capacity — Faisalabad Manufacturing Base',
+  title: 'Factory & Capacity — 20+ Years of Trims Manufacturing',
   description:
-    'Inside the Faisalabad manufacturing base: material preparation, braiding and winding lines, quality inspection protocol, export packaging and logistics for global trims programs.',
+    'Faisalabad manufacturing base: textile trims, ribbons, tassels, elastic, jute cord and more. 20+ years of export-grade production for B2B bulk buyers.',
   alternates: { canonical: '/factory' },
+  // Declared in full on purpose: a page-level `openGraph` supersedes the root
+  // layout's, so leaving `images` out here would drop the social preview card.
+  openGraph: {
+    type: 'website',
+    siteName: 'Mohid Enterprises',
+    url: '/factory',
+    locale: 'en_US',
+    title: 'Faisalabad Manufacturing Base — 20+ Years of Trims Manufacturing',
+    description:
+      'Ribbons, tassels, elastic, jute cord, conveyor belts and more — 20+ years of export-grade trims production for B2B bulk buyers.',
+    images: [
+      {
+        url: '/images/hero-bg.webp',
+        width: 1600,
+        height: 900,
+        alt: 'Mohid Enterprises — textile trims manufacturing floor in Faisalabad',
+      },
+    ],
+  },
 }
 
 export default function Page() { return <FactoryPage /> }

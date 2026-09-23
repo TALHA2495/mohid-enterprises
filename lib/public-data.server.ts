@@ -171,6 +171,58 @@ export async function loadFactorySections(): Promise<FactorySection[]> {
 }
 
 // ---------------------------------------------------------------------------
+// /factory snapshot metrics — counted off the live catalog so the page can
+// never advertise a number an admin could contradict. Any failure degrades to
+// FALLBACK_STATS rather than rendering a gap in the strip.
+// ---------------------------------------------------------------------------
+
+export type ProductStats = {
+  /** Active rows in `products`. */
+  totalProducts: number
+  /** Distinct `products.type` tags across the active catalog. */
+  trimTypes: number
+  /** Company track record ("20+ years") — copy, not catalog data. */
+  yearsManufacturing: number
+}
+
+const YEARS_MANUFACTURING = 20
+
+/** Last-verified counts (queried live 2026-09-23). Re-check after catalog edits. */
+const FALLBACK_STATS: ProductStats = {
+  totalProducts: 45,
+  trimTypes: 14,
+  yearsManufacturing: YEARS_MANUFACTURING,
+}
+
+/**
+ * Counts for the /factory snapshot strip.
+ * Never throws and never returns null: any failure yields the last-verified set.
+ */
+export async function getProductStats(): Promise<ProductStats> {
+  if (!supabaseAdmin) return FALLBACK_STATS
+
+  // Selecting only `type` keeps the payload to one small column while
+  // `count: 'exact'` still reports the full row count.
+  const { data, count, error } = await supabaseAdmin
+    .from('products')
+    .select('type', { count: 'exact' })
+    .eq('is_active', true)
+
+  if (error) {
+    console.warn(`[public-data] product stats query failed — using last-verified counts: ${error.message}`)
+    return FALLBACK_STATS
+  }
+
+  const rows = (data ?? []) as Row[]
+  const trimTypes = new Set(rows.map((row) => String(row.type ?? '').trim()).filter(Boolean))
+  return {
+    totalProducts: count ?? rows.length,
+    trimTypes: trimTypes.size,
+    yearsManufacturing: YEARS_MANUFACTURING,
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Home hero cards (hero_sections). Lives here rather than lib/showroom.ts:
 // that module is imported by 'use client' components, so it can never touch
 // the service-role client — moving the query back there would re-trip the
