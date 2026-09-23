@@ -3,6 +3,16 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
+// ============================================================================
+// CERTIFICATE GALLERY — direct document tiles, no card chrome or captions.
+// ----------------------------------------------------------------------------
+// 1 column on phones, 2 on small tablets, 4 in a single row on desktop.
+// Each tile IS the certificate: object-contain inside a uniform aspect-[3/4]
+// paper-white sheet so the WHOLE document stays visible (no cropped seals)
+// and every tile aligns despite mixed page ratios. Click / Enter / Space
+// opens the fullscreen lightbox.
+// ============================================================================
+
 type Certificate = { title: string; image: string }
 
 export function CertificateGallery({ certificates }: { certificates: Certificate[] }) {
@@ -38,7 +48,7 @@ export function CertificateGallery({ certificates }: { certificates: Certificate
 
   return (
     <>
-      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {certificates.map((cert) => (
           <figure
             key={cert.title}
@@ -53,15 +63,19 @@ export function CertificateGallery({ certificates }: { certificates: Certificate
                 openCert(cert)
               }
             }}
-            className="relative cursor-pointer overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors hover:border-black/20"
+            className="group relative cursor-pointer overflow-hidden rounded-xl  transition-transform duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853] active:scale-[0.98]"
           >
-            <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-              <Image src={cert.image} alt={cert.title} fill loading="lazy" quality={55} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="size-full object-cover" />
+            <div className="relative aspect-[3/4]">
+              <Image
+                src={cert.image}
+                alt={cert.title}
+                fill
+                loading="lazy"
+                quality={70}
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                className="size-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+              />
             </div>
-            <figcaption className="p-4">
-              <p className="text-center text-xs text-black/70">{cert.title}</p>
-              <p className="mt-1 text-center text-[10px] text-[#00c853]">Click to view</p>
-            </figcaption>
           </figure>
         ))}
       </div>
@@ -76,7 +90,7 @@ export function CertificateGallery({ certificates }: { certificates: Certificate
           onClick={() => closeCert()}
           onKeyDown={handleDialogKeyDown}
         >
-          <div className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl border border-white/10" onClick={(event) => event.stopPropagation()}>
+          <div className="relative max-h-[90vh] max-w-4xl" onClick={(event) => event.stopPropagation()}>
             <img src={selected.image} alt="" className="max-h-[90vh] w-auto object-contain" />
           </div>
         </div>

@@ -34,7 +34,7 @@ function HeroCategoryGrid({ categories }: { categories: readonly { id: string; l
           {/* Dark scrim keeps the white caption readable on any photo */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-            <span className="hidden sm:inline text-[10px] font-medium tracking-widest text-[#1ada67]">{category.id}</span>
+
             <h2 className="mt-0.5 text-balance text-lg font-semibold leading-snug text-white drop-shadow">
               {category.label}
             </h2>

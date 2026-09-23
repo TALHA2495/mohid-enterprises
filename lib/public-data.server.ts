@@ -39,14 +39,6 @@ export type FactorySection = {
   sortOrder: number
 }
 
-export type CertificateItem = {
-  id: string
-  title: string
-  subtitle: string | null
-  imageUrl: string
-  sortOrder: number
-}
-
 /** ImageKit delivery transform used across the public pages. */
 const TRANSFORM = '?tr=w-1200,f-auto,q-70'
 
@@ -171,27 +163,6 @@ export async function loadFactorySections(): Promise<FactorySection[]> {
   return (data ?? []).map((row) => ({
     id: String(row.id),
     kind: row.kind === 'card' ? 'card' : 'hero',
-    title: String(row.title ?? ''),
-    subtitle: typeof row.subtitle === 'string' ? row.subtitle : null,
-    imageUrl: String(row.image_url ?? ''),
-    sortOrder: typeof row.sort_order === 'number' ? row.sort_order : 0,
-  }))
-}
-
-export async function loadCertificates(): Promise<CertificateItem[]> {
-  if (!supabaseAdmin) return []
-  const { data, error } = await supabaseAdmin
-    .from('certificates')
-    .select('id, title, subtitle, image_url, sort_order')
-    .eq('is_active', true)
-    .order('sort_order')
-
-  if (error) {
-    console.warn(`[public-data] certificates query failed: ${error.message}`)
-    return []
-  }
-  return (data ?? []).map((row) => ({
-    id: String(row.id),
     title: String(row.title ?? ''),
     subtitle: typeof row.subtitle === 'string' ? row.subtitle : null,
     imageUrl: String(row.image_url ?? ''),

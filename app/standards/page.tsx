@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { StandardsPage } from '@/components/standards-page'
 
-// The certificate gallery is DB-driven (certificates), so revalidate instead of
-// freezing the page at build time — an admin edit appears within a minute.
+// The certificate gallery is now static CDN content, but revalidate is kept so
+// the page can be re-wired to live data later without freezing at build time.
 export const revalidate = 60
 
 export const metadata: Metadata = {
