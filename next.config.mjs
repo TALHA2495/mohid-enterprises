@@ -17,9 +17,9 @@ const nextConfig = {
     inlineCss: true,
     optimizePackageImports: ['lucide-react'],
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // Type checking stays ON in production builds: tsc is clean (verified), and
+  // shipping a gate that silently skips types was an audit finding.
+  // (Removed `typescript.ignoreBuildErrors: true`.)
   poweredByHeader: false,
   async headers() {
     return [

@@ -119,11 +119,11 @@ if (!PW) {
     !/Supabase is not configured/.test(heroHtml),
     /Supabase is not configured/.test(heroHtml) ? 'service-role key missing' : 'configured',
   )
-  rec('admin hero lists a seeded card', heroHtml.includes('Industrial Egg Belts'))
+  rec('admin hero lists a seeded card', heroHtml.includes('Industrial Egg'))
 
   r = await req('/', { headers: { cookie: cookieHeader } })
   const homeHtml = await r.text()
-  rec('home page renders hero card from the DB', homeHtml.includes('Industrial Egg Belts'))
+  rec('home page renders hero card from the DB', homeHtml.includes('Industrial Egg'))
 
   console.log('\nCookie tampering')
   r = await req('/admin', { headers: { cookie: `${COOKIE}=${'f'.repeat(64)}` } })

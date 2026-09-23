@@ -117,14 +117,16 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
               {product.description} Produced to consistent width and finish density.
             </p>
 
-            <div className="mt-4 border-t border-black/[0.07]">
+            {/* dl wrapper: dt/dd are invalid outside a <dl> — fixes HTML
+                validity/a11y without touching the styling classes. */}
+            <dl className="mt-4 border-t border-black/[0.07]">
               {product.specs.map(([label, value]) => (
                 <div key={label} className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] gap-4 border-b border-black/[0.07] py-2 last:border-0">
                   <dt className="text-[11px] uppercase tracking-[0.14em] text-black/40">{label}</dt>
                   <dd className="text-[13px] leading-5 text-black/85 tabular-nums">{value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
                 href={quoteHref}

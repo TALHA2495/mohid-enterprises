@@ -24,3 +24,11 @@ smoke-*.log
 .agents/
 .aider-desk/
 skills-lock.json
+
+# Audit artifacts: one-off probes/shots/logs stay local; the reusable
+# harnesses (e2e-full.mjs, admin-*.mjs, factory-verify.mjs) remain tracked.
+.audit/probe*.mjs
+.audit/sweep*.txt
+.audit/*.log
+.audit/dev.log
+.audit/shots/

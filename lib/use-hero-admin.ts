@@ -24,27 +24,31 @@ export function useHeroAdmin(initial: HeroSectionRow[]) {
   const bySort = (a: HeroSectionRow, b: HeroSectionRow) =>
     a.sort_order === b.sort_order ? a.label.localeCompare(b.label) : a.sort_order - b.sort_order
 
-  const move = (from: number, to: number) => {
+  const move = (from: number, to: number): HeroSectionRow[] => {
     const next = [...items]
     const [moved] = next.splice(from, 1)
     next.splice(to, 0, moved)
     setItems(next)
+    return next
   }
-  const flushOrder = () => {
+  // Flush the NEW order. The array is passed in explicitly because `items` in
+  // scope here is still the pre-move state (setItems above is async) — reading
+  // it would persist the old order back to the DB and silently undo the move.
+  const flushOrder = (next: HeroSectionRow[]) => {
     setNotice(null)
     startTransition(async () => {
-      const result = await reorderHero(items.map((i) => i.id))
+      const result = await reorderHero(next.map((i) => i.id))
       if (!result.ok) setNotice({ type: 'error', message: result.error ?? 'Reorder failed.' })
     })
   }
-  const moveUp = (i: number) => { if (i === 0) return; move(i, i - 1); flushOrder() }
-  const moveDown = (i: number) => { if (i === items.length - 1) return; move(i, i + 1); flushOrder() }
+  const moveUp = (i: number) => { if (i === 0) return; flushOrder(move(i, i - 1)) }
+  const moveDown = (i: number) => { if (i === items.length - 1) return; flushOrder(move(i, i + 1)) }
 
   const onDragStart = (e: React.DragEvent<HTMLButtonElement>, index: number) =>
     e.dataTransfer.setData('text/plain', String(index))
     const onDrop = (e: React.DragEvent<HTMLLIElement>, to: number) => {
     const from = Number(e.dataTransfer.getData('text/plain'))
-    if (!Number.isNaN(from) && from !== to) { move(from, to); flushOrder() }
+    if (!Number.isNaN(from) && from !== to) flushOrder(move(from, to))
   }
 
   const onSave = (values: HeroFormInput) => {

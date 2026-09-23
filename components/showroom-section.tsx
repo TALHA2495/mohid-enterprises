@@ -83,6 +83,10 @@ export function ShowroomSection({ products }: { products: Product[] }) {
 
   return (
     <section id="showroom" className="relative z-10 flex h-[calc(100vh-5.3125rem)] flex-col px-4 pt-8 text-black sm:px-6 md:h-[calc(100vh-5.0625rem)] lg:px-10">
+      {/* The grid has no visible heading by design (cards are the content), but
+          the page still needs exactly one h1 for SEO/screen readers — same
+          sr-only pattern as the home hero and /quote. Product cards keep h2. */}
+      <h1 className="sr-only">Showroom — Woven &amp; Woven Label Trims Catalog</h1>
       <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col">
         <div className="mb-8 flex shrink-0 gap-2 overflow-x-auto pb-1" role="group" aria-label="Product filters">
           {SHOWROOM_FILTERS.map((item) => (

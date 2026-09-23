@@ -43,9 +43,9 @@ function pickHeroes(sections: FactorySection[]): FactorySection[] {
 export async function FactoryPage() {
   const heroes = pickHeroes(await loadFactorySections())
 
-  return <PageShell><section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+  return <PageShell>
+    <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
 
-    <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[#1ada67] drop-shadow-sm">Our Factory</p>
 
     <h1 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-white drop-shadow-md sm:text-5xl">20+ Years of Proven Trims Manufacturing</h1>
 

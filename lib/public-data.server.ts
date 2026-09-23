@@ -54,11 +54,9 @@ function firstImage(row: Row): string {
 
 /** `specs` is [[label, value], ...]; pull one value out by label. */
 function specValue(specs: unknown, label: string): string | null {
-  if (!Array.isArray(specs)) return null
-  for (const entry of specs as unknown[]) {
-    if (Array.isArray(entry) && typeof entry[0] === 'string' && entry[0].toLowerCase() === label.toLowerCase()) {
-      return typeof entry[1] === 'string' ? entry[1] : null
-    }
+  const list = mapSpecs(specs)
+  for (const [key, value] of list) {
+    if (key.toLowerCase() === label.toLowerCase()) return value
   }
   return null
 }
@@ -82,8 +80,15 @@ function toProductType(value: unknown, name: string): ProductType {
 
 /** `specs` value coerced to the [[label, value], ...] shape the UI renders. */
 function mapSpecs(value: unknown): [string, string][] {
-  if (!Array.isArray(value)) return []
-  return (value as unknown[])
+  // Tolerate double-encoded rows: JSON.stringify was applied before the
+  // supabase-js update in older scripts, storing a JSON *string* in the JSONB
+  // column instead of an array — that silently rendered zero spec rows.
+  let list = value
+  if (typeof list === 'string') {
+    try { list = JSON.parse(list) } catch { return [] }
+  }
+  if (!Array.isArray(list)) return []
+  return (list as unknown[])
     .filter((entry): entry is [string, string] => Array.isArray(entry) && entry.length >= 2)
     .map((entry) => [String(entry[0]), String(entry[1])] as [string, string])
 }

@@ -53,7 +53,7 @@ async function main() {
   let missing = 0
 
   for (const product of products) {
-    const specsJson = JSON.stringify(product.specs ?? [])
+    const specsJson = product.specs ?? [] // plain array — supabase-js JSON-encodes it; stringify here double-encodes into a JSONB string
     const { data, error } = await supabase
       .from('products')
       .update({ type: product.type, specs: specsJson })
