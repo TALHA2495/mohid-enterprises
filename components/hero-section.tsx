@@ -1,18 +1,21 @@
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react' // used by the CTA pills below - NOT unused
+import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 
 import { HERO_CATEGORIES } from '@/lib/showroom'
+// loadHeroCategories lives in the server-only module — lib/showroom.ts is
+// client-safe and must never re-import the service-role client.
+import { loadHeroCategories } from '@/lib/public-data.server'
 
 const CARD_SIZES = '50vw'
 
-function HeroCategoryGrid() {
+function HeroCategoryGrid({ categories }: { categories: readonly { id: string; label: string; desc: string; filter: string; image: string }[] }) {
   return (
     <div
       aria-label="Product categories"
       className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-4 px-4 sm:px-6"
     >
-      {HERO_CATEGORIES.map((category, index) => (
+                  {categories.map((category, index) => (
         <Link
           key={category.id}
           href={`/showroom?filter=${encodeURIComponent(category.filter)}`}
@@ -31,7 +34,7 @@ function HeroCategoryGrid() {
           {/* Dark scrim keeps the white caption readable on any photo */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-            <span className="hidden sm:inline text-[10px] font-medium tracking-widest text-[#1ada67]">{category.id}</span>
+
             <h2 className="mt-0.5 text-balance text-lg font-semibold leading-snug text-white drop-shadow">
               {category.label}
             </h2>
@@ -49,13 +52,14 @@ function HeroCategoryGrid() {
   )
 }
 
-export function HeroSection() {
+export async function HeroSection() {
+  const categories = await loadHeroCategories()
   return (
     <section className="relative z-10 flex min-h-[calc(90vh-5.25rem)] flex-col justify-center py-10 sm:py-12 md:min-h-[calc(90vh-4.375rem)]">
       {/* Invisible page heading - the visible hero is cards + CTAs only. */}
       <h1 className="sr-only">Mohid Enterprises — garment trims manufacturer, Faisalabad, Pakistan</h1>
 
-      <HeroCategoryGrid />
+            <HeroCategoryGrid categories={categories} />
 
       <div className="mx-auto hidden w-full max-w-7xl flex-wrap items-center justify-center gap-2 px-4 pt-10 sm:gap-4 sm:px-6 sm:pt-12">
         <Link

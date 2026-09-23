@@ -12,10 +12,15 @@ __v0_jsx-dev-runtime.ts
 # Common ignores
 node_modules
 .next/
-.DS_Storebuild.log
+.DS_Store
 build.log
 smoke-*.log
 
 # Build artifacts
 *.tsbuildinfo
 .vercel
+
+# Agent scaffolding (tool state - never commit)
+.agents/
+.aider-desk/
+skills-lock.json

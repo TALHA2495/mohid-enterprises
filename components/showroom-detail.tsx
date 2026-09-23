@@ -26,8 +26,17 @@ function findSpec(product: Product, keywords: string[], fallback: string) {
 
 function ProductDetail({ product, onBack }: { product: Product; onBack: () => void }) {
   const [customOpen, setCustomOpen] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const imageRef = useRef<HTMLImageElement>(null)
   const [titleFirst, ...titleRest] = product.name.split(' ')
+
+  // Thumbnail switcher: the strip only renders when the product has multiple
+  // uploaded images. Transforms are applied per-slot (large vs thumbnail).
+  const hasMultiple = product.images.length > 1
+  const FULL = '?tr=w-1200,f-auto,q-70'
+  const THUMB = '?tr=w-180,f-auto,q-70'
+  const activeImage = hasMultiple ? (product.images[selectedIndex] ?? product.images[0] ?? '') : ''
+  const mainSrc = activeImage && !activeImage.includes('?') ? `${activeImage}${FULL}` : activeImage || product.image
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -52,6 +61,32 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
 
         <div className="mt-5 grid gap-6 lg:grid-cols-[1.02fr_1fr] lg:gap-8">
           <div className="overflow-hidden rounded-2xl border border-black/10 bg-white lg:self-start">
+            {hasMultiple && (
+              <div className="flex items-center gap-2 overflow-x-auto p-3 pb-0" aria-label="Product images">
+                {product.images.map((url, i) => (
+                  <button
+                    key={`${url}-${i}`}
+                    type="button"
+                    aria-label={`Show image ${i + 1}`}
+                    aria-current={selectedIndex === i ? 'true' : 'false'}
+                    onClick={() => setSelectedIndex(i)}
+                    className={`shrink-0 overflow-hidden rounded-md border-2 ${selectedIndex === i
+                      ? 'border-[#00ff59]'
+                      : 'border-black/10 opacity-60 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]'
+                    }`}
+                  >
+                    <Image
+                      src={url.includes('?') ? url : `${url}${THUMB}`}
+                      alt={`${product.name}, image ${i + 1}`}
+                      width={48}
+                      height={48}
+                      className="size-12 object-cover"
+                      loading="lazy"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
             <div
                 className="group relative aspect-[16/11] overflow-hidden bg-black/5"
                 onMouseMove={(event) => {
@@ -64,7 +99,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
               >
               <Image
                   ref={imageRef}
-                  src={product.image}
+                  src={mainSrc}
                   alt={`${product.name} - ${product.type} trim`}
                   fill
                   quality={70}
@@ -98,7 +133,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
                 Request quote &amp; sample <ArrowUpRight className="size-4" />
               </a>
               <a
-                href={quoteHref}
+                href={`mailto:info@mohident.com?subject=${encodeURIComponent(`Physical sample request — ${product.name}`)}`}
                 className="inline-flex flex-1 items-center justify-center rounded-full border border-black/20 px-6 py-3.5 text-sm text-black transition-colors hover:bg-black/[0.06]"
               >
                 Request physical sample

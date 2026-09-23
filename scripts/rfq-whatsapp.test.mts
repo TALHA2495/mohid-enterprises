@@ -14,6 +14,7 @@ const belowMoq = schema.safeParse({
   inquiry: 'Custom fringe lace with brushed finish for apparel edges.',
   companyName: 'Istanbul Textiles A.S.',
   workEmail: 'buyer@istanbul-textiles.com',
+  phone: '+92 300 1234567',
   quantity: 100,
   destinationPort: 'Istanbul',
   notes: '',
@@ -29,6 +30,7 @@ const noPort = schema.safeParse({
   inquiry: 'Custom fringe lace with brushed finish for apparel edges.',
   companyName: 'Istanbul Textiles A.S.',
   workEmail: 'buyer@istanbul-textiles.com',
+  phone: '+92 300 1234567',
   quantity: 500,
   destinationPort: '',
   notes: '',
@@ -40,17 +42,52 @@ const badEmail = schema.safeParse({
   inquiry: 'Custom fringe lace with brushed finish for apparel edges.',
   companyName: 'Yokohama Trims K.K.',
   workEmail: 'not-an-email',
+  phone: '+92 300 1234567',
   quantity: 500,
   destinationPort: 'Yokohama',
   notes: '',
 })
 check('invalid work email rejected', !badEmail.success)
 
+// 3b. Invalid phone numbers are rejected
+const badPhone = schema.safeParse({
+  inquiry: 'Custom fringe lace with brushed finish for apparel edges.',
+  companyName: 'Yokohama Trims K.K.',
+  workEmail: 'buyer@yokohama-trims.co.jp',
+  phone: 'abc',
+  quantity: 500,
+  destinationPort: 'Yokohama',
+  notes: '',
+})
+check('invalid phone rejected', !badPhone.success)
+if (!badPhone.success) {
+  check('phone error targets phone field', badPhone.error.issues.some((i) => i.path[0] === 'phone'))
+}
+
+// 3c. Phone is normalized: spaces and dashes stripped
+const phoneVariants = ['+92 300-1234567', '0300 1234567', '+923001234567']
+for (const variant of phoneVariants) {
+  const parsed = schema.safeParse({
+    inquiry: 'Custom fringe lace with brushed finish for apparel edges.',
+    companyName: 'Yokohama Trims K.K.',
+    workEmail: 'buyer@yokohama-trims.co.jp',
+    phone: variant,
+    quantity: 500,
+    destinationPort: 'Yokohama',
+    notes: '',
+  })
+  check(`phone "${variant}" accepted`, parsed.success)
+  if (parsed.success) {
+    check(`phone "${variant}" normalized to ${variant.replace(/[\s-]/g, '')}`, parsed.data.phone === variant.replace(/[\s-]/g, ''))
+  }
+}
+
 // 4. Short inquiry rejected
 const shortInquiry = schema.safeParse({
   inquiry: 'hi',
   companyName: 'Yokohama Trims K.K.',
   workEmail: 'buyer@yokohama-trims.co.jp',
+  phone: '+92 300 1234567',
   quantity: 500,
   destinationPort: 'Yokohama',
   notes: '',
@@ -62,6 +99,7 @@ const valid = schema.safeParse({
   inquiry: 'Custom fringe lace with brushed finish for apparel edges.',
   companyName: 'Yokohama Trims K.K.',
   workEmail: 'buyer@yokohama-trims.co.jp',
+  phone: '+92 300 1234567',
   quantity: '500',
   destinationPort: 'Yokohama',
   notes: 'Sample roll first.',
@@ -87,6 +125,7 @@ if (valid.success) {
     '',
     `*Company:* ${valid.data.companyName}`,
     `*Work email:* ${valid.data.workEmail}`,
+    `*Phone:* ${valid.data.phone}`,
   ]
   const url = `https://wa.me/92XXXXXXXXXX?text=${encodeURIComponent(lines.join('\n'))}`
   check('URL starts with wa.me link', url.startsWith('https://wa.me/92XXXXXXXXXX?text='))
@@ -102,6 +141,7 @@ check('no-MOQ context accepts any positive quantity', createRfqSchema({}).safePa
   inquiry: 'General trim inquiry for upcoming season.',
   companyName: 'ACME Apparel Ltd.',
   workEmail: 'procurement@acme.com',
+  phone: '+92 300 1234567',
   quantity: 5,
   destinationPort: 'Rotterdam',
   notes: '',

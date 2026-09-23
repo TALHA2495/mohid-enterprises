@@ -41,6 +41,11 @@ export function createRfqSchema(productContext: Partial<ProductContext>) {
         .string()
         .trim()
         .email('Enter a valid work email.'),
+      phone: z
+        .string()
+        .trim()
+        .regex(/^\+?\d[\d\s-]{6,18}$/, 'Enter a valid phone number (e.g. +92 300 1234567…).')
+        .transform((value) => value.replace(/[\s-]/g, '')),
       quantity: z.coerce
         .number()
         .refine((value) => Number.isFinite(value) && value > 0, 'Enter a numeric order quantity greater than zero.'),

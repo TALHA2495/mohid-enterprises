@@ -264,3 +264,22 @@ node scripts/optimize-images.mjs            # in-place image re-encoding
 8. **Mobile menu** is always-mounted with CSS transitions (`duration-500 ease-in-out`, opacity + translate) — mount/unmount would kill the exit animation
 9. **Home hero is a minimal billboard** — no heading/eyebrow/subhead; two rows of photo-only category cards (row 1: 6 categories right-to-left; row 2: 4 remaining categories left-to-right; continuous CSS marquee, pause on hover/focus, reduced-motion → static scrollable) deep-link to `/showroom?filter=<category>`
 9. **Over-photo text rule**: text sitting directly on backdrop photos uses `text-white` + `drop-shadow`; text on light surfaces uses `text-black/*`. No white/light overlays are added over any image
+
+---
+
+## Supabase & Admin (feat/supabase-order-lifecycle)
+
+| Path | Purpose |
+|---|---|
+| `supabase/schema.sql` | 8-table order-lifecycle schema + `create_quote` RPC + triggers + locked RLS |
+| `supabase/README.md` | Setup, verification queries, admin reference SQL |
+| `lib/supabase.ts` | Anon client (client-safe) + DB-mirrored TS types |
+| `lib/supabase-admin.server.ts` | Service-role client — server-only, never import from client components |
+| `lib/admin-auth.ts` | HMAC cookie session helpers (Web Crypto) |
+| `proxy.ts` | Next 16 proxy (ex-middleware) — guards `/admin` via session cookie |
+| `app/api/admin/login/route.ts` | POST password → httpOnly cookie |
+| `app/admin/` | Dashboard, quotes admin, login page; `actions.ts` server actions |
+| `components/admin/` | `admin-overview.tsx` (server), `quotes-admin-client.tsx` (client), `admin-login-form.tsx` (client) |
+| `.env.example` | Documented env template |
+
+Conventions: public writes only via the `create_quote` RPC; admin reads/writes via service-role key in server code; mutations logged to `audit_log`; money as `Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR' })`.
