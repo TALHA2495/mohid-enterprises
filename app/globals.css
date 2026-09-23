@@ -63,6 +63,16 @@
   html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display: none; }
 }
 
+/* Inner scroll regions (e.g. the admin quotes table) opt back into a visible
+   scrollbar: with the rule above, horizontally scrollable content on a phone
+   looks truncated rather than scrollable. Attribute selector out-specifies the
+   `*` rules, so no !important is needed. */
+@media (max-width: 767px) {
+  [data-scroll-x] { scrollbar-width: thin; -ms-overflow-style: auto; }
+  [data-scroll-x]::-webkit-scrollbar { display: block; height: 6px; }
+  [data-scroll-x]::-webkit-scrollbar-thumb { background: rgb(0 0 0 / 0.25); border-radius: 9999px; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

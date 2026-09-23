@@ -19,8 +19,11 @@ type Props = {
   productCounts: Record<string, number>
 }
 
+// max-w-2xl: these name fields sit in a 1fr grid track, which on a 2560px display
+// stretches them to ~1900px. The sort-order inputs sharing this class are `sm:w-24`,
+// so the cap does not affect them.
 const inputClass =
-  'w-full rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/45 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
+  'w-full max-w-2xl rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/45 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
 
 export default function CategoriesPanel({ categories, productCounts }: Props) {
   const [isPending, startTransition] = useTransition()

@@ -59,7 +59,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
       <div className="md:pl-64">
         <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur">
-          <div className="mx-auto flex h-14 items-center justify-between gap-4 px-4 sm:px-6">
+          {/* Padding mirrors <main> (incl. lg:px-8) so the header rule and the
+              page content share the same left/right edge at every width. */}
+          <div className="flex h-14 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
             {/* Mobile/tablet: hamburger + compact brand. Desktop: company name. */}
             <div className="flex items-center gap-2.5">
               <MobileSidebar />
@@ -89,7 +91,11 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             <main> (nested landmarks are an a11y violation). The global skip link
             in app/layout.tsx targets this id. */}
         <main id="main" className="min-h-[calc(100vh-3.5rem)] px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">{children}</div>
+          {/* Full-bleed content: the console is a data tool, so tables, grids and
+              forms fill the available width instead of sitting in a centred
+              1280px column (which left ~640px of dead space at 1920px, more at
+              2560px). Width discipline lives on the individual controls. */}
+          <div className="w-full">{children}</div>
         </main>
       </div>
     </div>

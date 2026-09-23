@@ -50,7 +50,7 @@ export default async function NewProductPage() {
   const categories = (data ?? []) as ProductCategory[]
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <div className="w-full">
         <Link
           href="/admin/products"
           className="text-xs font-medium text-[#0b7a34] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"

@@ -100,9 +100,12 @@ export default function ProductsAdminClient({ products, categories }: Props) {
     `${chipBase} ${isActive ? 'bg-[#01aa3f] text-white' : 'border border-black/10 bg-white text-black hover:bg-black/[0.03]'}`
 
   return (
-    <div className="grid gap-4">
+    <div className="grid min-w-0 gap-4">
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative min-w-[220px] flex-1">
+        {/* max-w-md stops the field stretching to ~2000px on an ultrawide display;
+            the row itself still spans the full width. */}
+        <div className="relative min-w-[220px] max-w-md flex-1">
+
           <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-black/40" />
           <input
             type="search"
@@ -189,13 +192,14 @@ export default function ProductsAdminClient({ products, categories }: Props) {
         </div>
       ) : (
         <>
-          {/* Phone layout: a 9-column table is unusable at 360px, so below md
-              the same rows render as compact cards with identical actions. */}
-          <ul aria-label="Products" className="grid gap-3 md:hidden">
+          {/* Card layout until lg: at md the fixed 256px sidebar leaves ~470-720px
+              for a table that needs 820px, so the table used to appear exactly
+              when it no longer fit and the comfortable cards were hidden. */}
+          <ul aria-label="Products" className="grid min-w-0 gap-3 lg:hidden">
             {visible.map((product) => {
               const cover = product.images?.[0]
               return (
-                <li key={product.id} className="rounded-2xl border border-black/10 bg-white p-3">
+                <li key={product.id} className="min-w-0 rounded-2xl border border-black/10 bg-white p-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-black/5">
                       {cover ? (
@@ -254,7 +258,11 @@ export default function ProductsAdminClient({ products, categories }: Props) {
             })}
           </ul>
 
-          <div className="hidden overflow-x-auto rounded-2xl border border-black/10 bg-white md:block">
+          {/* min-w-0 releases the grid item's automatic minimum; `relative` makes the
+              wrapper the containing block for the .sr-only spans inside the table
+              (position:absolute + static wrapper = they resolve against the initial
+              containing block, escape the clip and scroll the whole page sideways). */}
+          <div className="relative hidden min-w-0 overflow-x-auto rounded-2xl border border-black/10 bg-white lg:block">
             <table className="w-full min-w-[820px] text-sm">
               <thead>
                 <tr className="border-b border-black/10 bg-black/[0.02] text-left">

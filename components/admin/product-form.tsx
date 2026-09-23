@@ -128,14 +128,17 @@ export default function ProductForm({ categories, product }: Props) {
       <section className="grid gap-4 rounded-2xl border border-black/10 bg-white p-5">
         <h2 className="text-sm font-semibold text-black">Identity</h2>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-1.5" htmlFor="name">
+        {/* Four columns at xl: the product name gets two (long trims names), the
+            category one, and the description two — so no single control stretches
+            across a 1600px shell. */}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <label className="grid gap-1.5 xl:col-span-2" htmlFor="name">
             <span className="text-xs font-medium text-black">Product name</span>
             <input id="name" className={inputClass} placeholder="e.g. Jacquard Elastic Tape" {...register('name')} />
             {errors.name && <span className="text-[11px] font-normal text-[#c62828]">{errors.name.message}</span>}
           </label>
 
-          <label className="grid gap-1.5" htmlFor="categoryId">
+          <label className="grid gap-1.5 xl:col-span-2" htmlFor="categoryId">
             <span className="text-xs font-medium text-black">Category</span>
             <select id="categoryId" className={inputClass} {...register('categoryId')}>
               <option value="">Select a category…</option>
@@ -152,12 +155,12 @@ export default function ProductForm({ categories, product }: Props) {
           </label>
         </div>
 
-        <label className="grid gap-1.5" htmlFor="description">
+        <label className="grid gap-1.5 sm:col-span-2 xl:col-span-2" htmlFor="description">
           <span className="text-xs font-medium text-black">Description</span>
           <textarea
             id="description"
             rows={3}
-            className={`${inputClass} resize-none`}
+            className={`${inputClass} max-w-3xl resize-none`}
             placeholder="How this trim is used, finishes available, lead time…"
             {...register('description')}
           />
@@ -170,7 +173,9 @@ export default function ProductForm({ categories, product }: Props) {
       <section className="grid gap-4 rounded-2xl border border-black/10 bg-white p-5">
         <h2 className="text-sm font-semibold text-black">Specification</h2>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Column count grows with the viewport so each control keeps a sane width
+            now that the form fills the shell instead of a 896px column. */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <label className="grid gap-1.5" htmlFor="material">
             <span className="text-xs font-medium text-black">Material</span>
             <input id="material" className={inputClass} placeholder="e.g. Polyester" {...register('material')} />
@@ -229,7 +234,7 @@ export default function ProductForm({ categories, product }: Props) {
       <section className="grid gap-4 rounded-2xl border border-black/10 bg-white p-5">
         <h2 className="text-sm font-semibold text-black">Commercial</h2>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <label className="grid gap-1.5" htmlFor="pricePerUnit">
             <span className="text-xs font-medium text-black">Unit price (PKR)</span>
             <input

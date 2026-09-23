@@ -114,7 +114,11 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
         {isPending && <p className="text-xs font-normal text-black/50">Updating…</p>}
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-black/10 bg-white">
+      {/* relative + min-w-0 + data-scroll-x: relative contains the absolutely
+          positioned .sr-only spans in the table (otherwise they escape the clip
+          and scroll the whole page); min-w-0 releases the grid item's automatic
+          minimum; data-scroll-x keeps the scrollbar visible below 768px. */}
+      <div data-scroll-x className="relative min-w-0 overflow-x-auto rounded-2xl border border-black/10 bg-white">
         <table className="w-full min-w-[760px] text-sm">
           <thead>
             <tr className="border-b border-black/10 bg-black/[0.02]">

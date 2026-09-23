@@ -89,7 +89,10 @@ export default async function AdminOverview() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        // 2-up stays right on phones (numeric tiles), then the row grows with the
+        // viewport so six stats read as one band instead of three sprawling rows
+        // of half-width cards on an ultrawide display.
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-6">
           {(
             [
               { key: 'quotes', label: 'Quotes', href: '/admin/quotes' },
