@@ -37,7 +37,7 @@ export const Select = forwardRef<
       >
         {children}
       </select>
-      <span id={hintId} className={cn('text-[11px] font-normal', error ? 'text-[#c62828]' : 'text-black/50')}>
+      <span id={hintId} className={cn('text-[11px] font-normal', error ? 'text-[#c62828]' : 'text-black/60')}>
         {error ?? hint}
       </span>
     </div>
@@ -65,7 +65,7 @@ export const Textarea = forwardRef<
         className={cn(controlBase, controlState(Boolean(error)), 'resize-none', className)}
         {...props}
       />
-      <span id={hintId} className={cn('text-[11px] font-normal', error ? 'text-[#c62828]' : 'text-black/50')}>
+      <span id={hintId} className={cn('text-[11px] font-normal', error ? 'text-[#c62828]' : 'text-black/60')}>
         {error ?? hint}
       </span>
     </div>

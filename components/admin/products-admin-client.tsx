@@ -93,27 +93,33 @@ export default function ProductsAdminClient({ products, categories }: Props) {
     })
   }
 
+  // inline-flex + min-h-11: the pills were ~26px tall, under the 44px touch
+  // minimum. Below md (phones and portrait tablets) they stay 44px; from md up —
+  // where the console is pointer-driven — the compact pill returns.
   const chipBase =
-    'rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50'
+    'inline-flex min-h-11 items-center justify-center rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50 md:min-h-0'
 
   const chip = (isActive: boolean) =>
-    `${chipBase} ${isActive ? 'bg-[#01aa3f] text-white' : 'border border-black/10 bg-white text-black hover:bg-black/[0.03]'}`
+    // text-black on brand green (DESIGN.md): white measured ~2.4:1, a WCAG AA fail.
+    `${chipBase} ${isActive ? 'bg-[#01aa3f] text-black' : 'border border-black/10 bg-white text-black hover:bg-black/[0.03]'}`
 
   return (
     <div className="grid min-w-0 gap-4">
-      <div className="flex flex-wrap items-center gap-3">
-        {/* max-w-md stops the field stretching to ~2000px on an ultrawide display;
-            the row itself still spans the full width. */}
-        <div className="relative min-w-[220px] max-w-md flex-1">
-
-          <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-black/40" />
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        {/* Toolbar: stacked below sm (search full width, status filters below),
+            then a justified single row from sm up — search left, filters right —
+            so the controls frame the row instead of floating mid-canvas far from
+            the right edge on a wide display. max-w-md keeps the field from growing
+            with the viewport. */}
+        <div className="relative w-full sm:w-auto sm:min-w-[240px] sm:max-w-md sm:flex-1">
+          <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-black/60" />
           <input
             type="search"
             value={query}
             onChange={(event) => setParam('q', event.target.value)}
             placeholder="Search products by name or category…"
             aria-label="Search products"
-            className="w-full rounded-lg border border-black/10 bg-white py-2 pl-9 pr-3 text-sm text-black placeholder:text-black/45 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30"
+            className="w-full rounded-lg border border-black/10 bg-white py-2 pl-9 pr-3 text-sm text-black placeholder:text-black/55 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30"
           />
         </div>
 
@@ -169,7 +175,7 @@ export default function ProductsAdminClient({ products, categories }: Props) {
             {actionError}
           </p>
         )}
-        {isPending && <p className="text-xs font-normal text-black/50">Updating…</p>}
+        {isPending && <p className="text-xs font-normal text-black/60">Updating…</p>}
       </div>
       {filtered.length === 0 ? (
         <div className="rounded-2xl border border-black/10 bg-white p-8 text-center">

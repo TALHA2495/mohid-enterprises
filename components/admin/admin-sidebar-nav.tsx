@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -36,7 +36,7 @@ export function AdminSidebarNav() {
             <Icon
               aria-hidden="true"
               strokeWidth={2}
-              className={`h-4 w-4 shrink-0 transition-colors ${active ? 'text-[#01aa3f]' : 'text-black/40 group-hover:text-black/60'}`}
+              className={`h-4 w-4 shrink-0 transition-colors ${active ? 'text-[#01aa3f]' : 'text-black/60 group-hover:text-black/60'}`}
             />
             {link.label}
             <span

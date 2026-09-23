@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { heroFormSchema, type HeroFormInput } from '@/lib/hero-schema'
 
 const inputClass =
-  'w-full rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/45 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
+  'w-full rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/55 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
 
 const FILTERS = [
   'All trims', 'Egg Belts', 'Pom Poms', 'Accessories', 'Tapes', 'Elastics',

@@ -37,7 +37,7 @@ export default function HeroCardRow({ item, index, onDragStart, onDrop, onEdit, 
       >
         <GripVertical className="size-4" />
       </button>
-      <span className="tabular-nums text-xs text-black/40 w-5 text-right">{index + 1}</span>
+      <span className="tabular-nums text-xs text-black/60 w-5 text-right">{index + 1}</span>
       <div className="flex-1 truncate text-sm font-medium text-black">{item.label}</div>
       {/* Explicit up/down reorder: HTML5 drag never fires on touch, so this is
           the only reliable way to reorder on phones — and it is keyboard
@@ -48,7 +48,7 @@ export default function HeroCardRow({ item, index, onDragStart, onDrop, onEdit, 
           onClick={() => onMoveUp(index)}
           disabled={disabled || index === 0}
           aria-label={`Move ${item.label} up`}
-          className="rounded p-0.5 text-black/40 transition-colors hover:bg-black/[0.06] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853] disabled:cursor-not-allowed disabled:opacity-30"
+          className="rounded p-0.5 text-black/60 transition-colors hover:bg-black/[0.06] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853] disabled:cursor-not-allowed disabled:opacity-30"
         >
           <ChevronUp aria-hidden="true" className="size-3.5" />
         </button>
@@ -57,12 +57,12 @@ export default function HeroCardRow({ item, index, onDragStart, onDrop, onEdit, 
           onClick={() => onMoveDown(index)}
           disabled={disabled || isLast}
           aria-label={`Move ${item.label} down`}
-          className="rounded p-0.5 text-black/40 transition-colors hover:bg-black/[0.06] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853] disabled:cursor-not-allowed disabled:opacity-30"
+          className="rounded p-0.5 text-black/60 transition-colors hover:bg-black/[0.06] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853] disabled:cursor-not-allowed disabled:opacity-30"
         >
           <ChevronDown aria-hidden="true" className="size-3.5" />
         </button>
       </div>
-      <span className="hidden text-xs text-black/50 sm:inline">Filter: {item.filter}</span>
+      <span className="hidden text-xs text-black/60 sm:inline">Filter: {item.filter}</span>
       {!item.is_active && <span className="text-[10px] font-medium text-[#c62828]">(inactive)</span>}
       <div className="flex items-center gap-1">
         <button

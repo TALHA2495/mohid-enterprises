@@ -129,7 +129,7 @@ export default function ProductImagesField({ value, onChange, disabled = false }
           htmlFor="product-images"
           className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
             disabled || busy || remaining === 0
-              ? 'cursor-not-allowed border-black/10 text-black/40'
+              ? 'cursor-not-allowed border-black/10 text-black/60'
               : 'cursor-pointer border-[#00c853] text-black hover:bg-black/[0.03]'
           }`}
         >
@@ -151,7 +151,7 @@ export default function ProductImagesField({ value, onChange, disabled = false }
             {error}
           </p>
         )}
-        {isRemoving && <p className="text-black/50">Removing image…</p>}
+        {isRemoving && <p className="text-black/60">Removing image…</p>}
       </div>
 
       {(value.length > 0 || pending.length > 0) && (

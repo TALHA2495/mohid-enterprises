@@ -23,7 +23,7 @@ import ProductImagesField from './product-images-field'
 // ============================================================================
 
 const inputClass =
-  'w-full rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/45 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
+  'w-full rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/55 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
 
 type Props = {
   categories: ProductCategory[]
@@ -188,7 +188,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.widthMm ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.widthMm.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Leave blank if the product has no fixed width.</span>
+              <span className="text-[11px] font-normal text-black/60">Leave blank if the product has no fixed width.</span>
             )}
           </label>
 
@@ -198,7 +198,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.moqUnits ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.moqUnits.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">
+              <span className="text-[11px] font-normal text-black/60">
                 Leave blank if the site does not publish a minimum.
               </span>
             )}
@@ -215,7 +215,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.colors ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.colors.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Comma separated.</span>
+              <span className="text-[11px] font-normal text-black/60">Comma separated.</span>
             )}
           </label>
 
@@ -225,7 +225,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.finishes ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.finishes.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Comma separated.</span>
+              <span className="text-[11px] font-normal text-black/60">Comma separated.</span>
             )}
           </label>
         </div>
@@ -249,7 +249,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.pricePerUnit ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.pricePerUnit.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Per metre. Blank means priced on request.</span>
+              <span className="text-[11px] font-normal text-black/60">Per metre. Blank means priced on request.</span>
             )}
           </label>
 
@@ -343,7 +343,7 @@ export default function ProductForm({ categories, product }: Props) {
       </div>
 
       {product && (
-        <p className="text-[11px] font-normal text-black/45">
+        <p className="text-[11px] font-normal text-black/60">
           Last updated {new Intl.DateTimeFormat('en-PK', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(product.updated_at))} UTC
         </p>
       )}

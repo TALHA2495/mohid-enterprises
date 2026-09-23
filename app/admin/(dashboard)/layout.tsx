@@ -51,7 +51,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
               className="h-8 w-auto"
             />
           </Link>
-          <p className="mt-1.5 text-xs text-black/50">Operations console</p>
+          <p className="mt-1.5 text-xs text-black/60">Operations console</p>
         </div>
 
         <AdminSidebarNav />
@@ -77,12 +77,12 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                   height={26}
                   className="h-6 w-auto"
                 />
-                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-black/50">
+                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-black/60">
                   Admin
                 </span>
               </Link>
             </div>
-            <span className="font-mono text-xs text-black/40 hidden md:inline">
+            <span className="font-mono text-xs text-black/60 hidden md:inline">
               Mohid Enterprises
             </span>
           </div>

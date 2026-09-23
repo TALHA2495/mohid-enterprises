@@ -63,7 +63,7 @@ export function AdminLoginForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-lg bg-[#01aa3f] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#00ff59] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="rounded-lg bg-[#01aa3f] px-5 py-3 text-sm font-semibold text-black transition-colors hover:bg-[#00ff59] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {submitting ? 'Signing in…' : 'Sign in'}
       </button>

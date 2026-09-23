@@ -88,11 +88,11 @@ export function MobileSidebar() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="section-label mb-3">Admin</p>
+                  
                   <p className="font-display text-2xl leading-tight text-black">
                     Mohid<span className="gradient-brand-text">.</span>
                   </p>
-                  <p className="mt-1.5 text-xs text-black/50">Operations console</p>
+                  <p className="mt-1.5 text-xs text-black/60">Operations console</p>
                 </div>
                 <button
                   type="button"
