@@ -35,10 +35,21 @@ function HeroCategoryGrid({ categories }: { categories: readonly { id: string; l
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
 
-            <h2 className="mt-0.5 text-balance text-lg font-semibold leading-snug text-white drop-shadow">
+            {/* Two-line ceiling on both pieces of copy: hero_sections.label and
+                .description are free text ('lib/showroom.ts' seeds them, the admin
+                editor can paste anything) while the card is a fixed-height box
+                (h-64/72/80 + overflow-hidden), so unclamped copy escapes the scrim
+                instead of truncating. line-clamp-N emits display:-webkit-box, so
+                these two elements must carry NO other display utility — an
+                equal-specificity `block` (the `sm:block` that used to live here)
+                wins the cascade and silently disables the clamp at >=640px.
+                `break-words` stops a pasted unbroken token from forcing horizontal
+                overflow, and `title` is the zero-JS expand path that keeps the full
+                copy reachable once it is clamped. */}
+            <h2 title={category.label} className="mt-0.5 line-clamp-2 break-words text-balance text-lg font-semibold leading-snug text-white drop-shadow">
               {category.label}
             </h2>
-            <p className="hidden sm:block mt-1 line-clamp-2 text-[13px] leading-snug text-white/85 drop-shadow">
+            <p title={category.desc} className="mt-1 line-clamp-2 break-words text-[13px] leading-snug text-white/85 drop-shadow">
               {category.desc}
             </p>
             <div className="hidden sm:flex mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white transition-colors group-hover:text-[#00c853]">
