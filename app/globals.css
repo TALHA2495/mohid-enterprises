@@ -2,6 +2,40 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* Restrained homepage entrance: opacity/transform only, so motion cannot shift layout. */
+@keyframes homepage-reveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.homepage-motion-hero {
+  animation: homepage-reveal 500ms ease-out both;
+}
+
+.homepage-motion-section {
+  animation: homepage-reveal 650ms ease-out 120ms both;
+}
+
+.homepage-motion-section:nth-of-type(3) {
+  animation-delay: 240ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .homepage-motion-hero,
+  .homepage-motion-section {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Hero category marquee: continuous single-row drift, paused while hovered
+   or focused. A soft edge mask fades tiles in/out at the viewport edges. */
 @theme inline {
   --font-sans: var(--font-sans);
   --color-ring: var(--ring);

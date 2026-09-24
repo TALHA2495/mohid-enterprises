@@ -40,21 +40,21 @@ function pickHeroes(sections: FactorySection[]): FactorySection[] {
   return rows.length > 0 ? rows : FALLBACK_HERO
 }
 
-export async function FactoryPage() {
+export async function FactoryPage({ embedded = false }: { embedded?: boolean } = {}) {
   const heroes = pickHeroes(await loadFactorySections())
+  const Heading = embedded ? 'h2' : 'h1'
 
-  return <PageShell>
-    <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+  const content = (
 
+    <section className={embedded ? 'homepage-motion-section border-t border-[#101412]/10 bg-[#f7f8f5] px-5 pb-16 pt-8 text-[#101412] sm:px-8 sm:pb-20 sm:pt-10' : 'mx-auto max-w-7xl px-5 py-8 sm:px-8'}>
+      <Heading className={`mt-2 max-w-2xl text-3xl font-semibold tracking-tight ${embedded ? 'text-[#101412]' : 'text-white drop-shadow-md'} sm:text-5xl`}>20+ Years of Proven Trims Manufacturing</Heading>
 
-    <h1 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-white drop-shadow-md sm:text-5xl">20+ Years of Proven Trims Manufacturing</h1>
-
-    <p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 drop-shadow-sm">From sampling to bulk production: ribbons, tassels, elastic, jute cord, conveyor belts, and more.</p>
-    <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{heroes.map((tile) =>
+      <p className={`mt-3 max-w-2xl text-sm leading-6 ${embedded ? 'text-[#46534c]' : 'text-white/80 drop-shadow-sm'}`}>From sampling to bulk production: ribbons, tassels, elastic, jute cord, conveyor belts, and more.</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{heroes.map((tile) =>
 
       <figure key={tile.id} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-black/10">
 
-        <Image src={tile.imageUrl} alt="" fill loading="lazy" quality={70} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="size-full object-cover" />
+        <Image src={tile.imageUrl} alt={`${tile.title} manufacturing at Mohid Enterprises`} fill loading="lazy" quality={70} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="size-full object-cover" />
 
         {/* The visible caption carries the tile's meaning, so the image stays
             decorative (alt="") instead of repeating itself to screen readers. */}
@@ -62,12 +62,14 @@ export async function FactoryPage() {
 
       </figure>)}
 
-    </div>
+      </div>
 
-    <div className="mt-12 flex justify-center">
-      <Link href="/quote" className="inline-flex items-center gap-2 rounded-full bg-[#01aa3f] px-7 py-3.5 text-sm font-medium text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] hover:text-black active:scale-[0.98]">Request a Quote<ArrowUpRight className="size-4" strokeWidth={1.6} /></Link>
-    </div>
+      <div className="flex justify-center">
+        {/* <Link href="/quote" className="inline-flex items-center gap-2 rounded-full bg-[#01aa3f] px-7 py-3.5 text-sm font-medium text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] hover:text-black active:scale-[0.98]">Request a Quote<ArrowUpRight className="size-4" strokeWidth={1.6} /></Link> */}
+      </div>
 
-  </section>
-  </PageShell>
+    </section>
+  )
+
+  return embedded ? content : <PageShell>{content}</PageShell>
 }

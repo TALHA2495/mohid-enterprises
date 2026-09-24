@@ -18,18 +18,18 @@ const CERTIFICATES = [
   { title: 'WSO W-Tex 9000 Recycled Polyester Certification', image: 'https://ik.imagekit.io/a2q8u8qtw/certificates/wso-w-tex-9000-recycled-polyester-certification-mohid.jpg.jpeg?updatedAt=1790174344912&tr=w-1200,f-auto,q-70' },
 ]
 
-export function StandardsPage() {
+export function StandardsPage({ embedded = false }: { embedded?: boolean } = {}) {
+  const Heading = embedded ? 'h2' : 'h1'
+  const content = (
 
-  return <PageShell><section className="mx-auto max-w-5xl px-5 py-8 sm:px-8">
+    <section className={embedded ? 'homepage-motion-section bg-[#f7f8f5] px-5 pb-16 pt-8 text-[#101412] sm:px-8 sm:pb-20 sm:pt-10' : 'mx-auto max-w-5xl px-5 py-8 sm:px-8'}>
+      <Heading className={`mt-2 text-3xl font-semibold tracking-tight ${embedded ? 'text-[#101412]' : 'text-white drop-shadow-md'} sm:text-5xl`}>Quality Commitment & Export Compliance</Heading>
 
-    <h1 className="mt-2  text-3xl font-semibold tracking-tight text-white drop-shadow-md sm:text-5xl">Quality Commitment & Export Compliance</h1>
+      <p className={`mt-3 max-w-3xl text-sm leading-6 ${embedded ? 'text-[#46534c]' : 'text-white/80 drop-shadow-sm'}`}>Mohid Enterprises follows documented checks across materials, production, packing, and export readiness.</p>
 
+      <div className="mt-8"><CertificateGallery certificates={CERTIFICATES} /></div>
+    </section>
+  )
 
-    <p className="mt-3 max-w-3xl text-sm leading-6 text-white/80 drop-shadow-sm">Mohid Enterprises follows documented checks across materials, production, packing, and export readiness.</p>
-
-
-    <div className="mt-8"><CertificateGallery certificates={CERTIFICATES} /></div>
-  </section>
-  </PageShell>
-
+  return embedded ? content : <PageShell>{content}</PageShell>
 }
