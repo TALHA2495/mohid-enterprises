@@ -50,16 +50,8 @@ export async function FactoryPage() {
     <h1 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-white drop-shadow-md sm:text-5xl">20+ Years of Proven Trims Manufacturing</h1>
 
     <p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 drop-shadow-sm">From sampling to bulk production: ribbons, tassels, elastic, jute cord, conveyor belts, and more.</p>
-
-    <FactorySnapshot />
-
     <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{heroes.map((tile) =>
 
-      // aspect-[4/3] is a compromise: the sources are 2912x1632 (1.78),
-      // 1788x1788 (1.00) and 2000x1396 (1.43), and a single row needs one
-      // uniform box. 4:3 crops ~25% off the square braiding frame at worst,
-      // against ~35% at the previous aspect-[1.55]. Change all three together
-      // or the row stops aligning.
       <figure key={tile.id} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-black/10">
 
         <Image src={tile.imageUrl} alt="" fill loading="lazy" quality={70} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="size-full object-cover" />
