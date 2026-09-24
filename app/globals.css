@@ -161,38 +161,25 @@ body::after {
   }
 }
 
-/* Hero category marquee: continuous single-row drift, paused while hovered
-   or focused. A soft edge mask fades tiles in/out at the viewport edges. */
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
+/* Hero category marquee: one continuous, pointer/touch-draggable ribbon. */
 [data-marquee] {
   overflow: hidden;
+  cursor: grab;
+  user-select: none;
   -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
 }
 
+[data-marquee][data-dragging='true'] { cursor: grabbing; }
+
 [data-marquee-track] {
-  animation: marquee-scroll var(--marquee-duration, 60s) linear infinite;
   will-change: transform;
+  touch-action: pan-y;
 }
 
-[data-marquee]:hover [data-marquee-track],
-[data-marquee]:focus-within [data-marquee-track] {
-  animation-play-state: paused;
-}
-
-/* Reduced motion: show a static, manually scrollable row instead of the animation. */
 @media (prefers-reduced-motion: reduce) {
-  [data-marquee] {
-    overflow-x: auto;
-  }
-  [data-marquee-track] {
-    animation: none;
-    will-change: auto;
-  }
+  [data-marquee] { overflow-x: auto; }
+  [data-marquee-track] { animation: none; will-change: auto; }
 }
 
 

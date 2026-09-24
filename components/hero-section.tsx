@@ -1,56 +1,14 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 
+import { HeroCategoryMarquee } from '@/components/hero-category-marquee'
 import { loadHeroCategories } from '@/lib/public-data.server'
-
-const CARD_SIZES = '(max-width: 639px) 132px, (max-width: 767px) 150px, (max-width: 1023px) 180px, (max-width: 1279px) 200px, 230px'
 
 const credibility = [
   'Quality-Focused Production',
   'Local & International Markets',
   'Export Experience',
 ] as const
-
-type HeroCategory = Awaited<ReturnType<typeof loadHeroCategories>>[number]
-
-function HeroCategoryMarquee({ categories }: { categories: readonly HeroCategory[] }) {
-  const marqueeCategories = [...categories, ...categories]
-
-  return (
-    <div
-      aria-label="Product categories"
-      data-marquee
-      className="relative -mx-5 mt-5 w-[calc(100%+2.5rem)] sm:-mx-8 sm:mt-6 sm:w-[calc(100%+4rem)] md:-mx-12 md:mt-7 md:w-[calc(100%+6rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] xl:-mx-24 xl:w-[calc(100%+12rem)]"
-    >
-      <div data-marquee-track className="flex w-max gap-2.5 sm:gap-3 md:gap-4">
-        {marqueeCategories.map((category, index) => (
-          <Link
-            key={`${category.id}-${index}`}
-            href={`/showroom?filter=${encodeURIComponent(category.filter)}`}
-            aria-label={`View ${category.label} products`}
-            className="group relative block h-[86px] w-[132px] shrink-0 touch-manipulation overflow-hidden rounded-xl border border-[#101412]/15 bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2 active:scale-[0.98] sm:h-[108px] sm:w-[150px] sm:rounded-2xl md:h-[128px] md:w-[180px] lg:h-[142px] lg:w-[200px] xl:h-[158px] xl:w-[230px]"
-          >
-            <Image
-              src={category.image}
-              alt=""
-              fill
-              quality={70}
-              sizes={CARD_SIZES}
-              className="size-full object-cover transition duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-2 sm:p-2.5">
-              <h2 title={category.label} className="line-clamp-2 break-words text-[10px] font-semibold leading-tight text-white drop-shadow sm:text-xs md:text-sm">
-                {category.label}
-              </h2>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 export async function HeroSection() {
   const categories = await loadHeroCategories()
