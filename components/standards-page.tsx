@@ -19,15 +19,10 @@ const CERTIFICATES = [
 ]
 
 export function StandardsPage({ embedded = false }: { embedded?: boolean } = {}) {
-  const Heading = embedded ? 'h2' : 'h1'
   const content = (
 
-    <section className={embedded ? 'homepage-motion-section bg-[#f7f8f5] px-5 pb-16 pt-8 text-[#101412] sm:px-8 sm:pb-20 sm:pt-10' : 'mx-auto max-w-5xl px-5 py-8 sm:px-8'}>
-      <Heading className={`mt-2 text-3xl font-semibold tracking-tight ${embedded ? 'text-[#101412]' : 'text-white drop-shadow-md'} sm:text-5xl`}>Quality Commitment & Export Compliance</Heading>
-
-      <p className={`mt-3 max-w-3xl text-sm leading-6 ${embedded ? 'text-[#46534c]' : 'text-white/80 drop-shadow-sm'}`}>Mohid Enterprises follows documented checks across materials, production, packing, and export readiness.</p>
-
-      <div className="mt-8">
+    <section className={embedded ? 'homepage-motion-section bg-[#f7f8f5] px-5 pt-2 text-[#101412] sm:px-8 sm:pb-20 sm:pt-10' : 'mx-auto max-w-5xl px-5 py-8 sm:px-8'}>
+      <div>
         <CertificateGallery certificates={embedded ? CERTIFICATES.slice(0, 1) : CERTIFICATES} single={embedded} />
       </div>
     </section>
