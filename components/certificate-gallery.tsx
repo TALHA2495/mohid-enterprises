@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from 'react'
 
 type Certificate = { title: string; image: string }
 
-export function CertificateGallery({ certificates }: { certificates: Certificate[] }) {
+export function CertificateGallery({ certificates, single = false }: { certificates: Certificate[]; single?: boolean }) {
   const [selected, setSelected] = useState<Certificate | null>(null)
   const dialogRef = useRef<HTMLDivElement | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
@@ -48,7 +48,13 @@ export function CertificateGallery({ certificates }: { certificates: Certificate
 
   return (
     <>
-      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div
+        className={
+          single
+            ? 'mx-auto mt-3 grid max-w-3xl grid-cols-1'
+            : 'mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'
+        }
+      >
         {certificates.map((cert) => (
           <figure
             key={cert.title}

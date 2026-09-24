@@ -27,7 +27,9 @@ export function StandardsPage({ embedded = false }: { embedded?: boolean } = {})
 
       <p className={`mt-3 max-w-3xl text-sm leading-6 ${embedded ? 'text-[#46534c]' : 'text-white/80 drop-shadow-sm'}`}>Mohid Enterprises follows documented checks across materials, production, packing, and export readiness.</p>
 
-      <div className="mt-8"><CertificateGallery certificates={CERTIFICATES} /></div>
+      <div className="mt-8">
+        <CertificateGallery certificates={embedded ? CERTIFICATES.slice(0, 1) : CERTIFICATES} single={embedded} />
+      </div>
     </section>
   )
 
