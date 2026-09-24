@@ -109,8 +109,8 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
             </div>
           </div>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#00c853]">{product.type} · {product.material}</p>
-            <h1 className="mt-3 font-serif text-2xl font-semibold leading-[1.1] tracking-tight text-black sm:text-3xl lg:text-4xl">
+            <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[#00c853]">{product.type} · {product.material}</p>
+            <h1 className="mt-3 font-sans text-2xl font-semibold leading-[1.1] tracking-tight text-black sm:text-3xl lg:text-4xl">
               {titleFirst} {titleRest.length > 0 && <span className="text-[#00c853]">{titleRest.join(' ')}</span>}
             </h1>
             <p className="mt-3 max-w-xl text-[13px] leading-6 text-black/60">

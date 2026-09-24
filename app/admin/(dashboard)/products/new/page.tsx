@@ -20,7 +20,7 @@ export default async function NewProductPage() {
           {missingAdminEnvVars.length > 0 && (
             <>
               {' '}
-              Missing: <code className="font-mono">{missingAdminEnvVars.join(', ')}</code>.
+              Missing: <code className="font-sans">{missingAdminEnvVars.join(', ')}</code>.
             </>
           )}
         </p>

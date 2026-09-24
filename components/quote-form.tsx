@@ -263,7 +263,7 @@ export function QuoteForm() {
             <p className="font-semibold">Request received. WhatsApp has opened with your details.</p>
             {quoteId ? (
               <p className="mt-1 text-black/70">
-                Quote ID: <span className="font-mono font-semibold text-black">{quoteId}</span> — reference it in any follow-up messages.
+                Quote ID: <span className="font-sans font-semibold text-black">{quoteId}</span> — reference it in any follow-up messages.
               </p>
             ) : (
               <p className="mt-1 text-black/70">Our team will respond on WhatsApp shortly.</p>

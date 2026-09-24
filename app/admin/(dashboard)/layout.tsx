@@ -26,7 +26,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           {missingAdminEnvVars.length > 0 && (
             <>
               {' '}
-              Missing: <code className="font-mono">{missingAdminEnvVars.join(', ')}</code>.
+              Missing: <code className="font-sans">{missingAdminEnvVars.join(', ')}</code>.
             </>
           )}
         </p>
@@ -77,12 +77,12 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                   height={26}
                   className="h-6 w-auto"
                 />
-                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-black/60">
+                <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-black/60">
                   Admin
                 </span>
               </Link>
             </div>
-            <span className="font-mono text-xs text-black/60 hidden md:inline">
+            <span className="font-sans text-xs text-black/60 hidden md:inline">
               Mohid Enterprises
             </span>
           </div>

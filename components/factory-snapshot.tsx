@@ -30,7 +30,7 @@ export async function FactorySnapshot() {
     // photo at most viewports, and black-on-photo would be unreadable.
     <li key={metric.label} className="rounded-2xl border border-black/10 bg-white p-6">
 
-      <p className="flex items-center gap-2 font-mono text-4xl font-semibold tabular-nums text-black">
+      <p className="flex items-center gap-2 font-sans text-4xl font-semibold tabular-nums text-black">
         <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[#00c853]" />
         {metric.value}
       </p>

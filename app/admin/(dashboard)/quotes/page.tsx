@@ -14,7 +14,7 @@ export default async function AdminQuotesPage() {
     return (
       <div>
         <p className="rounded-2xl border border-black/10 bg-white p-6 text-sm font-normal">
-          Supabase is not configured on the server — see <code className="font-mono">supabase/README.md</code>.
+          Supabase is not configured on the server — see <code className="font-sans">supabase/README.md</code>.
         </p>
       </div>
     )
@@ -45,7 +45,7 @@ export default async function AdminQuotesPage() {
   return (
     <div>
         <p className="section-label mb-4">Quotes</p>
-        <h1 className="font-display mb-2 text-4xl leading-tight">Quote management</h1>
+        <h1 className="font-sans mb-2 text-4xl leading-tight">Quote management</h1>
         <p className="mb-8 text-sm font-normal text-black/60">Track and manage every incoming RFQ.</p>
         <QuotesAdminClient initialQuotes={(data as unknown as AdminQuote[]) ?? []} />
       </div>

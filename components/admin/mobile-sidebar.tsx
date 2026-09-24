@@ -89,7 +89,7 @@ export function MobileSidebar() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   
-                  <p className="font-display text-2xl leading-tight text-black">
+                  <p className="font-sans text-2xl leading-tight text-black">
                     Mohid<span className="gradient-brand-text">.</span>
                   </p>
                   <p className="mt-1.5 text-xs text-black/60">Operations console</p>

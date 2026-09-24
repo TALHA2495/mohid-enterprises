@@ -23,7 +23,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
           {missingAdminEnvVars.length > 0 && (
             <>
               {' '}
-              Missing: <code className="font-mono">{missingAdminEnvVars.join(', ')}</code>.
+              Missing: <code className="font-sans">{missingAdminEnvVars.join(', ')}</code>.
             </>
           )}
         </p>

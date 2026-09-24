@@ -10,7 +10,7 @@ export default function NotFound() {
     <main id="main" className="relative min-h-screen bg-[#f4f7f8] text-black">
       <SiteHeader />
       <div className="relative z-10 mx-auto flex min-h-[70vh] w-full max-w-2xl flex-col items-center justify-center px-5 py-16 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#00c853]">404 — page not found</p>
+        <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#00c853]">404 — page not found</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
           This page took a wrong turn
         </h1>

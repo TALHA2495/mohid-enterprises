@@ -32,16 +32,16 @@ export default function AdminLoginPage() {
           </div>
           <div className="mb-4 flex items-center gap-2 text-[#01aa3f]">
             <Lock aria-hidden="true" className="h-4 w-4" strokeWidth={2} />
-            <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#007a2b]">Restricted</p>
+            <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-[#007a2b]">Restricted</p>
           </div>
-          <h1 className="font-display mb-1 text-2xl text-black">Admin sign-in</h1>
+          <h1 className="font-sans mb-1 text-2xl text-black">Admin sign-in</h1>
           <p className="mb-5 text-xs text-black/60">Mohid Enterprises operations dashboard</p>
           {adminConfigured ? null : (
             <div className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-normal text-red-800">
               <p className="font-semibold">ADMIN_PASSWORD is not set in this environment.</p>
               <p className="mt-1 text-red-700">
                 Add it in Vercel under Settings, Environment Variables (tick Production and Preview) and redeploy, or
-                set it in <code className="font-mono">.env.local</code> for local development.
+                set it in <code className="font-sans">.env.local</code> for local development.
               </p>
             </div>
           )}

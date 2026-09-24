@@ -4,7 +4,6 @@
 
 @theme inline {
   --font-sans: var(--font-sans);
-  --font-serif: var(--font-serif);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -174,7 +173,7 @@ body::after {
   border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);
   background: color-mix(in srgb, var(--brand) 5%, transparent);
   padding: 0.5rem 1.25rem;
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-sans), Arial, sans-serif;
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -205,11 +204,6 @@ body::after {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-/* Display serif helper (Calistoga). */
-.font-display {
-  font-family: var(--font-display), Georgia, serif;
 }
 
 /* Inverted contrast section: deep slate bg + dot texture + brand glow. */

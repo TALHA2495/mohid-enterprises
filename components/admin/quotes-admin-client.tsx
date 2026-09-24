@@ -148,7 +148,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
               return (
                 <tr key={quote.id} className="border-b border-black/10 last:border-b-0 hover:bg-black/[0.015]">
                   <td className="px-4 py-3">
-                    <div className="font-mono text-xs text-black/80">{quote.id}</div>
+                    <div className="font-sans text-xs text-black/80">{quote.id}</div>
                     <div className="text-[11px] text-black/60">{quote.quote_number}</div>
                   </td>
                   <td className="max-w-[180px] px-4 py-3">

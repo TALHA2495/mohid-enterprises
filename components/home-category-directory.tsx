@@ -13,7 +13,7 @@ export async function HomeCategoryDirectory() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#00a83c]">Product range</p>
+            <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#00a83c]">Product range</p>
             <h2 id="category-directory-title" className="mt-2 text-2xl font-semibold tracking-tight text-black sm:text-3xl">Explore textile trims</h2>
           </div>
           <Link href="/showroom" className="hidden text-sm font-medium text-black/65 transition-colors hover:text-[#01aa3f] sm:inline-flex">View all products</Link>

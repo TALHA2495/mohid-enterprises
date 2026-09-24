@@ -62,7 +62,7 @@ export default async function AdminOverview() {
           {configMissing ? (
             <>
               <p className="mt-2">Missing from the environment of this deployment:</p>
-              <ul className="mt-2 list-disc pl-5 font-mono text-xs text-black">
+              <ul className="mt-2 list-disc pl-5 font-sans text-xs text-black">
                 {missingAdminEnvVars.map((name) => (
                   <li key={name}>{name}</li>
                 ))}
@@ -78,14 +78,14 @@ export default async function AdminOverview() {
           {error ? (
             <p className="mt-4">
               Supabase replied with{' '}
-              <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">{error}</code>
+              <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-sans text-xs">{error}</code>
             </p>
           ) : null}
           <p className="mt-4">
             If this is a fresh database, run{' '}
-            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/schema.sql</code> in
+            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-sans text-xs">supabase/schema.sql</code> in
             the Supabase SQL editor, then reload. See{' '}
-            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-mono text-xs">supabase/README.md</code>.
+            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 font-sans text-xs">supabase/README.md</code>.
           </p>
         </div>
       ) : (
@@ -105,10 +105,10 @@ export default async function AdminOverview() {
           ).map((stat) => {
             const body = (
               <>
-                <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-black/60">
+                <div className="font-sans text-[10px] uppercase tracking-[0.15em] text-black/60">
                   {stat.label}{stat.soon ? ' · soon' : ''}
                 </div>
-                <div className="font-display mt-2 text-3xl sm:text-4xl tabular-nums text-black">
+                <div className="font-sans mt-2 text-3xl sm:text-4xl tabular-nums text-black">
                   {counts[stat.key] ?? '—'}
                 </div>
               </>
