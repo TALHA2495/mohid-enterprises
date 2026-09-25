@@ -21,7 +21,11 @@ const CERTIFICATES = [
 export function StandardsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const content = (
 
-    <section className={embedded ? 'homepage-motion-section bg-[#f7f8f5] px-5 pt-2 text-[#101412] sm:px-8 sm:pb-20 sm:pt-10' : 'mx-auto max-w-5xl px-5 py-8 sm:px-8'}>
+    <section className={embedded ? 'homepage-motion-section bg-[#f7f8f5] px-5 pt-2 text-[#101412] sm:px-8 sm:pb-16 sm:pt-8' : 'mx-auto max-w-5xl px-5 py-8 text-[#101412] sm:px-8'}>
+      {/* The gallery is the content, so there is no visible heading by design —
+          but the page still needs exactly one h1 for SEO and screen readers.
+          Same sr-only pattern as /showroom and the home hero. */}
+      {!embedded && <h1 className="sr-only">Quality Standards &amp; Textile Trim Certifications — Mohid Enterprises</h1>}
       <div>
         <CertificateGallery certificates={embedded ? CERTIFICATES.slice(0, 1) : CERTIFICATES} single={embedded} />
       </div>

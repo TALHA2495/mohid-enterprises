@@ -27,7 +27,7 @@ export async function HeroSection() {
           </p>
           <h1 id="home-hero-title" className="font-sans text-">
             <span className="block text-[clamp(4.25rem,17vw,6.5rem)] font-[850] leading-[0.74] tracking-[-0.085em] sm:text-[clamp(5.5rem,15vw,7.5rem)] md:text-[clamp(4.75rem,10vw,7rem)]">
-               <span className='text-[#01aa3f]'>20+</span>
+               <span className='text-[#0a7d31]'>20+</span>
               <span className="ml-[0.16em] text-[0.5em] font-extrabold tracking-[-0.055em]">YEARS</span>
             </span>
             <span className="mt-3 block max-w-[720px] text-[clamp(0.78rem,2.3vw,1.15rem)] font-bold uppercase leading-[1.2] tracking-[0.14em] sm:mt-4 md:text-xl">
@@ -55,10 +55,10 @@ export async function HeroSection() {
           </div>
           <ul
             aria-label="Manufacturing credentials"
-            className="mt-5 grid max-w-[700px] grid-cols-1 gap-x-5 gap-y-2 border-y border-[#101412]/15 py-3 text-[11px] font-medium uppercase leading-relaxed tracking-[0.08em] text-[#46534c] sm:grid-cols-2 sm:text-xs md:mt-7 md:grid-cols-3 md:py-4"
+            className="mt-5 grid max-w-[760px] grid-cols-1 gap-x-6 gap-y-3 border-t border-[#101412]/15 pt-4 text-[11px] font-medium uppercase leading-relaxed tracking-[0.1em] text-[#46534c] sm:text-xs md:mt-7 md:grid-cols-3 md:gap-x-0 md:pt-5"
           >
             {credibility.map((item) => (
-              <li key={item} className="flex items-center gap-2.5">
+              <li key={item} className="flex items-center gap-2.5 md:border-l md:border-[#101412]/12 md:pl-5 md:first:border-l-0 md:first:pl-0">
                 <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 bg-[#01aa3f]" />
                 {item}
               </li>
