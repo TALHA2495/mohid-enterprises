@@ -35,6 +35,16 @@ export function CertificateGallery({ certificates, single = false }: { certifica
     if (selected) dialogRef.current?.focus()
   }, [selected])
 
+  // Lock background scroll while the lightbox is open, restore on close.
+  useEffect(() => {
+    if (!selected) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [selected])
+
   // Escape closes; Tab is trapped inside the single-element modal.
   const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Escape') {
@@ -51,7 +61,7 @@ export function CertificateGallery({ certificates, single = false }: { certifica
       <div
         className={
           single
-            ? 'mx-auto mt-3 grid max-w-3xl grid-cols-1'
+            ? 'mx-auto mt-3 grid w-full max-w-[15rem] grid-cols-1 sm:max-w-[17rem] lg:max-w-[19rem]'
             : 'mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'
         }
       >
@@ -69,16 +79,16 @@ export function CertificateGallery({ certificates, single = false }: { certifica
                 openCert(cert)
               }
             }}
-            className="group relative cursor-pointer overflow-hidden rounded-xl  transition-transform duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853] active:scale-[0.98]"
+            className="group relative cursor-pointer overflow-hidden rounded-xl  transition-transform duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] active:scale-[0.98]"
           >
-            <div className="relative aspect-[3/4]">
+            <div className="relative aspect-[3/4]" style={single ? { maxHeight: 'min(70vh, 26rem)' } : undefined}>
               <Image
                 src={cert.image}
                 alt={cert.title}
                 fill
                 loading="lazy"
                 quality={70}
-                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 92vw"
                 className="size-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
               />
             </div>
@@ -92,13 +102,35 @@ export function CertificateGallery({ certificates, single = false }: { certifica
           aria-modal="true"
           aria-label={selected.title}
           tabIndex={-1}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#0c1310]/72 p-4 backdrop-blur-sm"
           onClick={() => closeCert()}
           onKeyDown={handleDialogKeyDown}
         >
-          <div className="relative max-h-[90vh] max-w-4xl" onClick={(event) => event.stopPropagation()}>
-            <img src={selected.image} alt="" className="max-h-[90vh] w-auto object-contain" />
+          <div
+            className="relative max-w-[min(56rem,92vw)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <Image
+              src={selected.image}
+              alt=""
+              width={1600}
+              height={2200}
+              quality={80}
+              sizes="(min-width: 1024px) 90vw, 92vw"
+              className="max-h-[85vh] w-auto object-contain"
+              priority
+            />
           </div>
+          <button
+            type="button"
+            aria-label="Close certificate"
+            onClick={closeCert}
+            className="absolute right-4 top-4 flex size-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <span aria-hidden="true" className="text-2xl leading-none">
+              &#215;
+            </span>
+          </button>
         </div>
       )}
     </>
