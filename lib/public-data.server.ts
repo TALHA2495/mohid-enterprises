@@ -44,6 +44,22 @@ const TRANSFORM = '?tr=w-1200,f-auto,q-70'
 
 type Row = Record<string, unknown>
 
+/**
+ * Hero card imagery. Cards render at 142-238 CSS px, so a `w-640` source is
+ * ample even at 2x density. The DB rows store either a bare CDN path or a
+ * cache-buster (?updatedAt=...) - neither carries a real `tr=` transform, so a
+ * plain "has a query string" check would wrongly skip them and pull the
+ * full-resolution original.
+ */
+const HERO_CARD_TRANSFORM = 'tr=w-640,f-auto,q-70'
+
+function heroCardImage(value: unknown): string {
+  const raw = String(value ?? '').trim()
+  if (!raw) return ''
+  if (!raw.startsWith('http')) return ''
+  return /[?&]tr=/.test(raw) ? raw : `${raw}${raw.includes('?') ? '&' : '?'}${HERO_CARD_TRANSFORM}`
+}
+
 /** First image URL of a product row, transformed for the web. */
 function firstImage(row: Row): string {
   const images = Array.isArray(row.images) ? (row.images as Row[]) : []
@@ -240,8 +256,8 @@ function toHeroCategory(row: Row): HeroCategory {
     id: String(row.id ?? ''),
     label: String(row.label ?? ''),
     desc: typeof row.description === 'string' ? row.description : '',
-    filter: String(row.filter ?? ''),
-    image: String(row.image ?? ''),
+    filter: String(row.filter ?? '').trim(),
+    image: heroCardImage(row.image),
   }
 }
 
