@@ -9,8 +9,11 @@ import { useEffect, useRef, useState } from 'react'
 // 1 column on phones, 2 on small tablets, 4 in a single row on desktop.
 // Each tile IS the certificate: object-contain inside a uniform aspect-[3/4]
 // paper-white sheet so the WHOLE document stays visible (no cropped seals)
-// and every tile aligns despite mixed page ratios. Click / Enter / Space
-// opens the fullscreen lightbox.
+// and every tile aligns despite mixed page ratios. On /standards, Click /
+// Enter / Space opens the fullscreen lightbox. The home section passes
+// single=true, which renders the same tile as a static, non-interactive image
+// (no click, no focus target, no pointer cursor) because the fullscreen view
+// overflowed the viewport on portrait mobile.
 // ============================================================================
 
 type Certificate = { title: string; image: string }
@@ -19,6 +22,11 @@ export function CertificateGallery({ certificates, single = false }: { certifica
   const [selected, setSelected] = useState<Certificate | null>(null)
   const dialogRef = useRef<HTMLDivElement | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
+
+// Only the /standards grid (single=false) opens the lightbox. The home
+// section renders a single small tile, where the fullscreen view overflowed
+// the viewport in portrait mobile — so that tile stays a plain, static image.
+const interactive = !single
 
   const openCert = (cert: Certificate) => {
     openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -32,18 +40,18 @@ export function CertificateGallery({ certificates, single = false }: { certifica
 
   // Focus the dialog when it opens; the opener regains focus on close.
   useEffect(() => {
-    if (selected) dialogRef.current?.focus()
-  }, [selected])
+    if (interactive && selected) dialogRef.current?.focus()
+  }, [selected, interactive])
 
   // Lock background scroll while the lightbox is open, restore on close.
   useEffect(() => {
-    if (!selected) return
+    if (!interactive || !selected) return
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       document.body.style.overflow = prev
     }
-  }, [selected])
+  }, [selected, interactive])
 
   // Escape closes; Tab is trapped inside the single-element modal.
   const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -68,18 +76,25 @@ export function CertificateGallery({ certificates, single = false }: { certifica
         {certificates.map((cert) => (
           <figure
             key={cert.title}
-            tabIndex={0}
-            role="button"
-            aria-label={`View ${cert.title} larger`}
-            aria-haspopup="dialog"
-            onClick={() => openCert(cert)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault()
-                openCert(cert)
-              }
-            }}
-            className="group relative cursor-pointer overflow-hidden rounded-xl  transition-transform duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] active:scale-[0.98]"
+            role={interactive ? 'button' : undefined}
+            aria-label={interactive ? `View ${cert.title} larger` : undefined}
+            aria-haspopup={interactive ? 'dialog' : undefined}
+            tabIndex={interactive ? 0 : undefined}
+            onClick={interactive ? () => openCert(cert) : undefined}
+            onKeyDown={
+              interactive
+                ? (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
+                      openCert(cert)
+                    }
+                  }
+                : undefined
+            }
+            className={
+              'group relative overflow-hidden rounded-xl transition-transform duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]' +
+              (interactive ? ' cursor-pointer hover:-translate-y-1 active:scale-[0.98]' : '')
+            }
           >
             <div className="relative aspect-[3/4]" style={single ? { maxHeight: 'min(70vh, 26rem)' } : undefined}>
               <Image
@@ -89,13 +104,16 @@ export function CertificateGallery({ certificates, single = false }: { certifica
                 loading="lazy"
                 quality={70}
                 sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 92vw"
-                className="size-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+                className={
+                  'size-full object-contain transition-transform duration-500' +
+                  (interactive ? ' group-hover:scale-[1.03]' : '')
+                }
               />
             </div>
           </figure>
         ))}
       </div>
-      {selected && (
+      {interactive && selected && (
         <div
           ref={dialogRef}
           role="dialog"
