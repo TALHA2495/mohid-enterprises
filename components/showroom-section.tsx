@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import ProductDetail from './showroom-detail'
 import { FILTER_TYPES, SHOWROOM_FILTERS } from '@/lib/showroom'
+import { SURFACE_WHITE } from '@/lib/design-tokens'
 import type { ProductType } from '@/lib/showroom'
 
 export type Product = {
@@ -140,9 +141,9 @@ export function ShowroomSection({ products }: { products: Product[] }) {
               key={product.name}
               type="button"
               onClick={() => handleSelect(product)}
-              className="group overflow-hidden rounded-xl border border-[#101412]/12 bg-white text-left transition hover:-translate-y-1 hover:border-[#0a7d31]/50 hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]"
+              className={`group overflow-hidden rounded-xl border border-[#101412]/12 ${SURFACE_WHITE} text-left transition hover:-translate-y-1 hover:border-[#0a7d31]/50 hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]`}
             >
-              <div className="relative h-56 overflow-hidden bg-black/5">
+              <div className="relative h-56 overflow-hidden bg-[#e8eeea]">
                 <Image
                     src={product.image}
                     alt={`${product.name} textile trim`}

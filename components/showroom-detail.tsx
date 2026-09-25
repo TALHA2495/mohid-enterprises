@@ -60,7 +60,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
         </button>
 
         <div className="mt-5 grid gap-6 lg:grid-cols-[1.02fr_1fr] lg:gap-8">
-          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white lg:self-start">
+          <div className="overflow-hidden rounded-2xl border border-[#101412]/12 bg-white lg:self-start">
             {hasMultiple && (
               <div className="flex items-center gap-2 overflow-x-auto p-3 pb-0" aria-label="Product images">
                 {product.images.map((url, i) => (
@@ -72,7 +72,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
                     onClick={() => setSelectedIndex(i)}
                     className={`shrink-0 overflow-hidden rounded-md border-2 ${selectedIndex === i
                       ? 'border-[#01aa3f]'
-                      : 'border-black/10 opacity-60 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]'
+                      : 'border-[#101412]/12 opacity-60 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]'
                     }`}
                   >
                     <Image
@@ -88,7 +88,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
               </div>
             )}
             <div
-                className="group relative aspect-[16/11] overflow-hidden bg-black/5"
+                className="group relative aspect-[16/11] overflow-hidden bg-[#e8eeea]"
                 onMouseMove={(event) => {
                   const rect = event.currentTarget.getBoundingClientRect()
                   const x = ((event.clientX - rect.left) / rect.width) * 100
@@ -119,9 +119,9 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
 
             {/* dl wrapper: dt/dd are invalid outside a <dl> — fixes HTML
                 validity/a11y without touching the styling classes. */}
-            <dl className="mt-4 border-t border-black/[0.07]">
+            <dl className="mt-4 border-t border-[#101412]/12">
               {product.specs.map(([label, value]) => (
-                <div key={label} className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] gap-4 border-b border-black/[0.07] py-2 last:border-0">
+                <div key={label} className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] gap-4 border-b border-[#101412]/12 py-2 last:border-0">
                   <dt className="text-[11px] uppercase tracking-[0.14em] text-[#46534c]">{label}</dt>
                   <dd className="text-[13px] leading-5 text-[#101412] tabular-nums">{value}</dd>
                 </div>
@@ -153,7 +153,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
         </div>
 
         <div className="mt-8">
-          <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
+          <div className="rounded-2xl border border-[#101412]/12 bg-white p-5 sm:p-6">
             <h2 className="text-lg font-semibold text-[#101412]">
               <button
                 type="button"
@@ -181,7 +181,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 rounded-xl border border-black/10 bg-black/[0.03] p-4">
+                <div className="mt-4 rounded-xl border border-[#101412]/12 bg-[#e8eeea] p-4">
                   <div className="flex items-start gap-3">
                     <Package className="mt-0.5 size-5 shrink-0 text-[#0a7d31]" strokeWidth={1.6} />
                     <div>

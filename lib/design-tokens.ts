@@ -29,6 +29,13 @@ export const INK_MUTED = '#46534c'
 /** Page background. Warm off-white. */
 export const SURFACE = '#f7f8f5'
 
+/**
+ * Flat white surface. The showroom sits on white rather than the warm
+ * off-white, so its page and card backgrounds share this one value.
+ * Exposed as a class because Tailwind needs the utility, not the raw hex.
+ */
+export const SURFACE_WHITE = 'bg-white'
+
 /** Hover / subtle fill. */
 export const SURFACE_ALT = '#e8eeea'
 
