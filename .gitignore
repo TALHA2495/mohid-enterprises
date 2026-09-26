@@ -21,8 +21,11 @@ smoke-*.log
 .vercel
 
 # Agent scaffolding (tool state - never commit)
+# NOTE: .clinerules/ is deliberately NOT ignored - it holds the always-on
+# git-github-automation trigger and must survive a fresh clone.
 .agents/
 .aider-desk/
+.claude/
 skills-lock.json
 
 # Audit artifacts: one-off probes/shots/logs stay local; the reusable

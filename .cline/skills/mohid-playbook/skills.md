@@ -35,6 +35,7 @@ This project keeps its skills **in one file** (`skills.md`) plus two long-form r
 | **Code Structure** | Adding/refactoring components, data, or lib modules | [Code Structure](#skill-code-structure) |
 | **UI Consistency** | Any styling, layout, or component change | [UI Consistency](#skill-ui-consistency) |
 | **Code Review / Quality** | Before committing or merging | [Code Review / Quality](#skill-code-review--quality) |
+| **Git & GitHub Workflow** | **Always** — before any `git` command | [Git & GitHub Workflow](#skill-git--github-workflow-automation) |
 | **Performance** | Optimizing load, images, Lighthouse | [Performance](#skill-performance) |
 | **RFQ Forms & Validation** | Editing the quote form, schema, or WhatsApp handoff | [RFQ Forms & Validation](#skill-rfq-forms--validation) |
 | **Supabase & Admin** | Editing DB schema, the intake RPC, or `/admin` pages/actions | [Supabase & Admin](#skill-supabase--admin) |
@@ -130,6 +131,27 @@ This project keeps its skills **in one file** (`skills.md`) plus two long-form r
 
 ---
 
+## Skill: Git & GitHub Workflow Automation
+
+**Goal:** Every change lands on a feature branch as one atomic, verified, conventionally-named commit. Nothing is ever committed directly to `main` or `dev`.
+
+> **Full policy:** `.agents/skills/git-github-automation/SKILL.md` · **Always-on trigger:** `.clinerules/git-github-automation.md` · **Init directive:** `rules.md`.
+> The agent emits a `<git_plan>` pre-flight block before running **any** git command.
+
+1. **Pre-flight, every time.** Print `<git_plan>` first: intent, current branch, `git status --short`, staged stat, gate result, target branch, commit message, blast radius, secrets check. No git command runs before the block is complete.
+2. **Never touch `main`.** No commit, no push, no merge — not even a one-line hotfix. Feature work lives on `feature/*` / `bugfix/*`; the merge is the owner's call.
+3. **`dev` is the integration branch.** It replaces the generic `development` / `develop` / `staging` names. Feature branches cut from `dev`, never from `main`. New branches use `feature/*` — `feat/*` is legacy history only.
+4. **Gate = `npx tsc --noEmit` + `npm run build`.** This repo has no test runner. A failing build means halt and report — never commit red code, never `--no-verify`.
+5. **Conventional Commits, atomic scope.** `<type>(<scope>): <subject>` in present tense, subject <= 72 chars, body explains **why**. Stage per path (`git add <path>`), inspect `git diff --staged`, then commit. Never `git add -A` blindly.
+6. **Rebase before push.** `git pull --rebase origin <branch>`, then `git push -u origin <branch>`. Linear history, conflicts surfaced locally.
+7. **Force-push is forbidden.** No `--force`; `--force-with-lease` only on explicit request after a rebase. Never amend or rebase an already-pushed commit.
+8. **No Pull Requests.** `gh` is not installed and none should be created. The flow stops at local branch + commit + push. Report branch, short SHA, and the compare URL.
+9. **Stash before switching.** Dirty tree -> `git stash push -u -m "<why>"` -> switch -> `git stash pop`. Never `git checkout .` / `git restore .` to "clean" the tree.
+10. **Destructive commands need a yes.** `reset --hard`, `clean -fd`, `branch -D`, `push --delete`, history rewrites, and any `git config` write are described and confirmed first.
+11. **Never commit scaffolding or secrets.** `.agents/`, `.claude/`, `.clinerules/`, `.aider-desk/`, `skills-lock.json`, `*.log` and `.env*.local` stay untracked.
+
+---
+
 ## Skill: Performance
 
 **Goal:** Keep the site fast and pass Lighthouse/perf budgets.
@@ -191,6 +213,8 @@ The environment also exposes reusable agent skills that can be invoked on demand
 | `skill-creator` | Create, edit, and benchmark new skills |
 
 Use these for specific tasks (e.g. run `ui-responsiveness-check` after a layout change, `review-team` before merging). For styling, still defer to `DESIGN.md` tokens over generic guidance.
+
+Project-local (not environment-provided): **`git-github-automation`** is gated on every git action — see [Skill: Git & GitHub Workflow Automation](#skill-git--github-workflow-automation).
 
 ---
 
