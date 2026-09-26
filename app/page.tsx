@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-﻿import { HeroSection } from '@/components/hero-section'
+import { HeroSection } from '@/components/hero-section'
 import { StandardsPage } from '@/components/standards-page'
 import { FactoryPage } from '@/components/factory-page'
 import { SiteHeader } from '@/components/site-header'
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description,
   alternates: { canonical: '/' },
   openGraph: {
-    type: 'website', siteName: 'Mohid Enterprises', url: '/',
+    type: 'website', siteName: 'Mohid Enterprises', url: '/', locale: 'en',
     title: 'Textile Trims Manufacturer in Faisalabad | Mohid Enterprises', description,
     images: [{ url: 'https://ik.imagekit.io/a2q8u8qtw/Hero/Textile%20Trims%20Manufacturing.jpg', alt: 'Textile trims manufacturing floor at Mohid Enterprises in Faisalabad, Pakistan' }],
   },
