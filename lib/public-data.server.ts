@@ -28,6 +28,11 @@ export type ShowroomProduct = {
   colors: string
   finish: string
   specs: [string, string][]
+  moq?: number
+  pricingTiers?: { quantity: number; pricePerMeter: number }[]
+  leadTime?: string
+  weight?: string
+  compliance?: { oekotex?: boolean; certificates?: string[] }
 }
 
 export type FactorySection = {
@@ -146,6 +151,11 @@ function mapProduct(row: Row): ShowroomProduct {
       fallback?.finish ||
       'Various',
     specs: specs.length > 0 ? specs : fallback?.specs ?? [],
+    moq: fallback?.moq,
+    pricingTiers: fallback?.pricingTiers,
+    leadTime: fallback?.leadTime,
+    weight: fallback?.weight,
+    compliance: fallback?.compliance,
   }
 }
 

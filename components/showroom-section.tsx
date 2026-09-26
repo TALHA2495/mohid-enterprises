@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 import ProductDetail from './showroom-detail'
@@ -20,6 +21,11 @@ export type Product = {
   /** Raw CDN URLs for every uploaded image. Detail page thumbnails use these. */
   images: string[]
   specs: [string, string][]
+  moq?: number
+  pricingTiers?: { quantity: number; pricePerMeter: number }[]
+  leadTime?: string
+  weight?: string
+  compliance?: { oekotex?: boolean; certificates?: string[] }
 }
 
 export function ShowroomSection({ products }: { products: Product[] }) {
@@ -137,27 +143,31 @@ export function ShowroomSection({ products }: { products: Product[] }) {
         <div aria-label="Product grid" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto pb-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {displayed.map((product, index) => (
-            <button
+            <Link
               key={product.name}
-              type="button"
-              onClick={() => handleSelect(product)}
-              className={`group overflow-hidden rounded-xl border border-[#101412]/12 ${SURFACE_WHITE} text-left transition hover:-translate-y-1 hover:border-[#0a7d31]/50 hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]`}
+              href={`/showroom/${encodeURIComponent(product.name)}`}
+              className="block"
             >
-              <div className="relative h-56 overflow-hidden bg-[#e8eeea]">
-                <Image
-                    src={product.image}
-                    alt={`${product.name} textile trim`}
-                    loading={index < 4 ? 'eager' : 'lazy'}
-                    quality={70}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-              </div>
-              <div className="flex items-center justify-center p-3.5 text-center">
-                <h2 className="text-[15px] font-semibold leading-snug tracking-tight text-[#101412]">{product.name}</h2>
-              </div>
-            </button>
+              <button
+                type="button"
+                className={`w-full group overflow-hidden rounded-xl border border-[#101412]/12 ${SURFACE_WHITE} text-left transition hover:-translate-y-1 hover:border-[#0a7d31]/50 hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]`}
+              >
+                <div className="relative h-56 overflow-hidden bg-[#e8eeea]">
+                  <Image
+                      src={product.image}
+                      alt={`${product.name} textile trim`}
+                      loading={index < 4 ? 'eager' : 'lazy'}
+                      quality={70}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                </div>
+                <div className="flex items-center justify-center p-3.5 text-center">
+                  <h2 className="text-[15px] font-semibold leading-snug tracking-tight text-[#101412]">{product.name}</h2>
+                </div>
+              </button>
+            </Link>
           ))}
         </div>
 

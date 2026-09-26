@@ -2,6 +2,7 @@
 
 import { ArrowLeft, ArrowUpRight, ChevronDown, CircleCheck, Package, SlidersHorizontal } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 import type { Product } from './showroom-section'
@@ -24,7 +25,15 @@ function findSpec(product: Product, keywords: string[], fallback: string) {
   return fallback
 }
 
-function ProductDetail({ product, onBack }: { product: Product; onBack: () => void }) {
+export default function ProductDetail({
+  product,
+  onBack,
+  isDetailPage = false,
+}: {
+  product: Product
+  onBack?: () => void
+  isDetailPage?: boolean
+}) {
   const [customOpen, setCustomOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const imageRef = useRef<HTMLImageElement>(null)
@@ -55,9 +64,15 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
     <section className="product-detail relative z-10 min-h-screen overflow-hidden bg-[#f7f8f5] px-4 pb-12 pt-6 sm:px-6 lg:px-10">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_50%_at_50%_0%,rgba(255,255,255,0.05),transparent_65%)]" />
       <div className="relative mx-auto max-w-7xl">
-        <button type="button" onClick={onBack} className="inline-flex items-center gap-2 text-sm font-medium text-[#0a7d31] transition-colors hover:text-[#101412] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2">
-          <ArrowLeft className="size-4" /> Back to showroom
-        </button>
+        {isDetailPage ? (
+          <Link href="/showroom" className="inline-flex items-center gap-2 text-sm font-medium text-[#0a7d31] transition-colors hover:text-[#101412] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2">
+            <ArrowLeft className="size-4" /> Back to showroom
+          </Link>
+        ) : (
+          <button type="button" onClick={onBack} className="inline-flex items-center gap-2 text-sm font-medium text-[#0a7d31] transition-colors hover:text-[#101412] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2">
+            <ArrowLeft className="size-4" /> Back to showroom
+          </button>
+        )}
 
         <div className="mt-5 grid gap-6 lg:grid-cols-[1.02fr_1fr] lg:gap-8">
           <div className="overflow-hidden rounded-2xl border border-[#101412]/12 bg-white lg:self-start">
@@ -127,6 +142,42 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
                 </div>
               ))}
             </dl>
+
+            {product.moq && (
+              <section className="border-t border-[#101412]/10 pt-6 mt-8">
+                <h3 className="font-fraunces text-xl font-semibold text-[#101412] mb-4">Minimum Order &amp; Pricing</h3>
+                <div className="mb-4 rounded-lg bg-[#f4f7f8] p-4 border border-[#101412]/10">
+                  <div className="text-xs font-mono uppercase tracking-widest text-[#00c853]">MOQ</div>
+                  <div className="mt-3 text-lg font-semibold text-[#101412]">{product.moq.toLocaleString()} meters</div>
+                </div>
+                {product.pricingTiers && product.pricingTiers.length > 0 && (
+                  <table className="w-full text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-[#101412]/15">
+                        <th className="text-left py-3 px-0 text-[#101412]/70 font-semibold">Order Quantity (m)</th>
+                        <th className="text-right py-3 px-0 text-[#101412]/70 font-semibold">Price/Meter (USD)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {product.pricingTiers.map((tier, idx) => (
+                        <tr key={idx} className="border-b border-[#101412]/10 last:border-0">
+                          <td className="py-3 px-0 text-[#101412]">{tier.quantity.toLocaleString()}+</td>
+                          <td className="text-right py-3 px-0 text-[#101412] font-semibold">${tier.pricePerMeter.toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </section>
+            )}
+
+            {product.leadTime && (
+              <div className="mt-6 rounded-lg bg-[#f4f7f8] p-4 border border-[#101412]/10">
+                <div className="text-xs font-mono uppercase tracking-widest text-[#00c853]">Standard Lead Time</div>
+                <div className="mt-2 text-black">{product.leadTime}</div>
+              </div>
+            )}
+
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
                 href={quoteHref}
@@ -200,4 +251,3 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
   )
 }
 
-export default ProductDetail

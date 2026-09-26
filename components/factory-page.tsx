@@ -5,6 +5,7 @@ import { PageShell } from './page-shell'
 import { FactorySnapshot } from './factory-snapshot'
 import { loadFactorySections } from '@/lib/public-data.server'
 import type { FactorySection } from '@/lib/public-data.server'
+import { factoryCapacity } from '@/lib/factory-capacity'
 
 // ---------------------------------------------------------------------------
 // /factory — the three photo tiles are DB-driven (`factory_sections` rows with
@@ -50,6 +51,56 @@ export async function FactoryPage({ embedded = false }: { embedded?: boolean } =
       <Heading className={`mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-[#101412] sm:text-5xl`}>{embedded ? 'Sampling to Bulk Production' : '20+ Years of Proven Trims Manufacturing'}</Heading>
 
       <p className={`mt-3 max-w-2xl text-sm leading-6 text-[#46534c]`}>From sampling to bulk production: ribbons, tassels, elastic, jute cord, conveyor belts, and more.</p>
+
+      <section className="relative z-10 bg-[#f4f7f8] px-4 py-12 sm:px-6 md:py-16 my-8 rounded-2xl">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="font-fraunces text-3xl font-bold text-[#101412] mb-8">Production Capacity</h2>
+          
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+            <div className="rounded-lg border border-[#101412]/10 bg-white p-6">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#00c853]">Daily Output</div>
+              <div className="mt-3 text-lg font-semibold text-[#101412]">{factoryCapacity.production.dailyOutput}</div>
+            </div>
+            <div className="rounded-lg border border-[#101412]/10 bg-white p-6">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#00c853]">Min Order</div>
+              <div className="mt-3 text-lg font-semibold text-[#101412]">{factoryCapacity.production.minOrderQuantity} meters</div>
+            </div>
+            <div className="rounded-lg border border-[#101412]/10 bg-white p-6">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#00c853]">Lead Time</div>
+              <div className="mt-3 text-lg font-semibold text-[#101412]">{factoryCapacity.production.standardLeadTime}</div>
+            </div>
+            <div className="rounded-lg border border-[#101412]/10 bg-white p-6">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#00c853]">Max Batch</div>
+              <div className="mt-3 text-lg font-semibold text-[#101412]">{factoryCapacity.production.maxBatchSize}</div>
+            </div>
+          </div>
+
+          <div className="mb-12 rounded-lg border border-[#101412]/10 bg-white p-8">
+            <h3 className="mb-4 text-xl font-semibold text-[#101412]">Workforce</h3>
+            <p className="mb-3 text-[#101412]/80">{factoryCapacity.workforce.teamSize}</p>
+            <p className="text-sm text-[#101412]/70">Expertise: {factoryCapacity.workforce.expertise.join(' • ')}</p>
+            <p className="mt-3 text-sm text-[#101412]/70">{factoryCapacity.workforce.training}</p>
+          </div>
+
+          <div className="mb-12 rounded-lg border border-[#101412]/10 bg-white p-8">
+            <h3 className="mb-4 text-xl font-semibold text-[#101412]">Equipment</h3>
+            <ul className="space-y-2 text-sm text-[#101412]/70">
+              <li>Braiding: {factoryCapacity.equipment.braiding}</li>
+              <li>Weaving: {factoryCapacity.equipment.weaving}</li>
+              <li>Packaging: {factoryCapacity.equipment.packaging}</li>
+              <li>QC: {factoryCapacity.equipment.qc}</li>
+            </ul>
+          </div>
+
+          <div className="rounded-lg border border-[#101412]/10 bg-white p-8">
+            <h3 className="mb-4 text-xl font-semibold text-[#101412]">Logistics</h3>
+            <p className="text-sm text-[#101412]/70">Terms: {factoryCapacity.logistics.incoterms.join(' | ')}</p>
+            <p className="text-sm text-[#101412]/70 mt-2">Partners: {factoryCapacity.logistics.shippingPartners.join(' • ')}</p>
+            <p className="text-sm text-[#101412]/70 mt-2">Export Lead: {factoryCapacity.logistics.exportLeadTime}</p>
+          </div>
+        </div>
+      </section>
+
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{heroes.map((tile) =>
 
       <figure key={tile.id} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-[#101412]/12">
