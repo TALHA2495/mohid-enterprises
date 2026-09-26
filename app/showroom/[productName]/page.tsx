@@ -11,13 +11,25 @@ type Props = {
   params: Promise<{ productName: string }>
 }
 
+function normalize(str: string): string {
+  let decoded = str
+  try {
+    decoded = decodeURIComponent(str)
+  } catch {}
+  try {
+    decoded = decodeURIComponent(decoded)
+  } catch {}
+  return decoded.replace(/\+/g, ' ').trim().toLowerCase()
+}
+
 export default async function ProductPage({ params }: Props) {
   const { productName } = await params
   const live = await loadShowroomProducts()
   const products: Product[] =
     live.length > 0 ? live : CATALOG_DATA.map((p) => ({ ...p, images: [p.image] }))
-  const decodedName = decodeURIComponent(productName)
-  const product = products.find((p) => p.name.toLowerCase() === decodedName.toLowerCase())
+
+  const target = normalize(productName)
+  const product = products.find((p) => normalize(p.name) === target)
 
   if (!product) notFound()
 
@@ -32,5 +44,6 @@ export default async function ProductPage({ params }: Props) {
 export async function generateStaticParams() {
   const live = await loadShowroomProducts()
   const products = live.length > 0 ? live : CATALOG_DATA
-  return products.map((p) => ({ productName: encodeURIComponent(p.name) }))
+  return products.map((p) => ({ productName: p.name }))
 }
+
