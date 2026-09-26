@@ -246,6 +246,68 @@ export default function ProductDetail({
             </div>
           </div>
         </div>
+
+        {hasMultiple && (
+          <section className="mt-12 border-t border-[#101412]/10 pt-10" aria-label="Product image gallery">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+              <div>
+                <p className="font-sans text-[11px] uppercase tracking-[0.24em] text-[#0a7d31]">
+                  Gallery &bull; {product.images.length} Views
+                </p>
+                <h2 className="mt-1 font-sans text-2xl font-semibold tracking-tight text-[#101412]">
+                  Product Imagery &amp; Angles
+                </h2>
+              </div>
+              <p className="text-xs text-[#46534c]">
+                Select any image to inspect in full view
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 sm:gap-4">
+              {product.images.map((url, idx) => {
+                const isCurrent = selectedIndex === idx
+                const cardSrc = url.includes('?') ? url : `${url}${FULL}`
+                return (
+                  <button
+                    key={`${url}-${idx}`}
+                    type="button"
+                    onClick={() => {
+                      setSelectedIndex(idx)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                    aria-label={`View ${product.name} angle ${idx + 1}`}
+                    aria-current={isCurrent ? 'true' : 'false'}
+                    className={`group relative aspect-[4/3] w-full overflow-hidden rounded-xl border text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] ${
+                      isCurrent
+                        ? 'border-[#01aa3f] ring-2 ring-[#01aa3f]/20 shadow-md'
+                        : 'border-[#101412]/12 bg-white hover:-translate-y-1 hover:border-[#0a7d31]/50 hover:shadow-md'
+                    }`}
+                  >
+                    <Image
+                      src={cardSrc}
+                      alt={`${product.name} view ${idx + 1}`}
+                      fill
+                      quality={70}
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-end p-3">
+                      <span className="text-[11px] font-medium tracking-wide text-white">
+                        View angle {idx + 1} &uarr;
+                      </span>
+                    </div>
+                    {isCurrent && (
+                      <span className="absolute top-2 right-2 rounded-full bg-[#01aa3f] px-2 py-0.5 text-[10px] font-semibold text-white shadow-sm">
+                        Active
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </section>
+        )}
       </div>
     </section>
   )
