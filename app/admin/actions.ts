@@ -416,15 +416,20 @@ export async function deleteHero(id: string): Promise<HeroActionResult> {
   return { ok: true, id }
 }
 
-/** Reorder the published hero cards in one write (called from drag-and-drop). */
+/** Reorder the published hero cards (called from move buttons / drag-and-drop). */
 export async function reorderHero(ids: string[]): Promise<HeroActionResult> {
   const authError = await sessionError()
   if (authError) return { ok: false, error: authError }
   if (!supabaseAdmin) return { ok: false, error: 'Supabase is not configured on the server.' }
 
-  const updates = ids.map((id, sort_order) => ({ id, sort_order }))
-  const { error } = await supabaseAdmin.from('hero_sections').upsert(updates, { onConflict: 'id' })
-  if (error) return { ok: false, error: catalogError(error, 'hero') }
+  // Per-row UPDATE, not upsert({ id, sort_order }). PostgREST renders that
+  // upsert as INSERT ... ON CONFLICT, and the INSERT arm still requires every
+  // NOT NULL column (label, filter, image) — so every reorder failed with
+  // 23502 "null value in column label" and sort_order never changed.
+  for (const [index, id] of ids.entries()) {
+    const { error } = await supabaseAdmin.from('hero_sections').update({ sort_order: index }).eq('id', id)
+    if (error) return { ok: false, error: catalogError(error, 'hero') }
+  }
 
   // Revalidate by refreshing each card's row path individually is not possible;
   // clear the home + admin caches wholesale.

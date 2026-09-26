@@ -44,6 +44,22 @@ const TRANSFORM = '?tr=w-1200,f-auto,q-70'
 
 type Row = Record<string, unknown>
 
+/**
+ * Hero card imagery. Cards render at 142-238 CSS px, so a `w-640` source is
+ * ample even at 2x density. The DB rows store either a bare CDN path or a
+ * cache-buster (?updatedAt=...) - neither carries a real `tr=` transform, so a
+ * plain "has a query string" check would wrongly skip them and pull the
+ * full-resolution original.
+ */
+const HERO_CARD_TRANSFORM = 'tr=w-640,f-auto,q-70'
+
+function heroCardImage(value: unknown): string {
+  const raw = String(value ?? '').trim()
+  if (!raw) return ''
+  if (!raw.startsWith('http')) return ''
+  return /[?&]tr=/.test(raw) ? raw : `${raw}${raw.includes('?') ? '&' : '?'}${HERO_CARD_TRANSFORM}`
+}
+
 /** First image URL of a product row, transformed for the web. */
 function firstImage(row: Row): string {
   const images = Array.isArray(row.images) ? (row.images as Row[]) : []
@@ -54,11 +70,9 @@ function firstImage(row: Row): string {
 
 /** `specs` is [[label, value], ...]; pull one value out by label. */
 function specValue(specs: unknown, label: string): string | null {
-  if (!Array.isArray(specs)) return null
-  for (const entry of specs as unknown[]) {
-    if (Array.isArray(entry) && typeof entry[0] === 'string' && entry[0].toLowerCase() === label.toLowerCase()) {
-      return typeof entry[1] === 'string' ? entry[1] : null
-    }
+  const list = mapSpecs(specs)
+  for (const [key, value] of list) {
+    if (key.toLowerCase() === label.toLowerCase()) return value
   }
   return null
 }
@@ -82,8 +96,15 @@ function toProductType(value: unknown, name: string): ProductType {
 
 /** `specs` value coerced to the [[label, value], ...] shape the UI renders. */
 function mapSpecs(value: unknown): [string, string][] {
-  if (!Array.isArray(value)) return []
-  return (value as unknown[])
+  // Tolerate double-encoded rows: JSON.stringify was applied before the
+  // supabase-js update in older scripts, storing a JSON *string* in the JSONB
+  // column instead of an array — that silently rendered zero spec rows.
+  let list = value
+  if (typeof list === 'string') {
+    try { list = JSON.parse(list) } catch { return [] }
+  }
+  if (!Array.isArray(list)) return []
+  return (list as unknown[])
     .filter((entry): entry is [string, string] => Array.isArray(entry) && entry.length >= 2)
     .map((entry) => [String(entry[0]), String(entry[1])] as [string, string])
 }
@@ -171,6 +192,58 @@ export async function loadFactorySections(): Promise<FactorySection[]> {
 }
 
 // ---------------------------------------------------------------------------
+// /factory snapshot metrics — counted off the live catalog so the page can
+// never advertise a number an admin could contradict. Any failure degrades to
+// FALLBACK_STATS rather than rendering a gap in the strip.
+// ---------------------------------------------------------------------------
+
+export type ProductStats = {
+  /** Active rows in `products`. */
+  totalProducts: number
+  /** Distinct `products.type` tags across the active catalog. */
+  trimTypes: number
+  /** Company track record ("20+ years") — copy, not catalog data. */
+  yearsManufacturing: number
+}
+
+const YEARS_MANUFACTURING = 20
+
+/** Last-verified counts (queried live 2026-09-23). Re-check after catalog edits. */
+const FALLBACK_STATS: ProductStats = {
+  totalProducts: 45,
+  trimTypes: 14,
+  yearsManufacturing: YEARS_MANUFACTURING,
+}
+
+/**
+ * Counts for the /factory snapshot strip.
+ * Never throws and never returns null: any failure yields the last-verified set.
+ */
+export async function getProductStats(): Promise<ProductStats> {
+  if (!supabaseAdmin) return FALLBACK_STATS
+
+  // Selecting only `type` keeps the payload to one small column while
+  // `count: 'exact'` still reports the full row count.
+  const { data, count, error } = await supabaseAdmin
+    .from('products')
+    .select('type', { count: 'exact' })
+    .eq('is_active', true)
+
+  if (error) {
+    console.warn(`[public-data] product stats query failed — using last-verified counts: ${error.message}`)
+    return FALLBACK_STATS
+  }
+
+  const rows = (data ?? []) as Row[]
+  const trimTypes = new Set(rows.map((row) => String(row.type ?? '').trim()).filter(Boolean))
+  return {
+    totalProducts: count ?? rows.length,
+    trimTypes: trimTypes.size,
+    yearsManufacturing: YEARS_MANUFACTURING,
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Home hero cards (hero_sections). Lives here rather than lib/showroom.ts:
 // that module is imported by 'use client' components, so it can never touch
 // the service-role client — moving the query back there would re-trip the
@@ -183,8 +256,8 @@ function toHeroCategory(row: Row): HeroCategory {
     id: String(row.id ?? ''),
     label: String(row.label ?? ''),
     desc: typeof row.description === 'string' ? row.description : '',
-    filter: String(row.filter ?? ''),
-    image: String(row.image ?? ''),
+    filter: String(row.filter ?? '').trim(),
+    image: heroCardImage(row.image),
   }
 }
 

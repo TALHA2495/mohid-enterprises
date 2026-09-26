@@ -1,24 +1,35 @@
 -- ============================================================================
--- SEED FACTORY SECTIONS — 6 images from the ImageKit CDN (account a2q8u8qtw)
+-- SEED / REPAIR — factory_sections (the three /factory photo tiles)
 -- ------------------------------------------------------------------------------
--- Generated from the current factory-page.tsx content (3 hero images +
--- 3 info cards) and the ImageKit folder /factory.
+-- The hero tiles below are the only rows /factory renders. The capability
+-- cards that used to follow them were retired in the 2026 restructure and must
+-- stay is_active = false; their URLs are listed at the bottom for reference.
 --
---   Run in the Supabase SQL editor, or:
---   node --env-file=.env.local scripts/run-seed.mjs supabase/seed-factory.sql
+--   Run in the Supabase SQL editor, or relabel live rows with:
+--   node --env-file=.env.local scripts/update-factory-sections.mjs
 --
--- Idempotent: ON CONFLICT against the (lower(title), kind) expression index.
--- Postgres requires the expression parenthesized — hence the double parens.
+-- Idempotent by image_url, NOT by title. The (lower(title), kind) unique index
+-- means a title-keyed INSERT would, after a rename, add a SECOND tile pointing
+-- at the same photo — matching the URL makes re-runs a no-op instead.
 -- ============================================================================
 
-INSERT INTO factory_sections (kind, title, subtitle, image_url, sort_order, is_active) VALUES
-  -- Hero grid (top of /factory) — full-bleed production imagery.
-  ('hero', 'Material preparation',     NULL, 'https://ik.imagekit.io/a2q8u8qtw/factory/textile%20production.webp',      10, true),
-  ('hero', 'Production floor',         NULL, 'https://ik.imagekit.io/a2q8u8qtw/factory/Braiding%20Winding.webp',        20, true),
-  ('hero', 'Packed inventory',         NULL, 'https://ik.imagekit.io/a2q8u8qtw/factory/packed%20inventory.png',         30, true),
-  -- Info cards (bottom of /factory) — capability callouts.
-  ('card', 'Quality Inspection Protocol', 'Consistent processes, clear specifications, and dependable communication for every order.', 'https://ik.imagekit.io/a2q8u8qtw/factory/quality%20inspection.webp', 10, true),
-  ('card', 'Export Packaging',            'Consistent processes, clear specifications, and dependable communication for every order.', 'https://ik.imagekit.io/a2q8u8qtw/factory/global_export.webp',        20, true),
-  -- NOTE: the '&' here must stay RAW. '%26' returns HTTP 404 from ImageKit.
-  ('card', 'Incoterms & Logistics',       'Consistent processes, clear specifications, and dependable communication for every order.', 'https://ik.imagekit.io/a2q8u8qtw/factory/Logistics%20&%20Export.png', 30, true)
-ON CONFLICT ((lower(title)), kind) DO NOTHING;
+INSERT INTO factory_sections (kind, title, subtitle, image_url, sort_order, is_active)
+SELECT v.kind, v.title, v.subtitle, v.image_url, v.sort_order, v.is_active
+FROM (VALUES
+  ('hero', 'Textile Trims',     NULL::text, 'https://ik.imagekit.io/a2q8u8qtw/factory/textile%20production.webp', 10, true),
+  ('hero', 'Braids & Cords',    NULL::text, 'https://ik.imagekit.io/a2q8u8qtw/factory/Braiding%20Winding.webp',   20, true),
+  ('hero', 'Packed for Export', NULL::text, 'https://ik.imagekit.io/a2q8u8qtw/factory/packed%20inventory.png',    30, true)
+) AS v(kind, title, subtitle, image_url, sort_order, is_active)
+WHERE NOT EXISTS (
+  SELECT 1 FROM factory_sections f WHERE f.image_url = v.image_url
+);
+
+-- The retired capability cards stay in the table so the copy is one UPDATE away
+-- from returning. No-op once scripts/update-factory-sections.mjs has run.
+UPDATE factory_sections SET is_active = false WHERE kind = 'card';
+
+-- Retired card imagery (kept for the record; note the RAW '&' — '%26' 404s):
+--   https://ik.imagekit.io/a2q8u8qtw/factory/quality%20inspection.webp
+--   https://ik.imagekit.io/a2q8u8qtw/factory/global_export.webp
+--   https://ik.imagekit.io/a2q8u8qtw/factory/Logistics%20&%20Export.png
+

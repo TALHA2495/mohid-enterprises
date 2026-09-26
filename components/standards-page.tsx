@@ -18,18 +18,19 @@ const CERTIFICATES = [
   { title: 'WSO W-Tex 9000 Recycled Polyester Certification', image: 'https://ik.imagekit.io/a2q8u8qtw/certificates/wso-w-tex-9000-recycled-polyester-certification-mohid.jpg.jpeg?updatedAt=1790174344912&tr=w-1200,f-auto,q-70' },
 ]
 
-export function StandardsPage() {
+export function StandardsPage({ embedded = false }: { embedded?: boolean } = {}) {
+  const content = (
 
-  return <PageShell><section className="mx-auto max-w-5xl px-5 py-8 sm:px-8">
+    <section className={embedded ? 'homepage-motion-section bg-[#f7f8f5] px-5 pt-2 text-[#101412] sm:px-8 sm:pb-16 sm:pt-8' : 'mx-auto max-w-5xl px-5 py-8 text-[#101412] sm:px-8'}>
+      {/* The gallery is the content, so there is no visible heading by design —
+          but the page still needs exactly one h1 for SEO and screen readers.
+          Same sr-only pattern as /showroom and the home hero. */}
+      {!embedded && <h1 className="sr-only">Quality Standards &amp; Textile Trim Certifications — Mohid Enterprises</h1>}
+      <div>
+        <CertificateGallery certificates={embedded ? CERTIFICATES.slice(0, 1) : CERTIFICATES} single={embedded} />
+      </div>
+    </section>
+  )
 
-    <h1 className="mt-2  text-3xl font-semibold tracking-tight text-white drop-shadow-md sm:text-5xl">Quality Commitment & Export Compliance</h1>
-
-
-    <p className="mt-3 max-w-3xl text-sm leading-6 text-white/80 drop-shadow-sm">Mohid Enterprises follows documented checks across materials, production, packing, and export readiness.</p>
-
-
-    <div className="mt-8"><CertificateGallery certificates={CERTIFICATES} /></div>
-  </section>
-  </PageShell>
-
+  return embedded ? content : <PageShell>{content}</PageShell>
 }

@@ -52,15 +52,15 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
   }).toString()}`
 
   return (
-    <section className="product-detail relative z-10 min-h-screen overflow-hidden bg-[#f4f7f8] px-4 pb-12 pt-6 sm:px-6 lg:px-10">
+    <section className="product-detail relative z-10 min-h-screen overflow-hidden bg-[#f7f8f5] px-4 pb-12 pt-6 sm:px-6 lg:px-10">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_50%_at_50%_0%,rgba(255,255,255,0.05),transparent_65%)]" />
       <div className="relative mx-auto max-w-7xl">
-        <button type="button" onClick={onBack} className="inline-flex items-center gap-2 text-sm font-medium text-[#00c853] transition-colors hover:text-[#00ff59]">
+        <button type="button" onClick={onBack} className="inline-flex items-center gap-2 text-sm font-medium text-[#0a7d31] transition-colors hover:text-[#101412] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2">
           <ArrowLeft className="size-4" /> Back to showroom
         </button>
 
         <div className="mt-5 grid gap-6 lg:grid-cols-[1.02fr_1fr] lg:gap-8">
-          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white lg:self-start">
+          <div className="overflow-hidden rounded-2xl border border-[#101412]/12 bg-white lg:self-start">
             {hasMultiple && (
               <div className="flex items-center gap-2 overflow-x-auto p-3 pb-0" aria-label="Product images">
                 {product.images.map((url, i) => (
@@ -71,8 +71,8 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
                     aria-current={selectedIndex === i ? 'true' : 'false'}
                     onClick={() => setSelectedIndex(i)}
                     className={`shrink-0 overflow-hidden rounded-md border-2 ${selectedIndex === i
-                      ? 'border-[#00ff59]'
-                      : 'border-black/10 opacity-60 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]'
+                      ? 'border-[#01aa3f]'
+                      : 'border-[#101412]/12 opacity-60 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412]'
                     }`}
                   >
                     <Image
@@ -88,7 +88,7 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
               </div>
             )}
             <div
-                className="group relative aspect-[16/11] overflow-hidden bg-black/5"
+                className="group relative aspect-[16/11] overflow-hidden bg-[#e8eeea]"
                 onMouseMove={(event) => {
                   const rect = event.currentTarget.getBoundingClientRect()
                   const x = ((event.clientX - rect.left) / rect.width) * 100
@@ -109,40 +109,42 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
             </div>
           </div>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#00c853]">{product.type} · {product.material}</p>
-            <h1 className="mt-3 font-serif text-2xl font-semibold leading-[1.1] tracking-tight text-black sm:text-3xl lg:text-4xl">
-              {titleFirst} {titleRest.length > 0 && <span className="text-[#00c853]">{titleRest.join(' ')}</span>}
+            <p className="font-sans text-[11px] uppercase tracking-[0.28em] text-[#0a7d31]">{product.type} · {product.material}</p>
+            <h1 className="mt-3 font-sans text-2xl font-semibold leading-[1.1] tracking-tight text-[#101412] sm:text-3xl lg:text-4xl">
+              {titleFirst} {titleRest.length > 0 && <span className="text-[#0a7d31]">{titleRest.join(' ')}</span>}
             </h1>
-            <p className="mt-3 max-w-xl text-[13px] leading-6 text-black/60">
+            <p className="mt-3 max-w-xl text-[13px] leading-6 text-[#46534c]">
               {product.description} Produced to consistent width and finish density.
             </p>
 
-            <div className="mt-4 border-t border-black/[0.07]">
+            {/* dl wrapper: dt/dd are invalid outside a <dl> — fixes HTML
+                validity/a11y without touching the styling classes. */}
+            <dl className="mt-4 border-t border-[#101412]/12">
               {product.specs.map(([label, value]) => (
-                <div key={label} className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] gap-4 border-b border-black/[0.07] py-2 last:border-0">
-                  <dt className="text-[11px] uppercase tracking-[0.14em] text-black/40">{label}</dt>
-                  <dd className="text-[13px] leading-5 text-black/85 tabular-nums">{value}</dd>
+                <div key={label} className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] gap-4 border-b border-[#101412]/12 py-2 last:border-0">
+                  <dt className="text-[11px] uppercase tracking-[0.14em] text-[#46534c]">{label}</dt>
+                  <dd className="text-[13px] leading-5 text-[#101412] tabular-nums">{value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
                 href={quoteHref}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#01aa3f] px-6 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-[#00ff59]"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#01aa3f] px-6 py-3.5 text-sm font-semibold text-[#07120b] transition-colors hover:bg-[#00be48]"
               >
                 Request quote &amp; sample <ArrowUpRight className="size-4" />
               </a>
               <a
                 href={`mailto:info@mohident.com?subject=${encodeURIComponent(`Physical sample request — ${product.name}`)}`}
-                className="inline-flex flex-1 items-center justify-center rounded-full border border-black/20 px-6 py-3.5 text-sm text-black transition-colors hover:bg-black/[0.06]"
+                className="inline-flex flex-1 items-center justify-center rounded-full border border-[#101412]/20 px-6 py-3.5 text-sm text-[#101412] transition-colors hover:bg-black/[0.06]"
               >
                 Request physical sample
               </a>
             </div>
             <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2.5">
               {PRODUCT_FEATURES.map((feature) => (
-                <li key={feature} className="flex items-center gap-2 text-sm text-black/80">
-                  <CircleCheck className="size-[18px] text-[#00c853]" strokeWidth={1.6} /> {feature}
+                <li key={feature} className="flex items-center gap-2 text-sm text-[#101412]">
+                  <CircleCheck className="size-[18px] text-[#0a7d31]" strokeWidth={1.6} /> {feature}
                 </li>
               ))}
             </ul>
@@ -151,8 +153,8 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
         </div>
 
         <div className="mt-8">
-          <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
-            <h2 className="text-lg font-semibold text-black">
+          <div className="rounded-2xl border border-[#101412]/12 bg-white p-5 sm:p-6">
+            <h2 className="text-lg font-semibold text-[#101412]">
               <button
                 type="button"
                 onClick={() => setCustomOpen((prev) => !prev)}
@@ -161,10 +163,10 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
                 className="flex w-full items-center justify-between gap-3 text-left"
               >
                 <span className="flex items-center gap-2.5">
-                  <SlidersHorizontal className="size-5 text-black/70" strokeWidth={1.6} />
+                  <SlidersHorizontal className="size-5 text-[#101412]/70" strokeWidth={1.6} />
                   Customization options
                 </span>
-                <ChevronDown className={`size-5 shrink-0 text-black/40 transition-transform duration-300 ${customOpen ? 'rotate-180' : ''}`} strokeWidth={1.6} />
+                <ChevronDown className={`size-5 shrink-0 text-[#101412]/40 transition-transform duration-300 ${customOpen ? 'rotate-180' : ''}`} strokeWidth={1.6} />
               </button>
             </h2>
             <div
@@ -174,18 +176,18 @@ function ProductDetail({ product, onBack }: { product: Product; onBack: () => vo
               <div className="overflow-hidden">
                 <div>
                   {CUSTOMIZATION_OPTIONS.map((option) => (
-                    <div key={option} className="flex items-center gap-3 border-b border-black/[0.07] py-2.5 text-sm text-black/85 last:border-0">
-                      <CircleCheck className="size-[18px] shrink-0 text-[#00c853]" strokeWidth={1.6} /> {option}
+                    <div key={option} className="flex items-center gap-3 border-b border-[#101412]/10 py-2.5 text-sm text-[#101412] last:border-0">
+                      <CircleCheck className="size-[18px] shrink-0 text-[#0a7d31]" strokeWidth={1.6} /> {option}
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 rounded-xl border border-black/10 bg-black/[0.03] p-4">
+                <div className="mt-4 rounded-xl border border-[#101412]/12 bg-[#e8eeea] p-4">
                   <div className="flex items-start gap-3">
-                    <Package className="mt-0.5 size-5 shrink-0 text-[#00c853]" strokeWidth={1.6} />
+                    <Package className="mt-0.5 size-5 shrink-0 text-[#0a7d31]" strokeWidth={1.6} />
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#00c853]">Sample &amp; production</p>
-                      <p className="mt-1.5 text-[13px] leading-6 text-black/55">Samples available on request.</p>
-                      <p className="text-[13px] leading-6 text-black/55">Production lead time depends on order quantity and specifications.</p>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0a7d31]">Sample &amp; production</p>
+                      <p className="mt-1.5 text-[13px] leading-6 text-[#46534c]">Samples available on request.</p>
+                      <p className="text-[13px] leading-6 text-[#46534c]">Production lead time depends on order quantity and specifications.</p>
                     </div>
                   </div>
                 </div>

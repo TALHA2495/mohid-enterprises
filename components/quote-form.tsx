@@ -152,7 +152,7 @@ export function QuoteForm() {
           {[productContext.product, productContext.material, productContext.width, productContext.moq]
             .filter(Boolean)
             .map((chip) => (
-              <span key={chip} className="rounded-full border border-[#00c853]/30 px-2.5 py-1 text-[11px] font-medium text-[#00c853]">
+              <span key={chip} className="rounded-full border border-[#0a7d31]/30 px-2.5 py-1 text-[11px] font-medium text-[#0a7d31]">
                 {chip}
               </span>
             ))}
@@ -165,7 +165,7 @@ export function QuoteForm() {
           rows={3}
           autoComplete="off"
           placeholder="Tell us about your material, width, color, or trimming specifications…"
-          className="mt-1 resize-none rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none placeholder:text-black/45 focus:border-[#00c853]"
+          className="mt-1 resize-none rounded-lg border border-[#101412]/15 bg-white p-3 text-sm font-normal text-[#101412] outline-none placeholder:text-[#101412]/40 focus:border-[#0a7d31]"
           {...register('inquiry')}
           id="rfq-inquiry" aria-describedby={errors.inquiry ? 'rfq-inquiry-error' : undefined}
         />
@@ -177,7 +177,7 @@ export function QuoteForm() {
           Company name
           <input
             autoComplete="organization"
-            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
+            className="rounded-lg border border-[#101412]/15 bg-white p-3 text-sm font-normal text-[#101412] outline-none focus:border-[#0a7d31]"
             {...register('companyName')}
           id="rfq-companyName" aria-describedby={errors.companyName ? 'rfq-companyName-error' : undefined}
           />
@@ -190,7 +190,7 @@ export function QuoteForm() {
             type="email"
             autoComplete="email"
             spellCheck={false}
-            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
+            className="rounded-lg border border-[#101412]/15 bg-white p-3 text-sm font-normal text-[#101412] outline-none focus:border-[#0a7d31]"
             {...register('workEmail')}
           id="rfq-workEmail" aria-describedby={errors.workEmail ? 'rfq-workEmail-error' : undefined}
           />
@@ -204,7 +204,7 @@ export function QuoteForm() {
             min="0"
             inputMode="decimal"
             autoComplete="off"
-            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
+            className="rounded-lg border border-[#101412]/15 bg-white p-3 text-sm font-normal text-[#101412] outline-none focus:border-[#0a7d31]"
             {...register('quantity')}
           id="rfq-quantity" aria-describedby={errors.quantity ? 'rfq-quantity-error' : undefined}
           />
@@ -216,7 +216,7 @@ export function QuoteForm() {
           <input
             autoComplete="off"
             placeholder="e.g. Istanbul, Yokohama"
-            className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none placeholder:text-black/45 focus:border-[#00c853]"
+            className="rounded-lg border border-[#101412]/15 bg-white p-3 text-sm font-normal text-[#101412] outline-none placeholder:text-[#101412]/40 focus:border-[#0a7d31]"
             {...register('destinationPort')}
           id="rfq-destinationPort" aria-describedby={errors.destinationPort ? 'rfq-destinationPort-error' : undefined}
           />
@@ -232,7 +232,7 @@ export function QuoteForm() {
           autoComplete="tel"
           spellCheck={false}
           placeholder="+92 300 1234567…"
-          className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none placeholder:text-black/45 focus:border-[#00c853]"
+          className="rounded-lg border border-[#101412]/15 bg-white p-3 text-sm font-normal text-[#101412] outline-none placeholder:text-[#101412]/40 focus:border-[#0a7d31]"
           {...register('phone')}
           id="rfq-phone" aria-describedby={errors.phone ? 'rfq-phone-error' : undefined}
         />
@@ -244,7 +244,7 @@ export function QuoteForm() {
         <textarea
           rows={2}
           autoComplete="off"
-          className="resize-none rounded-lg border border-black/10 bg-black/[0.03] p-3 text-sm font-normal text-black outline-none focus:border-[#00c853]"
+          className="resize-none rounded-lg border border-[#101412]/15 bg-white p-3 text-sm font-normal text-[#101412] outline-none focus:border-[#0a7d31]"
           {...register('notes')}
           id="rfq-notes" aria-describedby={errors.notes ? 'rfq-notes-error' : undefined}
         />
@@ -259,11 +259,11 @@ export function QuoteForm() {
         )}
 
         {sent && (
-          <div className="rounded-lg border border-[#00c853]/30 bg-[#00c853]/[0.04] p-3 text-xs font-normal text-black">
+          <div className="rounded-lg border border-[#0a7d31]/30 bg-[#0a7d31]/[0.04] p-3 text-xs font-normal text-[#101412]">
             <p className="font-semibold">Request received. WhatsApp has opened with your details.</p>
             {quoteId ? (
               <p className="mt-1 text-black/70">
-                Quote ID: <span className="font-mono font-semibold text-black">{quoteId}</span> — reference it in any follow-up messages.
+                Quote ID: <span className="font-sans font-semibold text-black">{quoteId}</span> — reference it in any follow-up messages.
               </p>
             ) : (
               <p className="mt-1 text-black/70">Our team will respond on WhatsApp shortly.</p>
@@ -272,7 +272,7 @@ export function QuoteForm() {
         )}
       </div>
 
-      <button type="submit" disabled={submitting || sent} className="rounded-lg bg-[#01aa3f] px-5 py-3 text-sm font-semibold text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] hover:text-black active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+      <button type="submit" disabled={submitting || sent} className="rounded-lg bg-[#01aa3f] px-5 py-3 text-sm font-semibold text-[#07120b] transition-colors hover:bg-[#00be48] hover:text-black active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
         {submitting ? 'Submitting…' : sent ? 'Request received' : 'Submit request'}
       </button>
     </form>

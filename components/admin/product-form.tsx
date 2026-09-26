@@ -23,7 +23,7 @@ import ProductImagesField from './product-images-field'
 // ============================================================================
 
 const inputClass =
-  'w-full rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/45 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
+  'w-full rounded-lg border border-black/10 bg-black/[0.03] px-3 py-2 text-sm text-black placeholder:text-black/55 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30'
 
 type Props = {
   categories: ProductCategory[]
@@ -128,14 +128,17 @@ export default function ProductForm({ categories, product }: Props) {
       <section className="grid gap-4 rounded-2xl border border-black/10 bg-white p-5">
         <h2 className="text-sm font-semibold text-black">Identity</h2>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-1.5" htmlFor="name">
+        {/* Four columns at xl: the product name gets two (long trims names), the
+            category one, and the description two — so no single control stretches
+            across a 1600px shell. */}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <label className="grid gap-1.5 xl:col-span-2" htmlFor="name">
             <span className="text-xs font-medium text-black">Product name</span>
             <input id="name" className={inputClass} placeholder="e.g. Jacquard Elastic Tape" {...register('name')} />
             {errors.name && <span className="text-[11px] font-normal text-[#c62828]">{errors.name.message}</span>}
           </label>
 
-          <label className="grid gap-1.5" htmlFor="categoryId">
+          <label className="grid gap-1.5 xl:col-span-2" htmlFor="categoryId">
             <span className="text-xs font-medium text-black">Category</span>
             <select id="categoryId" className={inputClass} {...register('categoryId')}>
               <option value="">Select a category…</option>
@@ -152,12 +155,12 @@ export default function ProductForm({ categories, product }: Props) {
           </label>
         </div>
 
-        <label className="grid gap-1.5" htmlFor="description">
+        <label className="grid gap-1.5 sm:col-span-2 xl:col-span-2" htmlFor="description">
           <span className="text-xs font-medium text-black">Description</span>
           <textarea
             id="description"
             rows={3}
-            className={`${inputClass} resize-none`}
+            className={`${inputClass} max-w-3xl resize-none`}
             placeholder="How this trim is used, finishes available, lead time…"
             {...register('description')}
           />
@@ -170,7 +173,9 @@ export default function ProductForm({ categories, product }: Props) {
       <section className="grid gap-4 rounded-2xl border border-black/10 bg-white p-5">
         <h2 className="text-sm font-semibold text-black">Specification</h2>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Column count grows with the viewport so each control keeps a sane width
+            now that the form fills the shell instead of a 896px column. */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <label className="grid gap-1.5" htmlFor="material">
             <span className="text-xs font-medium text-black">Material</span>
             <input id="material" className={inputClass} placeholder="e.g. Polyester" {...register('material')} />
@@ -183,7 +188,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.widthMm ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.widthMm.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Leave blank if the product has no fixed width.</span>
+              <span className="text-[11px] font-normal text-black/60">Leave blank if the product has no fixed width.</span>
             )}
           </label>
 
@@ -193,7 +198,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.moqUnits ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.moqUnits.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">
+              <span className="text-[11px] font-normal text-black/60">
                 Leave blank if the site does not publish a minimum.
               </span>
             )}
@@ -210,7 +215,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.colors ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.colors.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Comma separated.</span>
+              <span className="text-[11px] font-normal text-black/60">Comma separated.</span>
             )}
           </label>
 
@@ -220,7 +225,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.finishes ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.finishes.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Comma separated.</span>
+              <span className="text-[11px] font-normal text-black/60">Comma separated.</span>
             )}
           </label>
         </div>
@@ -229,7 +234,7 @@ export default function ProductForm({ categories, product }: Props) {
       <section className="grid gap-4 rounded-2xl border border-black/10 bg-white p-5">
         <h2 className="text-sm font-semibold text-black">Commercial</h2>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <label className="grid gap-1.5" htmlFor="pricePerUnit">
             <span className="text-xs font-medium text-black">Unit price (PKR)</span>
             <input
@@ -244,7 +249,7 @@ export default function ProductForm({ categories, product }: Props) {
             {errors.pricePerUnit ? (
               <span className="text-[11px] font-normal text-[#c62828]">{errors.pricePerUnit.message}</span>
             ) : (
-              <span className="text-[11px] font-normal text-black/50">Per metre. Blank means priced on request.</span>
+              <span className="text-[11px] font-normal text-black/60">Per metre. Blank means priced on request.</span>
             )}
           </label>
 
@@ -338,7 +343,7 @@ export default function ProductForm({ categories, product }: Props) {
       </div>
 
       {product && (
-        <p className="text-[11px] font-normal text-black/45">
+        <p className="text-[11px] font-normal text-black/60">
           Last updated {new Intl.DateTimeFormat('en-PK', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(product.updated_at))} UTC
         </p>
       )}

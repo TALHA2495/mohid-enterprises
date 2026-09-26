@@ -93,24 +93,33 @@ export default function ProductsAdminClient({ products, categories }: Props) {
     })
   }
 
+  // inline-flex + min-h-11: the pills were ~26px tall, under the 44px touch
+  // minimum. Below md (phones and portrait tablets) they stay 44px; from md up —
+  // where the console is pointer-driven — the compact pill returns.
   const chipBase =
-    'rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50'
+    'inline-flex min-h-11 items-center justify-center rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50 md:min-h-0'
 
   const chip = (isActive: boolean) =>
-    `${chipBase} ${isActive ? 'bg-[#01aa3f] text-white' : 'border border-black/10 bg-white text-black hover:bg-black/[0.03]'}`
+    // text-black on brand green (DESIGN.md): white measured ~2.4:1, a WCAG AA fail.
+    `${chipBase} ${isActive ? 'bg-[#01aa3f] text-black' : 'border border-black/10 bg-white text-black hover:bg-black/[0.03]'}`
 
   return (
-    <div className="grid gap-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative min-w-[220px] flex-1">
-          <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-black/40" />
+    <div className="grid min-w-0 gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        {/* Toolbar: stacked below sm (search full width, status filters below),
+            then a justified single row from sm up — search left, filters right —
+            so the controls frame the row instead of floating mid-canvas far from
+            the right edge on a wide display. max-w-md keeps the field from growing
+            with the viewport. */}
+        <div className="relative w-full sm:w-auto sm:min-w-[240px] sm:max-w-md sm:flex-1">
+          <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-black/60" />
           <input
             type="search"
             value={query}
             onChange={(event) => setParam('q', event.target.value)}
             placeholder="Search products by name or category…"
             aria-label="Search products"
-            className="w-full rounded-lg border border-black/10 bg-white py-2 pl-9 pr-3 text-sm text-black placeholder:text-black/45 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30"
+            className="w-full rounded-lg border border-black/10 bg-white py-2 pl-9 pr-3 text-sm text-black placeholder:text-black/55 focus:border-[#00c853] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/30"
           />
         </div>
 
@@ -166,7 +175,7 @@ export default function ProductsAdminClient({ products, categories }: Props) {
             {actionError}
           </p>
         )}
-        {isPending && <p className="text-xs font-normal text-black/50">Updating…</p>}
+        {isPending && <p className="text-xs font-normal text-black/60">Updating…</p>}
       </div>
       {filtered.length === 0 ? (
         <div className="rounded-2xl border border-black/10 bg-white p-8 text-center">
@@ -189,13 +198,14 @@ export default function ProductsAdminClient({ products, categories }: Props) {
         </div>
       ) : (
         <>
-          {/* Phone layout: a 9-column table is unusable at 360px, so below md
-              the same rows render as compact cards with identical actions. */}
-          <ul aria-label="Products" className="grid gap-3 md:hidden">
+          {/* Card layout until lg: at md the fixed 256px sidebar leaves ~470-720px
+              for a table that needs 820px, so the table used to appear exactly
+              when it no longer fit and the comfortable cards were hidden. */}
+          <ul aria-label="Products" className="grid min-w-0 gap-3 lg:hidden">
             {visible.map((product) => {
               const cover = product.images?.[0]
               return (
-                <li key={product.id} className="rounded-2xl border border-black/10 bg-white p-3">
+                <li key={product.id} className="min-w-0 rounded-2xl border border-black/10 bg-white p-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-black/5">
                       {cover ? (
@@ -254,7 +264,11 @@ export default function ProductsAdminClient({ products, categories }: Props) {
             })}
           </ul>
 
-          <div className="hidden overflow-x-auto rounded-2xl border border-black/10 bg-white md:block">
+          {/* min-w-0 releases the grid item's automatic minimum; `relative` makes the
+              wrapper the containing block for the .sr-only spans inside the table
+              (position:absolute + static wrapper = they resolve against the initial
+              containing block, escape the clip and scroll the whole page sideways). */}
+          <div className="relative hidden min-w-0 overflow-x-auto rounded-2xl border border-black/10 bg-white lg:block">
             <table className="w-full min-w-[820px] text-sm">
               <thead>
                 <tr className="border-b border-black/10 bg-black/[0.02] text-left">

@@ -22,10 +22,10 @@ export default async function AdminProductsPage() {
           {missingAdminEnvVars.length > 0 && (
             <>
               {' '}
-              Missing: <code className="font-mono">{missingAdminEnvVars.join(', ')}</code>.
+              Missing: <code className="font-sans">{missingAdminEnvVars.join(', ')}</code>.
             </>
           )}{' '}
-          See <code className="font-mono">supabase/README.md</code>.
+          See <code className="font-sans">supabase/README.md</code>.
         </p>
       </div>
     )
@@ -58,7 +58,7 @@ export default async function AdminProductsPage() {
           {failure.code === '42P01' && (
             <>
               {' '}
-              Run <code className="font-mono">supabase/migrations/0002_products_catalog.sql</code> in the Supabase SQL
+              Run <code className="font-sans">supabase/migrations/0002_products_catalog.sql</code> in the Supabase SQL
               editor.
             </>
           )}
@@ -81,7 +81,7 @@ export default async function AdminProductsPage() {
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="section-label mb-4">Catalog</p>
-            <h1 className="font-display text-4xl leading-tight">Product catalog</h1>
+            <h1 className="font-sans text-4xl leading-tight">Product catalog</h1>
             <p className="mt-2 text-sm font-normal text-black/60">
               {products.length} product{products.length === 1 ? '' : 's'} across {categories.length} categor
               {categories.length === 1 ? 'y' : 'ies'}.

@@ -82,7 +82,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
   }
 
   const chipBase =
-    'rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50'
+    'inline-flex min-h-11 items-center justify-center rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50 md:min-h-0'
 
   return (
     <div className="grid gap-4">
@@ -95,7 +95,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
             aria-pressed={filter === status}
             className={`${chipBase} ${
               filter === status
-                ? 'bg-[#01aa3f] text-white'
+                ? 'bg-[#01aa3f] text-black'
                 : 'border border-black/10 bg-white text-black hover:bg-black/[0.03]'
             }`}
           >
@@ -111,10 +111,14 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
             {actionError}
           </p>
         )}
-        {isPending && <p className="text-xs font-normal text-black/50">Updating…</p>}
+        {isPending && <p className="text-xs font-normal text-black/60">Updating…</p>}
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-black/10 bg-white">
+      {/* relative + min-w-0 + data-scroll-x: relative contains the absolutely
+          positioned .sr-only spans in the table (otherwise they escape the clip
+          and scroll the whole page); min-w-0 releases the grid item's automatic
+          minimum; data-scroll-x keeps the scrollbar visible below 768px. */}
+      <div data-scroll-x className="relative min-w-0 overflow-x-auto rounded-2xl border border-black/10 bg-white">
         <table className="w-full min-w-[760px] text-sm">
           <thead>
             <tr className="border-b border-black/10 bg-black/[0.02]">
@@ -132,7 +136,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
           <tbody>
             {quotes.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-sm font-normal text-black/50">
+                <td colSpan={7} className="px-4 py-10 text-center text-sm font-normal text-black/60">
                   No quotes {filter === 'all' ? 'yet' : `with status “${filter}”`}.
                 </td>
               </tr>
@@ -144,8 +148,8 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
               return (
                 <tr key={quote.id} className="border-b border-black/10 last:border-b-0 hover:bg-black/[0.015]">
                   <td className="px-4 py-3">
-                    <div className="font-mono text-xs text-black/80">{quote.id}</div>
-                    <div className="text-[11px] text-black/50">{quote.quote_number}</div>
+                    <div className="font-sans text-xs text-black/80">{quote.id}</div>
+                    <div className="text-[11px] text-black/60">{quote.quote_number}</div>
                   </td>
                   <td className="max-w-[180px] px-4 py-3">
                     <div className="truncate text-sm font-medium text-black">{customer?.name ?? '—'}</div>
@@ -154,7 +158,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
                   <td className="max-w-[160px] px-4 py-3">
                     <div className="truncate text-sm text-black/85">{firstItem?.product_name ?? '—'}</div>
                     {extraItems > 0 && (
-                      <div className="text-[11px] text-black/50">+{extraItems} more item{extraItems > 1 ? 's' : ''}</div>
+                      <div className="text-[11px] text-black/60">+{extraItems} more item{extraItems > 1 ? 's' : ''}</div>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums text-sm font-medium text-black">{money(quote.total_amount)}</td>
@@ -170,7 +174,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
                       aria-expanded={expandedId === quote.id}
                       aria-controls={`quote-detail-${quote.id}`}
                       onClick={() => setExpandedId(expandedId === quote.id ? null : quote.id)}
-                      className="rounded px-2 py-1 text-sm font-medium text-[#01aa3f] transition-colors hover:bg-[#00c853]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"
+                      className="rounded px-2 py-1 text-sm font-medium text-[#0b7a34] transition-colors hover:bg-[#00c853]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/50"
                     >
                       {expandedId === quote.id ? 'Hide' : 'View'}
                     </button>
@@ -202,7 +206,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
               >
                 <div className="grid gap-6 md:grid-cols-3">
                   <div>
-                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#01aa3f]">Customer</h2>
+                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#0b7a34]">Customer</h2>
                     <dl className="grid gap-1.5 text-sm font-normal">
                       <div className="flex gap-2"><dt className="text-black/55">Name</dt><dd className="min-w-0 truncate text-black">{customer?.name ?? '—'}</dd></div>
                       <div className="flex gap-2"><dt className="text-black/55">Email</dt><dd className="min-w-0 truncate text-black">{customer?.email ?? '—'}</dd></div>
@@ -213,7 +217,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
                   </div>
 
                   <div>
-                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#01aa3f]">Pricing</h2>
+                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#0b7a34]">Pricing</h2>
                     <dl className="grid gap-1.5 text-sm font-normal tabular-nums">
                       <div className="flex gap-2"><dt className="text-black/55">Total</dt><dd className="text-black">{money(quote.total_amount)}</dd></div>
                       <div className="flex gap-2"><dt className="text-black/55">Tax</dt><dd className="text-black">{money(quote.tax_amount)}</dd></div>
@@ -222,7 +226,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
                   </div>
 
                   <div>
-                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#01aa3f]">Request</h2>
+                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#0b7a34]">Request</h2>
                     <p className="max-h-32 overflow-y-auto text-sm font-normal text-black/80">{rfq.inquiry ?? '—'}</p>
                     {rfq.notes && <p className="mt-2 text-xs font-normal text-black/55">Notes: {rfq.notes}</p>}
                   </div>
@@ -230,7 +234,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
 
                 {quote.quote_line_items?.length > 0 && (
                   <div className="mt-6 border-t border-black/10 pt-4">
-                    <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#01aa3f]">Line items</h2>
+                    <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#0b7a34]">Line items</h2>
                     <ul className="grid gap-2">
                       {quote.quote_line_items.map((item) => (
                         <li key={item.id} className="rounded-lg bg-black/[0.02] p-2.5 text-sm font-normal text-black/85">
@@ -245,7 +249,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
                 )}
 
                 <div className="mt-6 border-t border-black/10 pt-4">
-                  <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#01aa3f]">Set status</h2>
+                  <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#0b7a34]">Set status</h2>
                   <div className="flex flex-wrap gap-2">
                     {STATUSES.map((status) => (
                       <button
@@ -256,7 +260,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
                         aria-pressed={quote.quote_status === status}
                         className={`${chipBase} ${
                           quote.quote_status === status
-                            ? 'bg-[#01aa3f] text-white'
+                            ? 'bg-[#01aa3f] text-black'
                             : 'border border-black/10 bg-white text-black hover:bg-black/[0.03]'
                         } disabled:opacity-40`}
                       >
@@ -266,7 +270,7 @@ export default function QuotesAdminClient({ initialQuotes }: { initialQuotes: Ad
                   </div>
                 </div>
 
-                <p className="mt-6 border-t border-black/10 pt-4 text-[11px] font-normal text-black/45">
+                <p className="mt-6 border-t border-black/10 pt-4 text-[11px] font-normal text-black/60">
                   {quote.quote_number} • received {day(quote.created_at)} (UTC)
                   {quote.accepted_at && ` • accepted ${day(quote.accepted_at)}`}
                   {quote.rejected_at && ` • rejected ${day(quote.rejected_at)}${quote.rejection_reason ? `: ${quote.rejection_reason}` : ''}`}

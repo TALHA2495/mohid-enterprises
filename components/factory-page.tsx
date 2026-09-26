@@ -1,91 +1,75 @@
 import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 import { PageShell } from './page-shell'
+import { FactorySnapshot } from './factory-snapshot'
 import { loadFactorySections } from '@/lib/public-data.server'
 import type { FactorySection } from '@/lib/public-data.server'
 
 // ---------------------------------------------------------------------------
-// /factory — the photo grid and capability cards are DB-driven
-// (`factory_sections` via lib/public-data.server.ts). Each row is either
-// kind='hero' (the three full-bleed tiles) or kind='card' (the three white
-// cards); sort_order decides the running order.
+// /factory — the three photo tiles are DB-driven (`factory_sections` rows with
+// kind='hero'); sort_order decides the running order. Their `subtitle` is
+// ignored here because each tile carries its own overlay caption.
 //
-// The FALLBACK_* arrays below are the local tiles this page shipped before the
-// photography moved to the ImageKit CDN. They render only when Supabase is
-// unconfigured, the table is missing, or no rows are published for that kind —
-// so the page never degrades to an empty grid.
+// INTENTIONAL DEVIATION from DESIGN.md principle #2 (2026 restructure): the
+// capability-card row that used to follow the tiles was retired. Bulk buyers
+// scan this page to answer two questions — "what do you make?" and "can you
+// scale?" — and the operational trio (Quality Inspection Protocol / Export
+// Packaging / Incoterms & Logistics) pushed that answer below the fold.
+//
+// The rows were NOT deleted: they sit in `factory_sections` with
+// is_active=false, so the copy and photography are one UPDATE away from
+// returning. Revisit the trade-off against CTA conversion and time-on-page
+// once the new hero has traffic.
+//
+// FALLBACK_HERO holds the SAME ImageKit URLs the seed writes, so the page
+// renders identically whether the rows come from Supabase or not.
 // ---------------------------------------------------------------------------
 
-// Fallback content — the SAME ImageKit URLs the seed writes to
-// `factory_sections`, so the page looks identical whether the rows come from
-// Supabase or not. (The old local paths, /factory webp images/..., no longer
-// exist: that folder was renamed to /factory.)
 const CDN = 'https://ik.imagekit.io/a2q8u8qtw/factory'
 
 const FALLBACK_HERO: FactorySection[] = [
-  { id: 'fallback-hero-1', kind: 'hero', title: 'Material preparation', subtitle: null, imageUrl: `${CDN}/textile%20production.webp`, sortOrder: 10 },
-  { id: 'fallback-hero-2', kind: 'hero', title: 'Production floor', subtitle: null, imageUrl: `${CDN}/Braiding%20Winding.webp`, sortOrder: 20 },
-  { id: 'fallback-hero-3', kind: 'hero', title: 'Packed inventory', subtitle: null, imageUrl: `${CDN}/packed%20inventory.png`, sortOrder: 30 },
+  { id: 'fallback-hero-1', kind: 'hero', title: 'Textile Trims', subtitle: null, imageUrl: `${CDN}/textile%20production.webp`, sortOrder: 10 },
+  { id: 'fallback-hero-2', kind: 'hero', title: 'Braids & Cords', subtitle: null, imageUrl: `${CDN}/Braiding%20Winding.webp`, sortOrder: 20 },
+  { id: 'fallback-hero-3', kind: 'hero', title: 'Packed for Export', subtitle: null, imageUrl: `${CDN}/packed%20inventory.png`, sortOrder: 30 },
 ]
 
-const FALLBACK_CARDS: FactorySection[] = [
-  { id: 'fallback-card-1', kind: 'card', title: 'Quality Inspection Protocol', subtitle: null, imageUrl: `${CDN}/quality%20inspection.webp`, sortOrder: 10 },
-  { id: 'fallback-card-2', kind: 'card', title: 'Export Packaging', subtitle: null, imageUrl: `${CDN}/global_export.webp`, sortOrder: 20 },
-  // NOTE: '&' stays RAW — %26 is a 404 on this CDN.
-  { id: 'fallback-card-3', kind: 'card', title: 'Incoterms & Logistics', subtitle: null, imageUrl: `${CDN}/Logistics%20&%20Export.png`, sortOrder: 30 },
-]
-
-// Body copy for the capability cards. Published rows may override it per card
-// with their own `subtitle`.
-const CARD_BODY = 'Consistent processes, clear specifications, and dependable communication for every order.'
-
-/** Published rows for a kind, or the shipped tiles when none are published. */
-function pickKind(sections: FactorySection[], kind: FactorySection['kind'], fallback: FactorySection[]): FactorySection[] {
-  const rows = sections.filter((section) => section.kind === kind)
-  return rows.length > 0 ? rows : fallback
+/** Published hero tiles, or the shipped ones when none are published. */
+function pickHeroes(sections: FactorySection[]): FactorySection[] {
+  const rows = sections.filter((section) => section.kind === 'hero')
+  return rows.length > 0 ? rows : FALLBACK_HERO
 }
 
-export async function FactoryPage() {
-  const sections = await loadFactorySections()
-  const heroes = pickKind(sections, 'hero', FALLBACK_HERO)
-  const cards = pickKind(sections, 'card', FALLBACK_CARDS)
+export async function FactoryPage({ embedded = false }: { embedded?: boolean } = {}) {
+  const heroes = pickHeroes(await loadFactorySections())
+  const Heading = embedded ? 'h2' : 'h1'
 
-  return <PageShell><section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-    <h1 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-white drop-shadow-md sm:text-5xl">Faisalabad Manufacturing Base & Capacity</h1>
+  const content = (
 
-    <p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 drop-shadow-sm">Reliable production for global trims programs, from sampling through repeat manufacturing.</p>
+    <section className={embedded ? 'homepage-motion-section border-t border-[#101412]/10 bg-[#f7f8f5] px-5 pb-16 pt-8 text-[#101412] sm:px-8 sm:pb-20 sm:pt-10' : 'mx-auto max-w-7xl px-5 py-8 text-[#101412] sm:px-8'}>
+      <Heading className={`mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-[#101412] sm:text-5xl`}>{embedded ? 'Sampling to Bulk Production' : '20+ Years of Proven Trims Manufacturing'}</Heading>
 
-    <div className="mt-8 grid gap-3 md:grid-cols-3">{heroes.map((x) => 
-      
-      <div key={x.id} className="relative aspect-[1.55] overflow-hidden rounded-xl border border-black/10">
-        
-        <Image src={x.imageUrl} alt="Textile manufacturing detail" fill quality={70} sizes="(min-width: 768px) 33vw, 100vw" className="size-full object-cover" />
-        
-        <span className="absolute bottom-3 left-3 text-xs font-medium text-white drop-shadow-sm">{x.title}</span>
-        
-        </div>)}
-        
-        </div>
+      <p className={`mt-3 max-w-2xl text-sm leading-6 text-[#46534c]`}>From sampling to bulk production: ribbons, tassels, elastic, jute cord, conveyor belts, and more.</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{heroes.map((tile) =>
 
-    <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{cards.map((x) => 
-      <article key={x.id} className="relative overflow-hidden rounded-2xl border border-black/10 bg-white">
-        
-        <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-        
-        <Image src={x.imageUrl} alt={x.title} fill loading="lazy" quality={70} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="size-full object-cover" />
-        
-        </div>
+      <figure key={tile.id} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-[#101412]/12">
 
-      <div className="p-4">
-        <h2 className="text-sm font-semibold text-black">{x.title}
+        <Image src={tile.imageUrl} alt={`${tile.title} manufacturing at Mohid Enterprises`} fill loading="lazy" quality={70} sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 92vw" className="size-full object-cover" />
 
-        </h2>
+        {/* The visible caption carries the tile's meaning, so the image stays
+            decorative (alt="") instead of repeating itself to screen readers. */}
+        <figcaption className="absolute bottom-3 left-3 text-xs font-medium text-white drop-shadow-md">{tile.title}</figcaption>
 
-        <p className="mt-2 text-xs leading-5 text-black/55">{x.subtitle ?? CARD_BODY}</p>
+      </figure>)}
 
       </div>
-    </article>)}
-    </div>
 
-  </section>
-  </PageShell>
+      <div className="flex justify-center">
+        {/* <Link href="/quote" className="inline-flex items-center gap-2 rounded-full bg-[#01aa3f] px-7 py-3.5 text-sm font-medium text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] hover:text-black active:scale-[0.98]">Request a Quote<ArrowUpRight className="size-4" strokeWidth={1.6} /></Link> */}
+      </div>
+
+    </section>
+  )
+
+  return embedded ? content : <PageShell>{content}</PageShell>
 }

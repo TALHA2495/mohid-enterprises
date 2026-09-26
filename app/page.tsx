@@ -1,8 +1,40 @@
-import Image from 'next/image'
+import type { Metadata } from 'next'
 import { HeroSection } from '@/components/hero-section'
+import { StandardsPage } from '@/components/standards-page'
+import { FactoryPage } from '@/components/factory-page'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import { StructuredData } from '@/components/structured-data'
+import { ORGANIZATION_ID, webPageSchema } from '@/lib/seo'
+
+const description =
+  'Mohid Enterprises manufactures textile trims in Faisalabad, Pakistan, supplying local and international buyers with 20+ years of manufacturing experience.'
+
+export const metadata: Metadata = {
+  title: 'Textile Trims Manufacturer in Faisalabad',
+  description,
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website', siteName: 'Mohid Enterprises', url: '/', locale: 'en',
+    title: 'Textile Trims Manufacturer in Faisalabad | Mohid Enterprises', description,
+    images: [{ url: 'https://ik.imagekit.io/a2q8u8qtw/Hero/Textile%20Trims%20Manufacturing.jpg', alt: 'Textile trims manufacturing floor at Mohid Enterprises in Faisalabad, Pakistan' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Textile Trims Manufacturer in Faisalabad | Mohid Enterprises', description,
+    images: ['https://ik.imagekit.io/a2q8u8qtw/Hero/Textile%20Trims%20Manufacturing.jpg'],
+  },
+}
 
 export default function Page() {
-  return <main id="main" className="relative min-h-screen overflow-hidden bg-[#f4f7f8]"><div className="fixed inset-x-0 top-0 z-0 h-[90vh]"><Image src="/images/bg-img-for-mobile-screen.webp" alt="" aria-hidden="true" priority fill quality={70} sizes="100vw" className="size-full object-cover lg:hidden" /><Image src="/images/hero-bg.webp" alt="" aria-hidden="true" priority fill quality={70} sizes="100vw" className="hidden size-full object-cover lg:block" /></div><SiteHeader /><HeroSection /><div className="relative z-10 bg-[#f4f7f8]"><SiteFooter /></div></main>
+  return (
+    <main id="main" className="relative min-h-screen overflow-x-hidden bg-[#f4f7f8]">
+      <StructuredData data={{ ...webPageSchema('Textile Trims Manufacturer in Faisalabad', '/', description), mainEntity: { '@id': ORGANIZATION_ID } }} />
+      <SiteHeader />
+      <HeroSection />
+      <StandardsPage embedded />
+      <FactoryPage embedded />
+      <SiteFooter />
+    </main>
+  )
 }

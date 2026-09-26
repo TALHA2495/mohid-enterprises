@@ -19,7 +19,7 @@ export default async function AdminHeroPage() {
           {missingAdminEnvVars.length > 0 && (
             <>
               {' '}
-              Missing: <code className="font-mono">{missingAdminEnvVars.join(', ')}</code>.
+              Missing: <code className="font-sans">{missingAdminEnvVars.join(', ')}</code>.
             </>
           )}
         </p>
@@ -49,7 +49,7 @@ export default async function AdminHeroPage() {
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="section-label mb-4">Hero cards</p>
-            <h1 className="font-display text-4xl leading-tight">Hero cards</h1>
+            <h1 className="font-sans text-4xl leading-tight">Hero cards</h1>
             <p className="mt-2 text-sm font-normal text-black/60">
               {hero.length} card{hero.length === 1 ? '' : 's'} shown on the home page hero. Drag to reorder, or use a
               card's menu to edit or remove it.

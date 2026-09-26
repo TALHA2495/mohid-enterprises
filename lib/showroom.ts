@@ -99,7 +99,7 @@ export type HeroCategory = {
 // were renamed, so every card rendered a broken image. Each URL here was
 // verified HTTP 200.
 const CDN = 'https://ik.imagekit.io/a2q8u8qtw/products'
-const TRANSFORM = '?tr=w-1200,f-auto,q-70'
+const TRANSFORM = '?tr=w-640,f-auto,q-70'
 
 export const HERO_CATEGORIES: readonly HeroCategory[] = [
   { id: '01', label: 'Industrial Egg Belts', desc: 'Specialized belting for agricultural systems.', filter: 'Egg Belts', image: `${CDN}/pp_woven_egg_conveyor_belt.avif${TRANSFORM}` },

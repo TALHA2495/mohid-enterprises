@@ -10,7 +10,7 @@ export default function NotFound() {
     <main id="main" className="relative min-h-screen bg-[#f4f7f8] text-black">
       <SiteHeader />
       <div className="relative z-10 mx-auto flex min-h-[70vh] w-full max-w-2xl flex-col items-center justify-center px-5 py-16 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#00c853]">404 — page not found</p>
+        <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#0a7d31]">404 — page not found</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
           This page took a wrong turn
         </h1>
@@ -20,20 +20,20 @@ export default function NotFound() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-full bg-[#01aa3f] px-6 py-3 text-sm font-medium text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]"
+            className="inline-flex items-center justify-center rounded-full bg-[#01aa3f] px-6 py-3 text-sm font-medium text-[#07120b] transition-colors hover:bg-[#00be48] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2"
           >
             Back to home
           </Link>
           <Link
             href="/showroom"
-            className="inline-flex items-center justify-center rounded-full border border-black/20 px-6 py-3 text-sm text-black transition-colors hover:bg-black/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]"
+            className="inline-flex items-center justify-center rounded-full border border-[#101412]/20 px-6 py-3 text-sm text-[#101412] transition-colors hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2"
           >
             Open the showroom
           </Link>
         </div>
         <nav aria-label="All pages" className="mt-10 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-black/60">
           {siteNavLinks.map(([label, href]) => (
-            <Link key={href} href={href} className="transition-colors hover:text-[#00c853]">
+            <Link key={href} href={href} className="transition-colors hover:text-[#0a7d31]">
               {label}
             </Link>
           ))}

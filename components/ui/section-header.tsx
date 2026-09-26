@@ -21,7 +21,7 @@ export default function SectionHeader({
     <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div>
         <p className="section-label mb-4">{label}</p>
-        <h1 className="font-display text-3xl leading-tight text-black sm:text-4xl">{title}</h1>
+        <h1 className="font-sans text-3xl leading-tight text-black sm:text-4xl">{title}</h1>
         {description && <p className="mt-2 text-sm font-normal text-black/60">{description}</p>}
       </div>
       {action}

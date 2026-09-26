@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
-import { Calistoga, Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { AnalyticsLoader } from '@/components/analytics-loader'
+import { StructuredData } from '@/components/structured-data'
+import { ORGANIZATION_SCHEMA, SITE_URL, WEBSITE_SCHEMA } from '@/lib/seo'
 import './globals.css'
 
 const inter = Inter({
@@ -10,36 +12,14 @@ const inter = Inter({
   display: 'swap',
   fallback: ['system-ui', 'arial'],
 })
-const calistoga = Calistoga({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-display',
-  display: 'swap',
-  fallback: ['Georgia', 'serif'],
-})
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
-  display: 'swap',
-  fallback: ['monospace'],
-})
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-  fallback: ['Georgia', 'serif'],
-  preload: false, // only used in showroom product detail (below fold elsewhere)
-})
-
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mohident.com'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Textile Trims — Made for Scale | Faisalabad, Pakistan',
+    default: 'Textile Trims Manufacturer in Faisalabad | Mohid Enterprises',
     template: '%s | Mohid Enterprises',
   },
   description:
-    'A trusted manufacturing partner for custom laces, cords, tapes and specialty trims engineered in Faisalabad for global procurement teams.',
+    'Mohid Enterprises manufactures textile trims in Faisalabad, Pakistan for local and international buyers, with 20+ years of manufacturing experience.',
   applicationName: 'Mohid Enterprises',
   openGraph: {
     type: 'website',
@@ -96,9 +76,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-background ${inter.variable} ${calistoga.variable} ${jetbrainsMono.variable} ${playfair.variable}`}
+      className={`bg-background ${inter.variable}`}
     >
       <body className="font-sans antialiased">
+        <StructuredData data={[ORGANIZATION_SCHEMA, WEBSITE_SCHEMA]} />
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 z-50 rounded-full bg-[#01aa3f] px-4 py-2 text-sm font-medium text-white">Skip to main content</a>
         {children}
         {process.env.NODE_ENV === 'production' && <AnalyticsLoader />}
