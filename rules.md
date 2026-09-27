@@ -10,9 +10,9 @@ Prior to executing **any** `git` command (including `status`, `add`, `commit`, `
 GitHub action, you MUST invoke the `git-github-automation` skill and print its `<git_plan>`
 pre-flight block before running the command.
 
-- Policy: `.agents/skills/git-github-automation/SKILL.md`
-- Always-on trigger: `.clinerules/git-github-automation.md`
-- Playbook reference: `.cline/skills/mohid-playbook/skills.md` → *Skill: Git & GitHub Workflow Automation*
+- Playbook (tracked, authoritative): `.cline/skills/mohid-playbook/skills.md` → *Skill: Git & GitHub Workflow Automation*
+- Always-on trigger (tracked): `.clinerules/git-github-automation.md`
+- Full policy (machine-local, untracked — `.agents/` is gitignored): `.agents/skills/git-github-automation/SKILL.md`
 
 Hard bans, restated because they are easy to violate by accident:
 

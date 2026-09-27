@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { HeroSection } from '@/components/hero-section'
-import { StandardsPage } from '@/components/standards-page'
-import { FactoryPage } from '@/components/factory-page'
+import { HomeCapabilitiesSection } from '@/components/home-capabilities'
+import { HomeStandardsSection } from '@/components/home-standards'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { StructuredData } from '@/components/structured-data'
@@ -32,8 +32,8 @@ export default function Page() {
       <StructuredData data={{ ...webPageSchema('Textile Trims Manufacturer in Faisalabad', '/', description), mainEntity: { '@id': ORGANIZATION_ID } }} />
       <SiteHeader />
       <HeroSection />
-      <StandardsPage embedded />
-      <FactoryPage embedded />
+      <HomeCapabilitiesSection />
+      <HomeStandardsSection />
       <SiteFooter />
     </main>
   )

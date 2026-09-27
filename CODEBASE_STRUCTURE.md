@@ -236,6 +236,10 @@ type Product = {
 | `postcss.config.mjs` | Uses `@tailwindcss/postcss` plugin |
 | `.env.local` | `NEXT_PUBLIC_WHATSAPP_NUMBER` (international format, no +/spaces) |
 | `globals.css` | Tailwind v4 setup, shadcn tokens, scrollbar hiding (mobile + product filters), `.product-cards-grid > div:empty` fix |
+| `.clinerules/` | **Tracked** always-on agent rules. `git-github-automation.md` gates every `git` command with a `<git_plan>` pre-flight |
+| `.cline/skills/mohid-playbook/skills.md` | **Tracked** project skills playbook — the authoritative, durable copy of every agent convention |
+| `.agents/skills/` | Agent skill policies. Gitignored (machine-local scaffolding), so it never reaches a clone — the tracked playbook is the source of truth |
+| `.claude/` | Agent scaffolding, gitignored — never commit |
 
 ---
 
