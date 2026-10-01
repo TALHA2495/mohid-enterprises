@@ -47,7 +47,8 @@ export function HomeStandardsSection() {
         </div>
 
         <div className="mt-10">
-          <CertificateGallery certificates={CERTIFICATES} single={false} />
+          {/* Home previews only the first certificate (OEKO-TEX); the remaining documents live on /standards. */}
+          <CertificateGallery certificates={CERTIFICATES.slice(0, 1)} single={false} />
         </div>
 
         <div className="mt-16 sm:mt-20 rounded-3xl border border-[#101412]/12 bg-gradient-to-b from-white to-[#f4f7f8] p-8 sm:p-12 lg:p-16 text-center">
