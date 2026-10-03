@@ -25,7 +25,7 @@ export async function HeroSection() {
             <span aria-hidden="true" className="h-px w-8 bg-[#01aa3f]" />
             Mohid Enterprises
           </p>
-          <h1 id="home-hero-title" className="font-sans text-">
+          <h1 id="home-hero-title" className="font-sans">
             <span className="block text-[clamp(4.25rem,17vw,6.5rem)] font-[850] leading-[0.74] tracking-[-0.085em] sm:text-[clamp(5.5rem,15vw,7.5rem)] md:text-[clamp(4.75rem,10vw,7rem)]">
                <span className='text-[#0a7d31]'>20+</span>
               <span className="ml-[0.16em] text-[0.5em] font-extrabold tracking-[-0.055em]">YEARS</span>
@@ -38,20 +38,19 @@ export async function HeroSection() {
             Textile trims manufactured in Faisalabad, Pakistan for local and international buyers.
           </p>
           <HeroCategoryMarquee categories={categories} />
-          <div className="mt-5 flex flex-col gap-3 min-[430px]:flex-row md:mt-7">
+          <div className="mt-5 flex flex-nowrap items-stretch gap-2 sm:gap-3 md:mt-7 lg:gap-4 xl:gap-5">
             <Link
               href="/showroom"
-              className="inline-flex rounded-3xl min-h-12 items-center justify-center gap-2 border border-[#101412]/30 bg-transparent px-6 py-3 text-sm font-semibold text-[#101412] transition-colors hover:border-[#101412]/55 hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f8f5] active:bg-[#dce5df] min-[430px]:min-w-48"
+              className="inline-flex min-w-0 flex-1 basis-0 whitespace-nowrap rounded-3xl min-h-12 items-center justify-center gap-1.5 border border-[#101412]/30 bg-transparent px-3 py-3 text-[13px] font-semibold text-[#101412] transition-colors hover:border-[#101412]/55 hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f8f5] active:bg-[#dce5df] sm:gap-2 sm:px-5 sm:text-sm md:basis-auto md:flex-none md:min-w-48 md:px-6"
             >
-              Explore Products <ArrowUpRight aria-hidden="true" className="size-4" />
+              Explore Products <ArrowUpRight aria-hidden="true" className="size-4 max-[379px]:hidden" />
             </Link>
             <Link
               href="/quote"
-              className="inline-flex rounded-3xl min-h-12 items-center justify-center gap-2 bg-[#01aa3f] px-6 py-3 text-sm font-bold text-[#07120b] shadow-[0_6px_18px_rgba(1,170,63,0.18)] transition-colors hover:bg-[#00be48] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f8f5] active:bg-[#009637] min-[430px]:min-w-48"
+              className="inline-flex min-w-0 flex-1 basis-0 whitespace-nowrap rounded-3xl min-h-12 items-center justify-center gap-1.5 bg-[#01aa3f] px-3 py-3 text-[13px] font-bold text-[#07120b] shadow-[0_6px_18px_rgba(1,170,63,0.18)] transition-colors hover:bg-[#00be48] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f8f5] active:bg-[#009637] sm:gap-2 sm:px-5 sm:text-sm md:basis-auto md:flex-none md:min-w-48 md:px-6"
             >
-              Request a Quote <ArrowUpRight aria-hidden="true" className="size-4" />
+              Request a Quote <ArrowUpRight aria-hidden="true" className="size-4 max-[379px]:hidden" />
             </Link>
-            
           </div>
           <ul
             aria-label="Manufacturing credentials"
