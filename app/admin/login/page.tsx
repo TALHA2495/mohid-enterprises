@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { Lock } from 'lucide-react'
 
+import { BrandLogo } from '@/components/brand-logo'
 import { AdminLoginForm } from '@/components/admin/admin-login-form'
 
 export const metadata: Metadata = {
@@ -21,14 +21,7 @@ export default function AdminLoginPage() {
         <div aria-hidden="true" className="h-1.5 w-full bg-gradient-to-r from-[#01aa3f] to-[#00ff59]" />
         <div className="p-6">
           <div className="mb-4 flex items-center gap-3">
-            <Image
-              src="/images/LOGO MOHID.webp"
-              alt="Mohid Enterprises logo"
-              width={96}
-              height={26}
-              priority
-              className="h-7 w-auto"
-            />
+            <BrandLogo scale="sm" priority />
           </div>
           <div className="mb-4 flex items-center gap-2 text-[#01aa3f]">
             <Lock aria-hidden="true" className="h-4 w-4" strokeWidth={2} />

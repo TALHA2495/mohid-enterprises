@@ -2,18 +2,11 @@
 
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+import { BrandLogo } from '@/components/brand-logo'
 import { siteNavLinks } from '@/lib/navigation'
-
-// Brand logo lives on the ImageKit CDN (account a2q8u8qtw, /Brand folder).
-// NEXT_PUBLIC_LOGO_URL overrides it when set; the literal keeps the header
-// rendering if the variable is blank. Verified reachable (HTTP 200).
-const LOGO_URL =
-  process.env.NEXT_PUBLIC_LOGO_URL?.trim() ||
-  `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT ?? 'https://ik.imagekit.io/a2q8u8qtw'}/Brand/Mohid-Enterprises-logo.png`
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -31,7 +24,7 @@ export function SiteHeader() {
 
   return <>
     <header className="relative z-30 mx-auto flex w-full items-center justify-between gap-4 bg-white border-b border-black/10 px-4 py-5 text-black sm:px-6">
-      <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5"><Image src={LOGO_URL} alt="Mohid Enterprises logo" width={1600} height={1491} sizes="(min-width: 768px) 24px, 32px" className="h-6 w-auto object-contain md:h-6" priority /><span className="flex flex-col leading-[1.15]"><span className="text-[16px] font-bold tracking-[0.055em] text-[#1B5C95]">MOHID</span><span className="text-[12px] font-semibold tracking-[0.12em] text-[#101412]">ENTERPRISES</span></span></Link>
+      <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5"><BrandLogo priority /></Link>
       <nav aria-label="Primary" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
         {siteNavLinks.map(([label, href]) => <Link key={href} href={href} className={`rounded-full px-4 py-1.5 text-sm transition-colors ${pathname === href ? 'bg-[#01aa3f]/12 font-medium text-[#01aa3f]' : 'text-black/70 hover:text-black'}`}>{label}</Link>)}
       </nav>
