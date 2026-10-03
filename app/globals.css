@@ -24,6 +24,16 @@ html {
   animation-delay: 240ms;
 }
 
+/* Brand lockup wordmark (components/brand-logo.tsx): the two-line MOHID /
+   ENTERPRISES stack must keep the tight 1.15 leading defined for the navbar.
+   Tailwind's arbitrary `leading-[1.15]` was not applying here (measured:
+   computed line-height stayed 1.5 -> the stack inflated to 42px and grew the
+   site header from 81px to 83px, which pushed the hero 2px past the fold). A
+   hand-written rule keeps the lockup height deterministic across all scales. */
+.brand-wordmark {
+  line-height: 1.15;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .homepage-motion-hero,

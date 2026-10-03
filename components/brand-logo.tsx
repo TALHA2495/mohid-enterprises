@@ -21,9 +21,9 @@ type Scale = 'sm' | 'md' | 'lg'
 
 // One scale for every placement. `md` is the navbar reference size.
 const SCALES: Record<Scale, { logo: string; top: string; bottom: string; sizes: string }> = {
-  sm: { logo: 'h-6', top: 'text-[13px]', bottom: 'text-[10px]', sizes: '24px' },
-  md: { logo: 'h-[29px]', top: 'text-[16px]', bottom: 'text-[12px]', sizes: '29px' },
-  lg: { logo: 'h-9', top: 'text-xl', bottom: 'text-sm', sizes: '36px' },
+  sm: { logo: 'h-[29px]', top: 'text-[13px]', bottom: 'text-[10px]', sizes: '29px' },
+  md: { logo: 'h-[34px]', top: 'text-[16px]', bottom: 'text-[12px]', sizes: '34px' },
+  lg: { logo: 'h-[41px]', top: 'text-xl', bottom: 'text-sm', sizes: '41px' },
 }
 
 export function BrandLogo({
@@ -54,7 +54,7 @@ export function BrandLogo({
           className={`${s.logo} w-auto object-contain`}
         />
       ) : null}
-      <span className={`flex flex-col leading-[1.15]${light ? ' drop-shadow-sm' : ''}`}>
+      <span className={`brand-wordmark flex flex-col leading-[1.15]${light ? ' drop-shadow-sm' : ''}`}>
         <span className={`${s.top} font-bold tracking-[0.055em] ${light ? 'text-white' : 'text-[#1B5C95]'}`}>
           MOHID
         </span>
