@@ -10,9 +10,9 @@ export async function HeroSection() {
   return (
     <section
       aria-labelledby="home-hero-title"
-      className="relative isolate flex min-h-[calc(100svh-5.3125rem)] items-start overflow-hidden bg-[#f7f8f5] text-[#101412] md:min-h-[calc(100svh-5.0625rem)] md:items-end"
+      className="relative isolate flex overflow-hidden bg-[#f7f8f5] text-[#101412] md:min-h-[calc(100svh-5.0625rem)] md:items-end"
     >
-      <div className="relative mx-auto w-full max-w-[1600px] px-5 pt-6 pb-8 sm:px-8 sm:pb-10 md:px-12 md:pt-5 md:pb-12 lg:px-20 lg:pb-14 xl:px-24">
+      <div className="relative mx-auto w-full max-w-[1600px] px-5 pt-6 pb-10 sm:px-8 sm:pb-12 md:px-12 md:pt-5 md:pb-10 lg:px-20 lg:pb-12 xl:px-24">
 
         <div className="homepage-motion-hero max-w-5xl md:max-w-[760px] lg:max-w-[820px]">
           <p className="mb-3 flex items-center gap-3 text-xl font-semibold uppercase tracking-[0.2em] text-[#101412] sm:text-2xl">
