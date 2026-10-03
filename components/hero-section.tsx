@@ -19,7 +19,7 @@ export async function HeroSection() {
             <span aria-hidden="true" className="h-px w-8 bg-[#01aa3f]" />
             Mohid Enterprises
           </p>
-          <p className="mb-4"><span className="inline-flex items-center rounded-full bg-[#0a7d31] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-[0_4px_14px_rgba(10,125,49,0.22)] sm:px-4 sm:text-sm">Manufacturer, Importer, Exporter</span></p>
+          <p className="mb-4"><span className="inline-flex items-center rounded-full bg-[#01aa3f] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-[0_4px_14px_rgba(1,170,63,0.22)] sm:px-4 sm:text-sm">Manufacturer, Importer, Exporter</span></p>
           <h1 id="home-hero-title" className="font-sans">
             <span className="block text-[clamp(4.25rem,17vw,6.5rem)] font-[850] leading-[0.74] tracking-[-0.085em] sm:text-[clamp(5.5rem,15vw,7.5rem)] md:text-[clamp(4.75rem,10vw,7rem)]">
                <span className='text-[#0a7d31]'>20+</span>
@@ -39,7 +39,7 @@ export async function HeroSection() {
             in the full-width container to reach the viewport edges. */}
         <div className="homepage-motion-hero">
           <HeroCategoryMarquee categories={categories} />
-          <div className="mt-5 flex flex-nowrap items-stretch gap-2 sm:gap-3 md:mt-7 lg:gap-4 xl:gap-5">
+          <div className="mt-5 mb-2.5 flex flex-nowrap items-stretch gap-2 sm:gap-3 md:mt-7 lg:gap-4 xl:gap-5">
             <Link
               href="/showroom"
               className="inline-flex min-w-0 flex-1 basis-0 whitespace-nowrap rounded-3xl min-h-12 items-center justify-center gap-1.5 border border-[#101412]/30 bg-transparent px-3 py-3 text-[13px] font-semibold text-[#101412] transition-colors hover:border-[#101412]/55 hover:bg-[#e8eeea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f8f5] active:bg-[#dce5df] sm:gap-2 sm:px-5 sm:text-sm md:basis-auto md:flex-none md:min-w-48 md:px-6"
