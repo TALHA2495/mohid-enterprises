@@ -4,12 +4,6 @@ import { ArrowUpRight } from 'lucide-react'
 import { HeroCategoryMarquee } from '@/components/hero-category-marquee'
 import { loadHeroCategories } from '@/lib/public-data.server'
 
-const credibility = [
-  'Quality-Focused Production',
-  'Local & International Markets',
-  'Export Experience',
-] as const
-
 export async function HeroSection() {
   const categories = await loadHeroCategories()
 
@@ -21,10 +15,11 @@ export async function HeroSection() {
       <div className="relative mx-auto w-full max-w-[1600px] px-5 pt-6 pb-8 sm:px-8 sm:pb-10 md:px-12 md:pt-5 md:pb-12 lg:px-20 lg:pb-14 xl:px-24">
 
         <div className="homepage-motion-hero max-w-5xl md:max-w-[760px] lg:max-w-[820px]">
-          <p className="mb-3 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#101412] sm:text-xs">
+          <p className="mb-3 flex items-center gap-3 text-base font-semibold uppercase tracking-[0.2em] text-[#101412] sm:text-lg">
             <span aria-hidden="true" className="h-px w-8 bg-[#01aa3f]" />
             Mohid Enterprises
           </p>
+          <p className="mb-4"><span className="inline-flex items-center rounded-full bg-[#01aa3f] px-5 py-2 text-sm font-bold uppercase tracking-wide text-white shadow-[0_6px_18px_rgba(1,170,63,0.22)] sm:text-base">Manufacturer, Importer, Exporter</span></p>
           <h1 id="home-hero-title" className="font-sans">
             <span className="block text-[clamp(4.25rem,17vw,6.5rem)] font-[850] leading-[0.74] tracking-[-0.085em] sm:text-[clamp(5.5rem,15vw,7.5rem)] md:text-[clamp(4.75rem,10vw,7rem)]">
                <span className='text-[#0a7d31]'>20+</span>
@@ -52,17 +47,6 @@ export async function HeroSection() {
               Request a Quote <ArrowUpRight aria-hidden="true" className="size-4 max-[379px]:hidden" />
             </Link>
           </div>
-          <ul
-            aria-label="Manufacturing credentials"
-            className="mt-5 grid max-w-[760px] grid-cols-1 gap-x-6 gap-y-3 border-t border-[#101412]/15 pt-4 text-[11px] font-medium uppercase leading-relaxed tracking-[0.1em] text-[#46534c] sm:text-xs md:mt-7 md:grid-cols-3 md:gap-x-0 md:pt-5"
-          >
-            {credibility.map((item) => (
-              <li key={item} className="flex items-center gap-2.5 md:border-l md:border-[#101412]/12 md:pl-5 md:first:border-l-0 md:first:pl-0">
-                <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 bg-[#01aa3f]" />
-                {item}
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </section>

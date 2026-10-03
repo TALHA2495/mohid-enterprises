@@ -13,7 +13,7 @@ export default function QuotePage() {
 
       <div className="relative z-10 mx-auto flex w-full max-w-2xl items-center justify-between px-5 py-4 sm:px-6">
         <Link href="/" aria-label="Mohid Enterprises home" className="flex items-center gap-2.5">
-          <Image src="/images/LOGO%20MOHID.webp" alt="Mohid Enterprises logo" width={1600} height={1491} className="h-11 w-auto object-contain md:h-[30px]" priority />
+          <Image src="https://ik.imagekit.io/a2q8u8qtw/Brand/Mohid-Enterprises-logo.png" alt="Mohid Enterprises logo" width={1600} height={1491} className="h-11 w-auto object-contain md:h-[30px]" priority />
           <span className="flex flex-col leading-[1.15]">
             <span className="text-[13px] font-semibold tracking-[0.08em] text-white drop-shadow-sm">MOHID</span>
             <span className="text-[10px] font-medium tracking-[0.14em] text-white opacity-90 drop-shadow-sm">ENTERPRISES</span>

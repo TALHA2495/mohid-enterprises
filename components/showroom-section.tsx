@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 import ProductDetail from './showroom-detail'
+import { BackHomeLink } from '@/components/back-home-link'
 import { FILTER_TYPES, SHOWROOM_FILTERS } from '@/lib/showroom'
 import { SURFACE_WHITE } from '@/lib/design-tokens'
 import type { ProductType } from '@/lib/showroom'
@@ -118,6 +119,7 @@ export function ShowroomSection({ products }: { products: Product[] }) {
           sr-only pattern as the home hero and /quote. Product cards keep h2. */}
       <h1 className="sr-only">Showroom — Woven &amp; Woven Label Trims Catalog</h1>
       <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col">
+        <div className="mb-3 shrink-0"><BackHomeLink /></div>
         <div ref={filterRowRef} className="mb-3 flex shrink-0 gap-2 overflow-x-auto pb-1" role="group" aria-label="Product filters">
           {SHOWROOM_FILTERS.map((item) => (
             <button
