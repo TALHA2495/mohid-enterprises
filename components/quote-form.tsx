@@ -224,7 +224,7 @@ export function QuoteForm() {
         </label>
       </div>
 
-      <label className="grid gap-1 text-xs font-medium text-black/85">
+      <label className="grid gap-1 text-xs font-medium text-black/85 sm:col-span-2">
         Phone (WhatsApp)
         <input
           type="tel"

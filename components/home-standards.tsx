@@ -35,7 +35,7 @@ export function HomeStandardsSection() {
               Certified Quality Standards
             </h2>
             <p className="mt-3 text-base leading-relaxed text-[#46534c]">
-              Our manufacturing protocols comply with international textile standards. Click any certificate to inspect full compliance documentation and testing validity.
+              Our manufacturing protocols comply with international textile standards. Open the certifications page to inspect full compliance documentation and testing validity.
             </p>
           </div>
           <Link
@@ -48,7 +48,7 @@ export function HomeStandardsSection() {
 
         <div className="mt-10">
           {/* Home previews only the first certificate (OEKO-TEX); the remaining documents live on /standards. */}
-          <CertificateGallery certificates={CERTIFICATES.slice(0, 1)} single={false} />
+          <CertificateGallery certificates={CERTIFICATES.slice(0, 1)} single />
         </div>
 
         <div className="mt-16 sm:mt-20 rounded-3xl border border-[#101412]/12 bg-gradient-to-b from-white to-[#f4f7f8] p-8 sm:p-12 lg:p-16 text-center">

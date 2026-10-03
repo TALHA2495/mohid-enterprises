@@ -1,8 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
 import { PageShell } from './page-shell'
-import { FactorySnapshot } from './factory-snapshot'
 import { loadFactorySections } from '@/lib/public-data.server'
 import type { FactorySection } from '@/lib/public-data.server'
 import { factoryCapacity } from '@/lib/factory-capacity'
@@ -115,11 +112,7 @@ export async function FactoryPage({ embedded = false }: { embedded?: boolean } =
 
       </div>
 
-      <div className="flex justify-center">
-        {/* <Link href="/quote" className="inline-flex items-center gap-2 rounded-full bg-[#01aa3f] px-7 py-3.5 text-sm font-medium text-black transition-all hover:-translate-y-px hover:bg-[#00ff59] hover:text-black active:scale-[0.98]">Request a Quote<ArrowUpRight className="size-4" strokeWidth={1.6} /></Link> */}
-      </div>
-
-    </section>
+      </section>
   )
 
   return embedded ? content : <PageShell>{content}</PageShell>

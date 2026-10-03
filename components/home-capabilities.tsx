@@ -1,5 +1,4 @@
-﻿import Image from 'next/image'
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowUpRight, Factory, Gauge, Users, Truck, ShieldCheck, CheckCircle2 } from 'lucide-react'
 import { factoryCapacity } from '@/lib/factory-capacity'
 
@@ -151,53 +150,6 @@ export function HomeCapabilitiesSection() {
               <Link href="/standards" className="inline-flex items-center gap-1 font-semibold text-[#0a7d31] hover:underline">
                 View Standards <ArrowUpRight className="size-3" />
               </Link>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#101412]/10 bg-[#dfe6e1]">
-            <Image
-              src="https://ik.imagekit.io/a2q8u8qtw/factory/textile%20production.webp"
-              alt="Textile trims production floor at Mohid Enterprises"
-              fill
-              sizes="(min-width: 1024px) 33vw, 100vw"
-              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#01aa3f]">Floor 01</span>
-              <p className="text-sm font-semibold text-white drop-shadow">Textile Trims Weaving</p>
-            </div>
-          </div>
-
-          <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#101412]/10 bg-[#dfe6e1]">
-            <Image
-              src="https://ik.imagekit.io/a2q8u8qtw/factory/Braiding%20Winding.webp"
-              alt="Braiding and winding machine operation"
-              fill
-              sizes="(min-width: 1024px) 33vw, 100vw"
-              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#01aa3f]">Floor 02</span>
-              <p className="text-sm font-semibold text-white drop-shadow">Braiding &amp; Winding Fleet</p>
-            </div>
-          </div>
-
-          <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#101412]/10 bg-[#dfe6e1]">
-            <Image
-              src="https://ik.imagekit.io/a2q8u8qtw/factory/packed%20inventory.png"
-              alt="Packed trims inventory ready for international export"
-              fill
-              sizes="(min-width: 1024px) 33vw, 100vw"
-              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#01aa3f]">Dispatch</span>
-              <p className="text-sm font-semibold text-white drop-shadow">Packed For Export &amp; Audit</p>
             </div>
           </div>
         </div>
