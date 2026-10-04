@@ -24,9 +24,9 @@ type Scale = 'sm' | 'md' | 'lg'
 
 // One scale for every placement. `md` is the navbar reference size.
 const SCALES: Record<Scale, { logo: string; top: string; bottom: string; sizes: string }> = {
-  sm: { logo: 'h-[25px]', top: 'text-[19px]', bottom: 'text-[14px]', sizes: '25px' },
-  md: { logo: 'h-[44px]', top: 'text-[20px]', bottom: 'text-[16px]', sizes: '44px' },
-  lg: { logo: 'h-[37px]', top: 'text-[24px]', bottom: 'text-[18px]', sizes: '37px' },
+  sm: { logo: 'h-[21px]', top: 'text-[19px]', bottom: 'text-[14px]', sizes: '21px' },
+  md: { logo: 'h-[40px]', top: 'text-[20px]', bottom: 'text-[16px]', sizes: '40px' },
+  lg: { logo: 'h-[33px]', top: 'text-[24px]', bottom: 'text-[18px]', sizes: '33px' },
 }
 
 export function BrandLogo({
