@@ -10,7 +10,7 @@ export async function HeroSection() {
   return (
     <section
       aria-labelledby="home-hero-title"
-      className="relative isolate flex overflow-hidden bg-[#f7f8f5] text-[#101412] md:min-h-[calc(100svh-5.0625rem)] md:items-end"
+      className="relative isolate flex overflow-hidden bg-[#f7f8f5] text-[#101412] md:min-h-[calc(100svh-5.5625rem)] md:items-end"
     >
       <div className="relative mx-auto w-full max-w-[1600px] px-5 pt-6 pb-10 sm:px-8 sm:pb-12 md:px-12 md:pt-5 md:pb-10 lg:px-20 lg:pb-12 xl:px-24">
 

@@ -12,7 +12,7 @@ export default function QuotePage() {
         <Image src="/images/trims2.webp" alt="" fill priority fetchPriority="high" quality={70} sizes="100vw" className="size-full object-cover" />
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-2xl items-center justify-between px-5 py-4 sm:px-6">
+      <div className="relative z-10 mx-auto flex w-full max-w-2xl items-center justify-between px-5 py-4 sm:px-6 lg:max-w-4xl">
         <Link href="/" aria-label="Mohid Enterprises home" className="flex items-center gap-2.5">
           <BrandLogo tone="light" scale="lg" priority />
         </Link>
@@ -21,7 +21,7 @@ export default function QuotePage() {
         </Link>
       </div>
 
-      <section className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center px-5 pb-8 pt-4 sm:px-6">
+      <section className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center px-5 pb-8 pt-4 sm:px-6 lg:max-w-4xl">
         {/* Visible header removed by design; sr-only h1 keeps the page semantic for screen readers/SEO. */}
         <h1 className="sr-only">Request specifications &amp; quote</h1>
         <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">

@@ -22,7 +22,7 @@ type Scale = 'sm' | 'md' | 'lg'
 // One scale for every placement. `md` is the navbar reference size.
 const SCALES: Record<Scale, { logo: string; top: string; bottom: string; sizes: string }> = {
   sm: { logo: 'h-[29px]', top: 'text-[13px]', bottom: 'text-[10px]', sizes: '29px' },
-  md: { logo: 'h-[34px]', top: 'text-[16px]', bottom: 'text-[12px]', sizes: '34px' },
+  md: { logo: 'h-[48px]', top: 'text-[16px]', bottom: 'text-[12px]', sizes: '48px' },
   lg: { logo: 'h-[41px]', top: 'text-xl', bottom: 'text-sm', sizes: '41px' },
 }
 
