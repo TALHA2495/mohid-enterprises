@@ -14,7 +14,11 @@ import Image from 'next/image'
 // lockup rendering if the variable is blank.
 export const BRAND_LOGO_URL =
   process.env.NEXT_PUBLIC_LOGO_URL?.trim() ||
-  `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT ?? 'https://ik.imagekit.io/a2q8u8qtw'}/Brand/Mohid-Enterprises-logo.png`
+  `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT ?? 'https://ik.imagekit.io/a2q8u8qtw'}/MOHID_ENTERPRISES_LOGO.png`
+
+
+  // https://ik.imagekit.io/a2q8u8qtw/Brand/MOHID_ENTERPRISES_LOGO.png?updatedAt=1791108107981
+//https://ik.imagekit.io/a2q8u8qtw/Brand/LOGO.png?updatedAt=1791108790621
 
 type Tone = 'ink' | 'light'
 type Scale = 'sm' | 'md' | 'lg'

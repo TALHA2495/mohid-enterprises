@@ -14,7 +14,7 @@ export function HeroCategoryMarquee({ categories }: { categories: readonly HeroC
   const marqueeCategories = [...categories, ...categories]
 
   return (
-    <div aria-label="Product categories" data-marquee className="relative -mx-5 mt-5 w-[calc(100%+2.5rem)] sm:-mx-8 sm:mt-6 sm:w-[calc(100%+4rem)] md:-mx-12 md:mt-7 md:w-[calc(100%+6rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] xl:-mx-24 xl:w-[calc(100%+12rem)]">
+    <div aria-label="Product categories" data-marquee className="relative -mx-5 mt-6 mb-6 w-[calc(100%+2.5rem)] sm:-mx-8 sm:mt-8 sm:mb-8 sm:w-[calc(100%+4rem)] md:-mx-12 md:mt-10 md:mb-10 md:w-[calc(100%+6rem)] lg:-mx-20 lg:w-[calc(100%+10rem)] xl:-mx-24 xl:w-[calc(100%+12rem)]">
       <div data-marquee-track className="flex w-max gap-3 md:gap-4">
         {marqueeCategories.map((category, index) => (
           <Link key={`${category.id}-${index}`} href={`/showroom?filter=${encodeURIComponent(category.filter)}`} aria-label={`View ${category.label} products`} className="group relative block h-[92px] w-[142px] shrink-0 overflow-hidden rounded-xl border border-[#101412]/15 bg-[#dfe6e1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#101412] focus-visible:ring-offset-2 sm:h-[112px] sm:w-[158px] sm:rounded-2xl md:h-[134px] md:w-[188px] lg:h-[148px] lg:w-[208px] xl:h-[164px] xl:w-[238px]">

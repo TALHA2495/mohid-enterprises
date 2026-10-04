@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main id="main" className="relative min-h-screen overflow-x-hidden bg-[#f7f8f5]">
+    <main id="main" className="relative min-h-screen overflow-x-hidden bg-[#f7f8f5] ">
       <StructuredData data={{ ...webPageSchema('Textile Trims Manufacturer in Faisalabad', '/', description), mainEntity: { '@id': ORGANIZATION_ID } }} />
       <SiteHeader />
       <HeroSection />
