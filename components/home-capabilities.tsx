@@ -17,10 +17,10 @@ const CAPABILITIES = [
 // machine counts, output figures or capacity claims (removed in the UI redesign).
 export function HomeCapabilitiesSection() {
   return (
-    <section aria-labelledby="home-capabilities-heading" className="relative border-t border-[#101412]/10 bg-[#f4f7f8] py-16 sm:py-20 md:py-24">
+    <section aria-labelledby="home-capabilities-heading" className="relative border-t border-[#101412]/10 bg-[#f4f7f8] py-8 sm:py-10 md:py-12">
       <div className="mx-auto w-full max-w-[1600px] px-5 sm:px-8 md:px-12 lg:px-20 xl:px-24">
         <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0a7d31] sm:text-xs">What we do</p>
-        <h2 id="home-capabilities-heading" className="mt-3 max-w-2xl text-3xl font-extrabold tracking-tight text-[#101412] sm:text-4xl md:text-5xl">
+        <h2 id="home-capabilities-heading" className="mt-3 max-w-2xl text-3xl font-bold tracking-tight text-[#101412] sm:text-4xl md:text-5xl">
           Trims built for real production runs
         </h2>
 

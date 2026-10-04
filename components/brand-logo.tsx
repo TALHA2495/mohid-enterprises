@@ -17,17 +17,16 @@ export const BRAND_LOGO_URL =
   `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT ?? 'https://ik.imagekit.io/a2q8u8qtw'}/MOHID_ENTERPRISES_LOGO.png`
 
 
-  // https://ik.imagekit.io/a2q8u8qtw/Brand/MOHID_ENTERPRISES_LOGO.png?updatedAt=1791108107981
-//https://ik.imagekit.io/a2q8u8qtw/Brand/LOGO.png?updatedAt=1791108790621
+
 
 type Tone = 'ink' | 'light'
 type Scale = 'sm' | 'md' | 'lg'
 
 // One scale for every placement. `md` is the navbar reference size.
 const SCALES: Record<Scale, { logo: string; top: string; bottom: string; sizes: string }> = {
-  sm: { logo: 'h-[29px]', top: 'text-[13px]', bottom: 'text-[10px]', sizes: '29px' },
-  md: { logo: 'h-[48px]', top: 'text-[16px]', bottom: 'text-[12px]', sizes: '48px' },
-  lg: { logo: 'h-[41px]', top: 'text-xl', bottom: 'text-sm', sizes: '41px' },
+  sm: { logo: 'h-[25px]', top: 'text-[19px]', bottom: 'text-[14px]', sizes: '25px' },
+  md: { logo: 'h-[44px]', top: 'text-[20px]', bottom: 'text-[16px]', sizes: '44px' },
+  lg: { logo: 'h-[37px]', top: 'text-[24px]', bottom: 'text-[18px]', sizes: '37px' },
 }
 
 export function BrandLogo({
