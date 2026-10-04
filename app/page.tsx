@@ -6,9 +6,10 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { StructuredData } from '@/components/structured-data'
 import { ORGANIZATION_ID, webPageSchema } from '@/lib/seo'
+import { yearsEstablishedLabel } from '@/lib/company-years'
 
 const description =
-  'Mohid Enterprises manufactures textile trims in Faisalabad, Pakistan, supplying local and international buyers with 20+ years of manufacturing experience.'
+  `Mohid Enterprises manufactures textile trims in Faisalabad, Pakistan, supplying local and international buyers with ${yearsEstablishedLabel()} years of manufacturing experience.`
 
 export const metadata: Metadata = {
   title: 'Textile Trims Manufacturer in Faisalabad',

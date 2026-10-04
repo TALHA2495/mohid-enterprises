@@ -6,6 +6,7 @@ import { StructuredData } from '@/components/structured-data'
 import { CATALOG_DATA } from '@/lib/catalog-data'
 import { loadShowroomProducts } from '@/lib/public-data.server'
 import { absoluteUrl, breadcrumbSchema, webPageSchema } from '@/lib/seo'
+import { yearsEstablishedLabel } from '@/lib/company-years'
 
 // Revalidate so catalog edits made in /admin appear without a redeploy; the
 // page would otherwise be frozen at build time.
@@ -43,7 +44,7 @@ export default async function Page() {
   const products: Product[] =
     live.length > 0 ? live : CATALOG_DATA.map((p) => ({ ...p, images: [p.image] }))
 
-  const collectionDescription = 'Textile trims manufactured by Mohid Enterprises in Faisalabad, Pakistan, with 20+ years of manufacturing experience.'
+  const collectionDescription = `Textile trims manufactured by Mohid Enterprises in Faisalabad, Pakistan, with ${yearsEstablishedLabel()} years of manufacturing experience.`
   const itemList = {
     '@type': 'ItemList',
     itemListElement: products.map((product, index) => ({

@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react'
 
 import { HeroCategoryMarquee } from '@/components/hero-category-marquee'
 import { loadHeroCategories } from '@/lib/public-data.server'
+import { yearsEstablishedLabel } from '@/lib/company-years'
 
 export async function HeroSection() {
   const categories = await loadHeroCategories()
@@ -22,7 +23,7 @@ export async function HeroSection() {
           <p className="mb-4"><span className="inline-flex items-center rounded-full bg-[#01aa3f] px-2.5 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-[0_4px_14px_rgba(1,170,63,0.22)] sm:px-4 sm:text-sm">Manufacturer, Importer, Exporter</span></p>
           <h1 id="home-hero-title" className="font-sans mt-5">
             <span className="block  text-[4.5rem] md:text-[clamp(4.25rem,17vw,6.5rem)] font-[850] leading-[0.74]  tracking-[-0.085em] sm:text-[clamp(5.5rem,15vw,7.5rem)] md:text-[clamp(4.75rem,10vw,7rem)]">
-               <span className='text-[#0a7d31] '>20+</span>
+               <span className='text-[#0a7d31] '>{yearsEstablishedLabel()}</span>
               <span className="ml-[0.16em] text-[0.5em] font-extrabold tracking-[-0.055em]">YEARS</span>
             </span>
             <span className="mt-3 block max-w-[720px] text-[clamp(0.78rem,2.3vw,1.15rem)] font-bold uppercase leading-[1.2] tracking-[0.14em] sm:mt-4 md:text-xl">

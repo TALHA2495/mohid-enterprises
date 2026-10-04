@@ -3,6 +3,7 @@ import { PageShell } from './page-shell'
 import { BackHomeLink } from './back-home-link'
 import { loadFactorySections } from '@/lib/public-data.server'
 import type { FactorySection } from '@/lib/public-data.server'
+import { yearsEstablishedLabel } from '@/lib/company-years'
 
 // /factory — minimal by design. The three DB-driven photo tiles answer the two
 // questions bulk buyers ask (what do you make / can you scale) without the former
@@ -29,7 +30,7 @@ export async function FactoryPage({ embedded = false }: { embedded?: boolean } =
     <section className={embedded ? 'homepage-motion-section border-t border-[#101412]/10 bg-[#f7f8f5] px-5 pb-16 pt-8 text-[#101412] sm:px-8 sm:pb-20 sm:pt-10' : 'mx-auto max-w-7xl px-5 py-8 text-[#101412] sm:px-8'}>
       {!embedded && <BackHomeLink />}
       <Heading className="mt-6 max-w-2xl text-3xl font-semibold tracking-tight text-[#101412] sm:text-5xl">
-        {embedded ? 'Sampling to Bulk Production' : '20+ Years of Proven Trims Manufacturing'}
+        {embedded ? 'Sampling to Bulk Production' : `${yearsEstablishedLabel()} Years of Proven Trims Manufacturing`}
       </Heading>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-[#46534c]">From sampling to bulk production: ribbons, tassels, elastic, jute cord, conveyor belts, and more.</p>
 

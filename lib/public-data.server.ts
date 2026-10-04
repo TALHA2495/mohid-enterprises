@@ -15,6 +15,7 @@ import { supabaseAdmin, missingAdminEnvVars } from './supabase-admin.server'
 import { HERO_CATEGORIES, PRODUCT_TYPES } from './showroom'
 import type { HeroCategory, HeroSectionRow, ProductType } from './showroom'
 import { CATALOG_DATA } from './catalog-data'
+import { yearsEstablished } from './company-years'
 
 export type ShowroomProduct = {
   name: string
@@ -216,7 +217,7 @@ export type ProductStats = {
   yearsManufacturing: number
 }
 
-const YEARS_MANUFACTURING = 20
+const YEARS_MANUFACTURING = yearsEstablished()
 
 /** Last-verified counts (queried live 2026-09-23). Re-check after catalog edits. */
 const FALLBACK_STATS: ProductStats = {
