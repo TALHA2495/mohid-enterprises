@@ -20,7 +20,7 @@ const count = (re) => (html.match(re) ?? []).length
 const checks = [
   ['HTTP 200', res.status === 200],
   ['single h1', count(/<h1/g) === 1],
-  ['new H1 copy', html.includes('20+ Years of Proven Trims Manufacturing')],
+  ['new H1 copy', /\d+\+ Years of Proven Trims Manufacturing/.test(html)],
   ['eyebrow Our Factory', html.includes('Our Factory')],
   ['new intro', html.includes('jute cord, conveyor belts, and more')],
   ['tile label 1', html.includes('Textile Trims')],
@@ -31,7 +31,7 @@ const checks = [
   ['cards REMOVED', !html.includes('Quality Inspection Protocol') && !html.includes('Incoterms')],
   ['old H1 gone', !html.includes('Faisalabad Manufacturing Base &amp; Capacity')],
   ['old eyebrow gone', !html.includes('OUR OPERATION')],
-  ['metadata desc updated', html.includes('20+ years of export-grade production')],
+  ['metadata desc updated', /\d+\+ years of experience/.test(html)],
   ['og:image present', html.includes('og:image')],
   ['canonical /factory', html.includes('rel="canonical"')],
 ]

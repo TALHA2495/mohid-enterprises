@@ -55,7 +55,7 @@ One family: **Inter**. No secondary display or mono face.
 | Body | `text-[15px] leading-relaxed text-[#46534c] sm:text-base` |
 | Meta / eyebrow | `text-[11px] font-medium uppercase tracking-[0.1em] sm:text-xs` |
 
-The hero `20+ YEARS` is a deliberate exception — `font-extrabold`, tight
+The hero `21+ YEARS` (dynamic, from 15 Jan 2005 — `lib/company-years.ts`) is a deliberate exception — `font-extrabold`, tight
 negative tracking, fluid `clamp()` sizing. It is the single largest element on
 the site and should stay that way.
 

@@ -213,7 +213,7 @@ export type ProductStats = {
   totalProducts: number
   /** Distinct `products.type` tags across the active catalog. */
   trimTypes: number
-  /** Company track record ("20+ years") — copy, not catalog data. */
+  /** Company track record ("21+ years", dynamic from 15 Jan 2005) — copy, not catalog data. */
   yearsManufacturing: number
 }
 
