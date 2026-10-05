@@ -197,6 +197,12 @@ body::after {
   [data-marquee]::-webkit-scrollbar {
     display: none;
   }
+  /* Transform drift desyncs pixels from the layout box and leaves a dead zone
+     when dragging; on touch the drift is scroll-driven by the component. */
+  [data-marquee-track] {
+    animation: none;
+    will-change: auto;
+  }
 }
 
 [data-marquee-track] {
