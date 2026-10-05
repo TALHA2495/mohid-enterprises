@@ -186,7 +186,7 @@ export default function ProductDetail({
                 Request quote &amp; sample <ArrowUpRight className="size-4" />
               </a>
               <a
-                href={`mailto:info@mohident.com?subject=${encodeURIComponent(`Physical sample request — ${product.name}`)}`}
+                href={`mailto:mohident149@gmail.com?subject=${encodeURIComponent(`Physical sample request — ${product.name}`)}`}
                 className="inline-flex flex-1 items-center justify-center rounded-full border border-[#101412]/20 px-6 py-3.5 text-sm text-[#101412] transition-colors hover:bg-black/[0.06]"
               >
                 Request physical sample

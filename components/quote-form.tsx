@@ -109,7 +109,7 @@ export function QuoteForm() {
       setSubmitError(
         persistedQuoteId
           ? `Your request was received (ID: ${persistedQuoteId}), but WhatsApp is not configured — our team will follow up by email.`
-          : 'WhatsApp is not configured for this deployment — please email us at info@mohident.com with your specifications.',
+          : 'WhatsApp is not configured for this deployment — please email us at mohident149@gmail.com with your specifications.',
       )
       if (persistedQuoteId) setQuoteId(persistedQuoteId)
       setSubmitting(false)

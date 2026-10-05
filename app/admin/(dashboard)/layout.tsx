@@ -9,8 +9,14 @@ import { ADMIN_SESSION_COOKIE, isValidSession } from '@/lib/admin-auth'
 import { missingAdminEnvVars, supabaseAdmin } from '@/lib/supabase-admin.server'
 import { AdminSidebarNav } from '@/components/admin/admin-sidebar-nav'
 import { MobileSidebar } from '@/components/admin/mobile-sidebar'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+// Backstop for the robots.txt /admin disallow: the console must never be indexed.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   // Redirect to the login screen when there is no valid session. The login
