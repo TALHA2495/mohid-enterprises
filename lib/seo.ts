@@ -1,6 +1,6 @@
 import { yearsEstablishedLabel } from './company-years'
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mohident.com').replace(/\/$/, '')
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mohid-enterprises.com').replace(/\/$/, '')
 export const ORGANIZATION_ID = `${SITE_URL}/#organization`
 export const WEBSITE_ID = `${SITE_URL}/#website`
 
@@ -9,11 +9,14 @@ export const ORGANIZATION_SCHEMA = {
   '@id': ORGANIZATION_ID,
   name: 'Mohid Enterprises',
   url: `${SITE_URL}/`,
+  email: 'mohident149@gmail.com',
   description:
     `Textile trims manufacturer in Faisalabad, Pakistan, supplying local and international buyers with ${yearsEstablishedLabel()} years of manufacturing experience.`,
   address: {
     '@type': 'PostalAddress',
+    streetAddress: 'Plot #79, Gulshan Rafiq Colony Samanabad',
     addressLocality: 'Faisalabad',
+    addressRegion: 'Punjab',
     addressCountry: 'PK',
   },
 } as const

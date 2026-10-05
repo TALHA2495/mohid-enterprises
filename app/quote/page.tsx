@@ -1,9 +1,19 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { X } from 'lucide-react'
 import Image from 'next/image'
 import { QuoteForm } from '@/components/quote-form'
 import { BrandLogo } from '@/components/brand-logo'
+
+// Conversion step, not an entry page — kept out of the index alongside the
+// robots.txt disallow (defence in depth if the rule is ever missed).
+export const metadata: Metadata = {
+  title: 'Request a Quote',
+  description:
+    'Request specifications and a quote for textile trims from Mohid Enterprises, Faisalabad, Pakistan.',
+  robots: { index: false, follow: false },
+}
 
 export default function QuotePage() {
   return (
