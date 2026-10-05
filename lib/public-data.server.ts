@@ -15,6 +15,7 @@ import { supabaseAdmin, missingAdminEnvVars } from './supabase-admin.server'
 import { HERO_CATEGORIES, PRODUCT_TYPES } from './showroom'
 import type { HeroCategory, HeroSectionRow, ProductType } from './showroom'
 import { CATALOG_DATA } from './catalog-data'
+import { yearsEstablished } from './company-years'
 
 export type ShowroomProduct = {
   name: string
@@ -28,6 +29,11 @@ export type ShowroomProduct = {
   colors: string
   finish: string
   specs: [string, string][]
+  moq?: number
+  pricingTiers?: { quantity: number; pricePerMeter: number }[]
+  leadTime?: string
+  weight?: string
+  compliance?: { oekotex?: boolean; certificates?: string[] }
 }
 
 export type FactorySection = {
@@ -146,6 +152,11 @@ function mapProduct(row: Row): ShowroomProduct {
       fallback?.finish ||
       'Various',
     specs: specs.length > 0 ? specs : fallback?.specs ?? [],
+    moq: fallback?.moq,
+    pricingTiers: fallback?.pricingTiers,
+    leadTime: fallback?.leadTime,
+    weight: fallback?.weight,
+    compliance: fallback?.compliance,
   }
 }
 
@@ -202,11 +213,11 @@ export type ProductStats = {
   totalProducts: number
   /** Distinct `products.type` tags across the active catalog. */
   trimTypes: number
-  /** Company track record ("20+ years") — copy, not catalog data. */
+  /** Company track record ("21+ years", dynamic from 15 Jan 2005) — copy, not catalog data. */
   yearsManufacturing: number
 }
 
-const YEARS_MANUFACTURING = 20
+const YEARS_MANUFACTURING = yearsEstablished()
 
 /** Last-verified counts (queried live 2026-09-23). Re-check after catalog edits. */
 const FALLBACK_STATS: ProductStats = {

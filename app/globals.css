@@ -24,6 +24,16 @@ html {
   animation-delay: 240ms;
 }
 
+/* Brand lockup wordmark (components/brand-logo.tsx): the two-line MOHID /
+   ENTERPRISES stack must keep the tight 1.15 leading defined for the navbar.
+   Tailwind's arbitrary `leading-[1.15]` was not applying here (measured:
+   computed line-height stayed 1.5 -> the stack inflated to 42px and grew the
+   site header from 81px to 83px, which pushed the hero 2px past the fold). A
+   hand-written rule keeps the lockup height deterministic across all scales. */
+.brand-wordmark {
+  line-height: 1.15;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .homepage-motion-hero,
@@ -171,6 +181,28 @@ body::after {
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+/* Touch devices: let the row scroll horizontally with native momentum while
+   the drift animation keeps running (transform and scrollLeft compose). */
+@media (pointer: coarse) {
+  [data-marquee] {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  [data-marquee]::-webkit-scrollbar {
+    display: none;
+  }
+  /* Transform drift desyncs pixels from the layout box and leaves a dead zone
+     when dragging; on touch the drift is scroll-driven by the component. */
+  [data-marquee-track] {
+    animation: none;
+    will-change: auto;
+  }
 }
 
 [data-marquee-track] {

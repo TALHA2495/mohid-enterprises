@@ -317,7 +317,7 @@ section('B5. Factory + Standards + certificate lightbox')
   const { context, page } = await makePage(1440)
   await page.goto(BASE + '/factory', { waitUntil: 'load' }); await page.waitForTimeout(400)
   const fhtml = await page.content()
-  rec('factory H1 copy', fhtml.includes('20+ Years of Proven Trims Manufacturing'))
+  rec('factory H1 copy', /\d+\+ Years of Proven Trims Manufacturing/.test(fhtml))
   rec('factory CTA -> /quote', (await page.locator('a[href="/quote"]').count()) >= 1)
   rec('factory metrics present', fhtml.includes('Trims Types') && fhtml.includes('Years Manufacturing'))
 

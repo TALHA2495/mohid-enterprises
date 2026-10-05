@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { AnalyticsLoader } from '@/components/analytics-loader'
 import { StructuredData } from '@/components/structured-data'
 import { ORGANIZATION_SCHEMA, SITE_URL, WEBSITE_SCHEMA } from '@/lib/seo'
+import { yearsEstablishedLabel } from '@/lib/company-years'
 import './globals.css'
 
 const inter = Inter({
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
     template: '%s | Mohid Enterprises',
   },
   description:
-    'Mohid Enterprises manufactures textile trims in Faisalabad, Pakistan for local and international buyers, with 20+ years of manufacturing experience.',
+    `Mohid Enterprises manufactures textile trims in Faisalabad, Pakistan for local and international buyers, with ${yearsEstablishedLabel()} years of manufacturing experience.`,
   applicationName: 'Mohid Enterprises',
   openGraph: {
     type: 'website',

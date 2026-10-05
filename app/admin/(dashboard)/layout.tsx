@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+
+import { BrandLogo } from '@/components/brand-logo'
 
 import { ADMIN_SESSION_COOKIE, isValidSession } from '@/lib/admin-auth'
 import { missingAdminEnvVars, supabaseAdmin } from '@/lib/supabase-admin.server'
@@ -42,14 +43,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         <div>
           <p className="section-label mb-3">Admin</p>
           <Link href="/" className="block w-fit" aria-label="Mohid Enterprises home">
-            <Image
-              src="/images/LOGO MOHID.webp"
-              alt="Mohid Enterprises logo"
-              width={120}
-              height={32}
-              priority
-              className="h-8 w-auto"
-            />
+            <BrandLogo scale="sm" priority />
           </Link>
           <p className="mt-1.5 text-xs text-black/60">Operations console</p>
         </div>
@@ -70,20 +64,14 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                 aria-label="Mohid Enterprises admin home"
                 className="flex items-center gap-2.5 md:hidden"
               >
-                <Image
-                  src="/images/LOGO MOHID.webp"
-                  alt="Mohid Enterprises logo"
-                  width={96}
-                  height={26}
-                  className="h-6 w-auto"
-                />
+                <BrandLogo scale="sm" />
                 <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-black/60">
                   Admin
                 </span>
               </Link>
             </div>
-            <span className="font-sans text-xs text-black/60 hidden md:inline">
-              Mohid Enterprises
+            <span className="hidden md:inline-flex">
+              <BrandLogo scale="sm" icon={false} />
             </span>
           </div>
         </header>

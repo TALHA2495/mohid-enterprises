@@ -1,5 +1,6 @@
 import { CertificateGallery } from './certificate-gallery'
 import { PageShell } from './page-shell'
+import { BackHomeLink } from './back-home-link'
 
 // ---------------------------------------------------------------------------
 // /standards — the certificate gallery renders the four compliance documents
@@ -25,6 +26,7 @@ export function StandardsPage({ embedded = false }: { embedded?: boolean } = {})
       {/* The gallery is the content, so there is no visible heading by design —
           but the page still needs exactly one h1 for SEO and screen readers.
           Same sr-only pattern as /showroom and the home hero. */}
+      {!embedded && <div className="mb-6"><BackHomeLink /></div>}
       {!embedded && <h1 className="sr-only">Quality Standards &amp; Textile Trim Certifications — Mohid Enterprises</h1>}
       <div>
         <CertificateGallery certificates={embedded ? CERTIFICATES.slice(0, 1) : CERTIFICATES} single={embedded} />
