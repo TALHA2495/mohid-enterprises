@@ -33,6 +33,9 @@ export function HeroCategoryMarquee({ categories }: { categories: readonly HeroC
 
     const setWidth = firstClone.offsetLeft - first.offsetLeft
     if (!Number.isFinite(setWidth) || setWidth <= 0) return
+    // Start one full set in: sets are pixel-identical, so this is visually
+    // invisible and gives equal smooth drag range to the left and right.
+    el.scrollLeft = setWidth
 
     const speed = setWidth / 60000 // px per ms (one set per 60s, matches --marquee-duration)
     let raf = 0
