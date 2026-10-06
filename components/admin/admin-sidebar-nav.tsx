@@ -1,8 +1,8 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Package, Image as ImageIcon, FileText, type LucideIcon } from 'lucide-react'
+import { Home, Package, Image as ImageIcon, FileText, LogOut, type LucideIcon } from 'lucide-react'
 
 const NAV_LINKS: { href: string; label: string; icon: LucideIcon; exact?: boolean }[] = [
   { href: '/admin', label: 'Dashboard', icon: Home, exact: true },
@@ -17,6 +17,17 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 
 export function AdminSidebarNav() {
   const pathname = usePathname()
+
+  async function handleLogout() {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' })
+    } catch {
+      // Network hiccup — still fall through to the login page.
+    }
+    // Full navigation: drops all client state and lets proxy.ts take over.
+    window.location.assign('/admin/login')
+  }
+
   return (
     <nav aria-label="Admin sections" className="flex flex-col gap-1.5">
       {NAV_LINKS.map((link) => {
@@ -46,6 +57,18 @@ export function AdminSidebarNav() {
           </Link>
         )
       })}
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="group mt-2 flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium text-black/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-black/5 hover:bg-black/[0.03] hover:text-black hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c853]/60"
+      >
+        <LogOut
+          aria-hidden="true"
+          strokeWidth={2}
+          className="h-4 w-4 shrink-0 text-black/60 transition-colors group-hover:text-black/60"
+        />
+        Log out
+      </button>
     </nav>
   )
 }
