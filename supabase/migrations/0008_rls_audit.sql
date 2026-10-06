@@ -1,0 +1,38 @@
+﻿-- ==============================================================================
+-- 0008 — RLS AUDIT (documentation only — no schema changes)
+-- ------------------------------------------------------------------------------
+--
+-- CURRENT RLS STANCE (verified against supabase/schema.sql + migrations):
+--   * ALL tables have RLS enabled:
+--       customers, products, product_categories, quotes, quote_line_items,
+--       orders, invoices, payments, hero_sections, factory_sections,
+--       certificates, audit_log, login_attempts
+--   * ZERO policies exist → deny-all for anon AND authenticated roles.
+--   * The ONLY public entry point is public.create_quote(...), a SECURITY
+--     DEFINER RPC granted EXECUTE to anon, authenticated (validated intake,
+--     dedup + audit_log entry; schema.sql lines 450-577).
+--
+-- WHY PUBLIC PAGES DO NOT NEED SELECT POLICIES:
+--   * Public/showroom pages read through lib/public-data.server.ts using the
+--     service-role key inside Server Components — never from the browser.
+--     The anon key in the client bundle can therefore read nothing.
+--
+-- WHY ADMIN WRITES DO NOT NEED USER WRITE POLICIES:
+--   * All admin writes go through server actions (app/admin/actions.ts) that
+--     (a) validate the HMAC session cookie via isValidSession() and (b) use
+--     the service-role key from lib/supabase-admin.server.ts, which bypasses
+--     RLS by design. No authenticated-user INSERT/UPDATE/DELETE policy is
+--     required — and none exists.
+--
+-- RATIONALE:
+--   * Explicit deny-all prevents accidental PII exposure: customers, quotes,
+--     orders and invoices contain emails, company and payment data.
+--
+-- ACTION (standing rule):
+--   * Do NOT add SELECT policies to products, hero_sections, certificates,
+--     factory_sections, etc. They remain readable only server-side or via
+--     the create_quote RPC. Any future public read must pass a PII review
+--     first. See .cline/skills/mohid-playbook/skills.md rule #3.
+--
+-- This migration intentionally contains no executable statements.
+-- ==============================================================================
