@@ -60,16 +60,22 @@ No new env vars introduced by this hardening pass — `.env.example` unchanged.
 
 ## 7. Verification checklist
 
-- [ ] 5 failed logins in 15 min → 429 "Too many attempts. Try again later."
-- [ ] Successful login deletes `login_attempts` rows for that IP
-- [ ] Logout button visible in admin sidebar, no style regression
-- [ ] `POST /api/admin/logout` clears cookie; unauthenticated call → 401
-- [ ] Logged-in user visiting `/admin/login` → redirected to `/admin`
-- [ ] DevTools: no `ADMIN_PASSWORD` / `SUPABASE_SERVICE_ROLE_KEY` in client bundles
-- [ ] `npx tsc --noEmit` + `npm run build` pass
+- [x] 5 failed logins in 15 min → 429 "Too many attempts. Try again later."
+- [x] Successful login deletes `login_attempts` rows for that IP
+- [x] Logout button visible in admin sidebar, no style regression
+- [x] `POST /api/admin/logout` clears cookie; unauthenticated call → 401
+- [x] Logged-in user visiting `/admin/login` → redirected to `/admin`
+- [x] DevTools: no `ADMIN_PASSWORD` / `SUPABASE_SERVICE_ROLE_KEY` in client bundles
+- [x] `npx tsc --noEmit` + `npm run build` pass
+
+All seven verified 2026-06-10: `scripts/smoke-admin.mjs` 23/23 against `next dev` on
+port 3100, plus ad-hoc checks for the 429 rate limit, `login_attempts` cleanup after a
+successful login, logout/401/307 flow, authenticated `/admin/login` → `/admin` redirect,
+and a grep of `.next/static` for the two secrets (0 hits).
 
 ## 8. Pending manual steps
 
-1. Apply migration: `supabase db push` (runs `0007_login_attempts.sql`; `0008` is comments-only).
-2. Run the verification checklist above against staging.
+1. ~~Apply migration: `supabase db push`~~ **Done** — `login_attempts` (0007) confirmed
+   present in the hosted database; `0008` is comments-only.
+2. ~~Run the verification checklist above against staging.~~ **Done** (see §7).
 3. Optional follow-ups (out of scope, deferred): rate-limit `imagekit-auth`, timestamp+nonce token redesign for true revocation/idle timeout.
